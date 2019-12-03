@@ -10,6 +10,7 @@ class LoginPage extends StatelessWidget {
       ),
       body: Center(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             FlatButton(
               color: Colors.blue,
