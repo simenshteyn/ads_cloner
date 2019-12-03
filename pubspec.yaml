@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  flutter_vk_sdk: ^0.0.6+4
   flutter:
     sdk: flutter
 
