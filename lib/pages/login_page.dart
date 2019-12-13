@@ -12,7 +12,8 @@ import 'package:ads_cloner/blocs/application_bloc.dart';
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final ApplicationBloc applicationBloc = BlocProvider.of<ApplicationBloc>(context);
+    final ApplicationBloc applicationBloc =
+        BlocProvider.of<ApplicationBloc>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -39,16 +40,28 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  void vkLogin(BuildContext context, ApplicationBloc bloc) {
-    FlutterVKSdk.login(
-        scope: '${VKScope.ads}, ${VKScope.offline}',
-        onSuccess: (VKAccessToken token) async {
-          bloc.inVkAccessToken.add(token);
-          _openAccountsPage(context);          
-        },
-        onError: (error) {
-          print('LOGIN ERROR: $error}');
-        });
+  Future<bool> checkLoggedIn() async {
+    var isLoggedIn = await FlutterVKSdk.isLoggedIn();
+    return isLoggedIn;
+  }
+
+  Future<void> vkLogin(BuildContext context, ApplicationBloc bloc) async {
+    if (await checkLoggedIn() == false) {
+      FlutterVKSdk.login(
+          scope: '${VKScope.ads}, ${VKScope.offline}',
+          onSuccess: (VKAccessToken token) async {
+            bloc.inVkAccessToken.add(token);
+            _openAccountsPage(context);
+          },
+          onError: (error) {
+            print('LOGIN ERROR: $error}');
+          });
+    } else {
+      print('Already logged in');
+      VKAccessToken token = await FlutterVKSdk.getAccessToken();
+      bloc.inVkAccessToken.add(token);
+      _openAccountsPage(context);
+    }
   }
 
   void _openAccountsPage(BuildContext context) {
