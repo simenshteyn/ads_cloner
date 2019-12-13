@@ -14,7 +14,7 @@ class AccountsPage extends StatelessWidget {
     bloc.getAccountsList.add(appBloc.vkAccessToken);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose account'),
+        title: Text('Choose ads account'),
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,

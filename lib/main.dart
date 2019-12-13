@@ -8,7 +8,7 @@ import 'package:ads_cloner/pages/login_page.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  //FlutterVKSdk.init(appId: '7219294', apiVersion: '5.96');
+  FlutterVKSdk.init(appId: '7219294', apiVersion: '5.96');
   SystemChrome.setPreferredOrientations(
       [DeviceOrientation.portraitUp, DeviceOrientation.portraitDown]).then(
     (_) => runApp(

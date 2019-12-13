@@ -11,6 +11,5 @@ class AccountsList {
     for (var account in _accountsList) {
       accounts.add(Account.fromJSON(account));
     }
-    print('accounts_list.dart accounts length: ${accounts.length}');
   }
 }
