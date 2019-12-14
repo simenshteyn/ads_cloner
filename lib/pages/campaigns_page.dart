@@ -1,5 +1,7 @@
+import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/blocs/campaigns_bloc.dart';
 import 'package:ads_cloner/models/campaigns_request.dart';
+import 'package:ads_cloner/pages/ads_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
@@ -32,7 +34,10 @@ class CampaignsPage extends StatelessWidget {
                       title: Text(snapshot.data.campaigns[index].name),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        print('Campaign tapped index is ${index}');
+                        appBloc.inCurrentCampaign
+                            .add(snapshot.data.campaigns[index]);
+                        print('Account tapped index is ${index}');
+                        _openAdsPage(context);
                       },
                     );
                   },
@@ -41,6 +46,17 @@ class CampaignsPage extends StatelessWidget {
               return Center(child: CircularProgressIndicator());
             }),
       ),
+    );
+  }
+
+  void _openAdsPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext context) {
+        return BlocProvider<AdsBloc>(
+          bloc: AdsBloc(),
+          child: AdsPage(),
+        );
+      }),
     );
   }
 }

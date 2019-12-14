@@ -15,24 +15,24 @@ class AdsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose ads campaign'),
+        title: Text('Choose ad'),
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
-        child: StreamBuilder<CampaignsList>(
+        child: StreamBuilder<AdsList>(
             //initialData: loginBloc.accounts,
-            stream: bloc.outCampaignsList,
+            stream: bloc.outAdsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return ListView.builder(
-                  itemCount: snapshot.data.campaigns.length,
+                  itemCount: snapshot.data.ads.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
                       leading: Icon(Icons.account_circle),
-                      title: Text(snapshot.data.campaigns[index].name),
+                      title: Text(snapshot.data.ads[index].name),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        print('Campaign tapped index is ${index}');
+                        print('Ads tapped index is ${index}');
                       },
                     );
                   },
