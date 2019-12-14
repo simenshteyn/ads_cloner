@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'package:ads_cloner/models/accounts_list.dart';
+import 'package:ads_cloner/models/campaigns_list.dart';
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -29,6 +30,25 @@ class VkApi {
 
     return listOfAccounts;
   }
+
+    Future<CampaignsList> adsGetCampaigns(String campaignId) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getCampaigns',
+      <String, String>{
+        'campaign_id': campaignId,
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+
+    var response = await _getRequest(uri);
+
+    CampaignsList listOfCampaigns = CampaignsList.fromJSON(response);
+
+    return listOfCampaigns;
+  }
+
 
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
