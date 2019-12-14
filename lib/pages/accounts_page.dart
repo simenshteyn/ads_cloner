@@ -7,17 +7,6 @@ import 'package:ads_cloner/blocs/accounts_bloc.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 
 class AccountsPage extends StatelessWidget {
-  //   void _openCampaignsPage(BuildContext context) {
-  //   Navigator.of(context).push(
-  //     MaterialPageRoute(builder: (BuildContext context) {
-  //       return BlocProvider<AccountsBloc>(
-  //         bloc: AccountsBloc(),
-  //         child: AccountsPage(),
-  //       );
-  //     }),
-  //   );
-  // }
-
   @override
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
