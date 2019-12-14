@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
+import 'package:ads_cloner/models/ads_list.dart';
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -40,6 +41,22 @@ class VkApi {
     var response = await _getRequest(uri);
     CampaignsList listOfCampaigns = CampaignsList.fromJSON(response);
     return listOfCampaigns;
+  }
+
+  Future<AdsList> adsGetAds(String accountId, int campaignId) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getAds',
+      <String, String>{
+        'account_id': accountId,
+        'campaign_ids': '[${campaignId}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    AdsList listOfAds = AdsList.fromJSON(response);
+    return listOfAds;
   }
 
   Future<String> _getRequest(Uri uri) async {
