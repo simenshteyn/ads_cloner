@@ -1,0 +1,162 @@
+import 'package:test/test.dart';
+import 'package:ads_cloner/models/campaigns_list.dart';
+import 'dart:async';
+
+void main(){
+  test('CampaignsList Class testing from JSON',
+  () async {
+    final stringJson = '''{
+      "response": [{
+      "id": 1013318440,
+      "type": "promoted_posts",
+      "name": "СР-модели-ММ: октябрь",
+      "status": 0,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1570082199",
+      "update_time": "1573360248"
+      }, {
+      "id": 1013525215,
+      "type": "promoted_posts",
+      "name": "@19/10-0001-Ltv2018Lost",
+      "status": 0,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1572251278",
+      "update_time": "1573360246"
+      }, {
+      "id": 1013533375,
+      "type": "promoted_posts",
+      "name": "@19/10-0002: группа-iradel-mob-CPM",
+      "status": 0,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1572326791",
+      "update_time": "1573360245"
+      }, {
+      "id": 1013538657,
+      "type": "promoted_posts",
+      "name": "@19/10-0003-2019LtvActive",
+      "status": 0,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1572355918",
+      "update_time": "1573360242"
+      }, {
+      "id": 1013591992,
+      "type": "promoted_posts",
+      "name": "@19/11-0004-ММ-фото",
+      "status": 0,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1572948748",
+      "update_time": "1573360241"
+      }, {
+      "id": 1013633263,
+      "type": "promoted_posts",
+      "name": "@19/11-0005-LtvWindows",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573359681",
+      "update_time": "1573359681"
+      }, {
+      "id": 1013633269,
+      "type": "promoted_posts",
+      "name": "@19/11-0006-GropIradel",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573360154",
+      "update_time": "1573360154"
+      }, {
+      "id": 1013633311,
+      "type": "promoted_posts",
+      "name": "@19/11-0007-Sites",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573362228",
+      "update_time": "1573362228"
+      }, {
+      "id": 1013639307,
+      "type": "promoted_posts",
+      "name": "@19/11-0008-MasterModel",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573444619",
+      "update_time": "1573444619"
+      }, {
+      "id": 1013657252,
+      "type": "promoted_posts",
+      "name": "@19/11-0009-SmmHub-Videos",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573572079",
+      "update_time": "1573572532"
+      }, {
+      "id": 1013694661,
+      "type": "promoted_posts",
+      "name": "@19/11-0010-Lashmaker",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "views_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1573890093",
+      "update_time": "1573890093"
+      }, {
+      "id": 1013828522,
+      "type": "promoted_posts",
+      "name": "@19/12-0011-OldModels",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "views_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1575260071",
+      "update_time": "1575260071"
+      }, {
+      "id": 1013848719,
+      "type": "promoted_posts",
+      "name": "@19/12-0013-LtvDec",
+      "status": 1,
+      "day_limit": "0",
+      "all_limit": "0",
+      "views_limit": "0",
+      "start_time": "0",
+      "stop_time": "0",
+      "create_time": "1575440519",
+      "update_time": "1575440519"
+      }]
+      }''';
+    final camps = CampaignsList.fromJSON(stringJson);
+    expect(camps.campaigns.length, 13);
+    expect(camps.campaigns[0].name, "СР-модели-ММ: октябрь");
+  });
+}
+
