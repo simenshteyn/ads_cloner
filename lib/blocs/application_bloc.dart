@@ -1,22 +1,22 @@
 import 'dart:async';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/account.dart';
+import 'package:ads_cloner/models/campaign.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
-
 
 class ApplicationBloc implements BlocBase {
   VKAccessToken vkAccessToken;
   AccountsList accountsList;
   CampaignsList campaignsList;
   Account currentAccount;
+  Campaign currentCampaign;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
   StreamSink<VKAccessToken> get inVkAccessToken => _tokenController.sink;
   Stream<VKAccessToken> get outVkAccessToken => _tokenController.stream;
-
   StreamController _cmdTokenController = StreamController();
   StreamSink get getVkAccessToken => _cmdTokenController.sink;
 
@@ -24,23 +24,29 @@ class ApplicationBloc implements BlocBase {
       StreamController<AccountsList>.broadcast();
   StreamSink<AccountsList> get inAccountsList => _accountsController.sink;
   Stream<AccountsList> get outAccountsList => _accountsController.stream;
-
   StreamController _cmdAccountsController = StreamController();
   StreamSink get getAccountsList => _cmdAccountsController.sink;
 
-  StreamController<CampaignsList> _campaignsController = StreamController<CampaignsList>.broadcast();
+  StreamController<CampaignsList> _campaignsController =
+      StreamController<CampaignsList>.broadcast();
   StreamSink<CampaignsList> get inCampaignsList => _campaignsController.sink;
   Stream<CampaignsList> get outCampaignsList => _campaignsController.stream;
-
   StreamController _cmdCampaignsController = StreamController();
   StreamSink get getCampaignsList => _cmdCampaignsController.sink;
 
-  StreamController<Account> _currentAccountConroller = StreamController<Account>.broadcast();
-  StreamSink<Account> get inCurrentAccount => _currentAccountConroller.sink;
-  Stream<Account> get outCurrentAccount => _currentAccountConroller.stream;
-
+  StreamController<Account> _currentAccountController =
+      StreamController<Account>.broadcast();
+  StreamSink<Account> get inCurrentAccount => _currentAccountController.sink;
+  Stream<Account> get outCurrentAccount => _currentAccountController.stream;
   StreamController _cmdCurrentAccountController = StreamController();
   StreamSink get getCurrentAccount => _cmdCurrentAccountController.sink;
+
+  StreamController<Campaign> _currentCampaignController =
+      StreamController<Campaign>.broadcast();
+  StreamSink<Campaign> get inCurrentCampaign => _currentCampaignController.sink;
+  Stream<Campaign> get outCurrentCampaign => _currentCampaignController.stream;
+  StreamController _cmdCurrentCampaignController = StreamController();
+  StreamSink get getCurrentCampaign => _cmdCurrentCampaignController.sink;
 
   ApplicationBloc() {
     _tokenController.stream.listen(_handleLogicTokenController);
@@ -58,11 +64,15 @@ class ApplicationBloc implements BlocBase {
       _campaignsController.sink.add(campaigns);
     });
 
-    _currentAccountConroller.stream.listen(_handleCurrentAccountController);
+    _currentAccountController.stream.listen(_handleCurrentAccountController);
     _cmdCurrentAccountController.stream.listen((account) {
-      _currentAccountConroller.sink.add(account);
+      _currentAccountController.sink.add(account);
     });
 
+    _currentCampaignController.stream.listen(_handleCurrentCampaignController);
+    _cmdCurrentCampaignController.stream.listen((campaign) {
+      _currentCampaignController.sink.add(campaign);
+    });
   }
 
   void dispose() {
@@ -72,8 +82,10 @@ class ApplicationBloc implements BlocBase {
     _cmdAccountsController.close();
     _campaignsController.close();
     _cmdCampaignsController.close();
-    _currentAccountConroller.close();
+    _currentAccountController.close();
     _cmdCurrentAccountController.close();
+    _currentCampaignController.close();
+    _cmdCurrentCampaignController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -90,5 +102,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentAccountController(data) {
     currentAccount = data;
+  }
+
+  void _handleCurrentCampaignController(data) {
+    currentCampaign = data;
   }
 }
