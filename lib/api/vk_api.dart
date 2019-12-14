@@ -21,11 +21,8 @@ class VkApi {
         'v': apiVersion,
       },
     );
-
     var response = await _getRequest(uri);
-
     AccountsList listOfAccounts = AccountsList.fromJSON(response);
-
     return listOfAccounts;
   }
 
@@ -39,13 +36,9 @@ class VkApi {
         'v': apiVersion,
       },
     );
-
     print('URI 2 is ${uri}');
-
     var response = await _getRequest(uri);
-
     CampaignsList listOfCampaigns = CampaignsList.fromJSON(response);
-
     return listOfCampaigns;
   }
 
