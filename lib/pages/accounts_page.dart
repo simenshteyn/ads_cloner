@@ -7,6 +7,17 @@ import 'package:ads_cloner/blocs/accounts_bloc.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 
 class AccountsPage extends StatelessWidget {
+  //   void _openCampaignsPage(BuildContext context) {
+  //   Navigator.of(context).push(
+  //     MaterialPageRoute(builder: (BuildContext context) {
+  //       return BlocProvider<AccountsBloc>(
+  //         bloc: AccountsBloc(),
+  //         child: AccountsPage(),
+  //       );
+  //     }),
+  //   );
+  // }
+
   @override
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
@@ -27,7 +38,10 @@ class AccountsPage extends StatelessWidget {
                   itemCount: snapshot.data.accounts.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                        title: Text(snapshot.data.accounts[index].accountName));
+                        leading: Icon(Icons.account_circle),
+                        title: Text(snapshot.data.accounts[index].accountName),
+                        trailing: Icon(Icons.keyboard_arrow_right),
+                        onTap: () {print('Account tapped index is ${index}');},);
                   },
                 );
               }
