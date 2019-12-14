@@ -2,10 +2,13 @@ import 'dart:async';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
+import 'package:ads_cloner/models/campaigns_list.dart';
+
 
 class ApplicationBloc implements BlocBase {
   VKAccessToken vkAccessToken;
   AccountsList accountsList;
+  CampaignsList campaignsList;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -23,6 +26,13 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdAccountsController = StreamController();
   StreamSink get getAccountsList => _cmdAccountsController.sink;
 
+  StreamController<CampaignsList> _campaignsController = StreamController<CampaignsList>.broadcast();
+  StreamSink<CampaignsList> get inCampaignsList => _campaignsController.sink;
+  Stream<CampaignsList> get outCampaignsList => _campaignsController.stream;
+
+  StreamController _cmdCampaignsController = StreamController();
+  StreamSink get getCampaignsList => _cmdCampaignsController.sink;
+
   ApplicationBloc() {
     _tokenController.stream.listen(_handleLogicTokenController);
     _cmdTokenController.stream.listen((token) {
@@ -33,6 +43,11 @@ class ApplicationBloc implements BlocBase {
     _cmdAccountsController.stream.listen((accounts) {
       _accountsController.sink.add(accounts);
     });
+
+    _campaignsController.stream.listen(_handleCampaignsController);
+    _cmdCampaignsController.stream.listen((campaigns) {
+      _campaignsController.sink.add(campaigns);
+    });
   }
 
   void dispose() {
@@ -40,6 +55,8 @@ class ApplicationBloc implements BlocBase {
     _cmdTokenController.close();
     _accountsController.close();
     _cmdAccountsController.close();
+    _campaignsController.close();
+    _cmdCampaignsController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -48,5 +65,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleAccountsController(data) {
     accountsList = data;
+  }
+
+  void _handleCampaignsController(data) {
+    campaignsList = data;
   }
 }
