@@ -22,8 +22,6 @@ class VkApi {
       },
     );
 
-    print('URI is ${uri}');
-
     var response = await _getRequest(uri);
 
     AccountsList listOfAccounts = AccountsList.fromJSON(response);
@@ -31,16 +29,18 @@ class VkApi {
     return listOfAccounts;
   }
 
-    Future<CampaignsList> adsGetCampaigns(String campaignId) async {
+  Future<CampaignsList> adsGetCampaigns(String accountId) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.getCampaigns',
       <String, String>{
-        'campaign_id': campaignId,
+        'account_id': accountId,
         'access_token': userToken,
         'v': apiVersion,
       },
     );
+
+    print('URI 2 is ${uri}');
 
     var response = await _getRequest(uri);
 
@@ -48,7 +48,6 @@ class VkApi {
 
     return listOfCampaigns;
   }
-
 
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);

@@ -1,5 +1,7 @@
+import 'package:ads_cloner/blocs/campaigns_bloc.dart';
 import 'package:ads_cloner/blocs/login_bloc.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
+import 'package:ads_cloner/pages/campaigns_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
@@ -27,16 +29,32 @@ class AccountsPage extends StatelessWidget {
                   itemCount: snapshot.data.accounts.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                        leading: Icon(Icons.account_circle),
-                        title: Text(snapshot.data.accounts[index].accountName),
-                        trailing: Icon(Icons.keyboard_arrow_right),
-                        onTap: () {print('Account tapped index is ${index}');},);
+                      leading: Icon(Icons.account_circle),
+                      title: Text(snapshot.data.accounts[index].accountName),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        appBloc.inCurrentAccount.add(snapshot.data.accounts[index]);
+                        print('Account tapped index is ${index}');
+                        _openCampaignsPage(context);
+                      },
+                    );
                   },
                 );
               }
               return Center(child: CircularProgressIndicator());
             }),
       ),
+    );
+  }
+
+  void _openCampaignsPage(BuildContext context) {
+    Navigator.of(context).push(
+      MaterialPageRoute(builder: (BuildContext context) {
+        return BlocProvider<CampaignsBloc>(
+          bloc: CampaignsBloc(),
+          child: CampaignsPage(),
+        );
+      }),
     );
   }
 }
