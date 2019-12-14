@@ -12,9 +12,7 @@ class AdsPage extends StatelessWidget {
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
     bloc.getAdsList.add(AdsRequest(appBloc.vkAccessToken,
         appBloc.currentAccount, appBloc.currentCampaign));
-    bloc.getAdsLayoutList.add(AdsRequest(appBloc.vkAccessToken,
-        appBloc.currentAccount, appBloc.currentCampaign));
-
+ 
     return Scaffold(
       appBar: AppBar(
         title: Text('Choose ad'),

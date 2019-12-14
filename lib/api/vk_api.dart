@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
 import 'package:ads_cloner/models/accounts_list.dart';
+import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
@@ -61,13 +62,14 @@ class VkApi {
   }
 
   Future<AdsLayoutList> adsGetAdsLayout(
-      String accountId, int campaignId) async {
+      String accountId, Ad ad) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
       <String, String>{
         'account_id': accountId,
-        'campaign_ids': '[${campaignId}]',
+        'campaign_ids': '[${ad.campaignId}]',
+        'ad_ids': '[${ad.id}]',
         'access_token': userToken,
         'v': apiVersion,
       },

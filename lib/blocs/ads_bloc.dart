@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
+import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
 import 'bloc_provider.dart';
@@ -21,9 +22,9 @@ class AdsBloc implements BlocBase {
       StreamController<AdsLayoutList>.broadcast();
   Stream<AdsLayoutList> get outAdsLayoutList => _adsLayoutController.stream;
 
-  StreamController<AdsRequest> _cmdAdsLayoutController =
-      StreamController<AdsRequest>.broadcast();
-  StreamSink<AdsRequest> get getAdsLayoutList => _cmdAdsLayoutController.sink;
+  StreamController<AdsLayoutRequest> _cmdAdsLayoutController =
+      StreamController<AdsLayoutRequest>.broadcast();
+  StreamSink<AdsLayoutRequest> get getAdsLayoutList => _cmdAdsLayoutController.sink;
 
   AdsBloc() {
     _adsController.stream.listen(_handleLogic);
@@ -41,9 +42,9 @@ class AdsBloc implements BlocBase {
       //_accountsController.sink.add(_accounts);
     });
 
-    _cmdAdsLayoutController.stream.listen((AdsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk.adsGetAdsLayout(request.account.accountId.toString(), request.campaign.id)
+    _cmdAdsLayoutController.stream.listen((AdsLayoutRequest req) {
+      var vk = VkApi(userToken: req.vkAccessToken.token);
+      vk.adsGetAdsLayout(req.account.accountId.toString(), req.ad)
           .then((list) {
         _adsLayout = list;
         print('ads_bloc ads layout list is ${list.adsLayout.length}');
