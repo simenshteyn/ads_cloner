@@ -17,7 +17,7 @@ class CampaignsPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Choose ads campaign'),
+        title: Text(appBloc.currentAccount.accountName),
       ),
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
@@ -30,7 +30,7 @@ class CampaignsPage extends StatelessWidget {
                   itemCount: snapshot.data.campaigns.length,
                   itemBuilder: (BuildContext context, int index) {
                     return ListTile(
-                      leading: Icon(Icons.account_circle),
+                      leading: Icon(Icons.photo_library),
                       title: Text(snapshot.data.campaigns[index].name),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
