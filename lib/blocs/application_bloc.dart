@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/account.dart';
+import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/campaign.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
@@ -12,6 +13,7 @@ class ApplicationBloc implements BlocBase {
   CampaignsList campaignsList;
   Account currentAccount;
   Campaign currentCampaign;
+  Ad currentAd;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -48,6 +50,12 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdCurrentCampaignController = StreamController();
   StreamSink get getCurrentCampaign => _cmdCurrentCampaignController.sink;
 
+  StreamController<Ad> _currentAdController = StreamController<Ad>.broadcast();
+  StreamSink<Ad> get inCurrentAd => _currentAdController.sink;
+  Stream<Ad> get outCurrentAd => _currentAdController.stream;
+  StreamController _cmdCurrentAdController = StreamController();
+  StreamSink get getCurrentAd => _cmdCurrentAdController.sink;
+
   ApplicationBloc() {
     _tokenController.stream.listen(_handleLogicTokenController);
     _cmdTokenController.stream.listen((token) {
@@ -73,6 +81,11 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentCampaignController.stream.listen((campaign) {
       _currentCampaignController.sink.add(campaign);
     });
+
+    _currentAdController.stream.listen(_handleCurrentAdController);
+    _cmdCurrentAdController.stream.listen((ad) {
+      _currentAdController.sink.add(ad);
+    });
   }
 
   void dispose() {
@@ -86,6 +99,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentAccountController.close();
     _currentCampaignController.close();
     _cmdCurrentCampaignController.close();
+    _currentAdController.close();
+    _cmdCurrentAdController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -106,5 +121,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentCampaignController(data) {
     currentCampaign = data;
+  }
+
+  void _handleCurrentAdController(data) {
+    currentAd = data;
   }
 }
