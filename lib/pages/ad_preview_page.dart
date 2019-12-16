@@ -1,3 +1,4 @@
+import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
 import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
@@ -11,7 +12,7 @@ class AdPreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+    AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
     bloc.getAdsLayoutList.add(AdsLayoutRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
     return Scaffold(
@@ -32,13 +33,10 @@ class AdPreviewPage extends StatelessWidget {
                       initialUrl: snapshot.data.adsLayout[0].previewLink,
                     ),
                   );
-
-                  //return Text('${snapshot.data.adsLayout[0].id}');
                 }
                 return Center(child: CircularProgressIndicator());
               },
             ),
-            
           ],
         ),
       ),

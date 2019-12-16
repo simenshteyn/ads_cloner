@@ -21,7 +21,6 @@ class AccountsPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: StreamBuilder<AccountsList>(
-            //initialData: loginBloc.accounts,
             stream: bloc.outAccountsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {

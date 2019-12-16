@@ -25,7 +25,6 @@ class CampaignsBloc implements BlocBase {
         print('campaigns_bloc list is ${list.campaigns.length}');
         _campaignsController.sink.add(_campaigns);
       });
-      //_accountsController.sink.add(_accounts);
     });
   }
 

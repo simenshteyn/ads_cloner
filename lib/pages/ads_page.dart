@@ -22,7 +22,6 @@ class AdsPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: StreamBuilder<AdsList>(
-            //initialData: loginBloc.accounts,
             stream: bloc.outAdsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -51,8 +50,8 @@ class AdsPage extends StatelessWidget {
   void _openAdPreviewPage(BuildContext context) {
     Navigator.of(context).push(
       MaterialPageRoute(builder: (BuildContext context) {
-        return BlocProvider<AdsBloc>(
-          bloc: AdsBloc(),
+        return BlocProvider<AdPreviewBloc>(
+          bloc: AdPreviewBloc(),
           child: AdPreviewPage(),
         );
       }),

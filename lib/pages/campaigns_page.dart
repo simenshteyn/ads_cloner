@@ -22,7 +22,6 @@ class CampaignsPage extends StatelessWidget {
       body: SizedBox(
         height: MediaQuery.of(context).size.height,
         child: StreamBuilder<CampaignsList>(
-            //initialData: loginBloc.accounts,
             stream: bloc.outCampaignsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
