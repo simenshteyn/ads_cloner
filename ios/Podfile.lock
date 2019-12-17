@@ -4,10 +4,13 @@ PODS:
     - Flutter
     - VK-ios-sdk
   - VK-ios-sdk (1.5.1)
+  - webview_flutter (0.0.1):
+    - Flutter
 
 DEPENDENCIES:
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - flutter_vk_sdk (from `.symlinks/plugins/flutter_vk_sdk/ios`)
+  - webview_flutter (from `.symlinks/plugins/webview_flutter/ios`)
 
 SPEC REPOS:
   trunk:
@@ -15,15 +18,18 @@ SPEC REPOS:
 
 EXTERNAL SOURCES:
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_vk_sdk:
     :path: ".symlinks/plugins/flutter_vk_sdk/ios"
+  webview_flutter:
+    :path: ".symlinks/plugins/webview_flutter/ios"
 
 SPEC CHECKSUMS:
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_vk_sdk: 9eca046bf123e76fe7203772c8b31d389bb9b841
   VK-ios-sdk: 62a10b6571fbcda0657f455fedce7fedf55b4cd0
+  webview_flutter: db3aba222b23e4dc432e0c5882834123dc50ff9f
 
-PODFILE CHECKSUM: 10ae9c18d12c9ffc2275c9a159a3b1e281990db0
+PODFILE CHECKSUM: 1b66dae606f75376c5f2135a8290850eeb09ae83
 
 COCOAPODS: 1.8.4

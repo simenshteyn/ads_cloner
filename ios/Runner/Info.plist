@@ -41,5 +41,26 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleTypeRole</key>
+            <string>Editor</string>
+            <key>CFBundleURLName</key>
+            <string>vk7219294</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>vk7219294</string>
+            </array>
+        </dict>
+    </array>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>vk</string>
+		<string>vk-share</string>
+		<string>vkauthorize</string>
+	</array>
+	<key>io.flutter.embedded_views_preview</key>
+    <string>YES</string>
 </dict>
 </plist>
