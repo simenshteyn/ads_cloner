@@ -81,6 +81,26 @@ class VkApi {
     return listOfAdsLayout;
   }
 
+    Future<AdsTargetingList> adsGetAdsTargeting(
+      String accountId, Ad ad) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getAdsTargeting',
+      <String, String>{
+        'account_id': accountId,
+        'campaign_ids': '[${ad.campaignId}]',
+        'ad_ids': '[${ad.id}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    print('URI 4 is ${uri}');
+
+    var response = await _getRequest(uri);
+    AdsLayoutList listOfAdsTargeting = AdsTargetingList.fromJSON(response);
+    return listOfAdsTargeting;
+  }
+
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
     var response = await request.close();
