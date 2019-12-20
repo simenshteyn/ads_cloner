@@ -14,6 +14,7 @@ class ApplicationBloc implements BlocBase {
   Account currentAccount;
   Campaign currentCampaign;
   Ad currentAd;
+  String currentPostId;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -56,6 +57,13 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdCurrentAdController = StreamController();
   StreamSink get getCurrentAd => _cmdCurrentAdController.sink;
 
+  StreamController<String> _currentPostIdController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inCurrentPostId => _currentPostIdController.sink;
+  Stream<String> get outCurrentPostId => _currentPostIdController.stream;
+  StreamController _cmdCurrentPostIdController = StreamController();
+  StreamSink get getCurrentPostId => _cmdCurrentPostIdController.sink;
+
   ApplicationBloc() {
     _tokenController.stream.listen(_handleLogicTokenController);
     _cmdTokenController.stream.listen((token) {
@@ -86,6 +94,11 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentAdController.stream.listen((ad) {
       _currentAdController.sink.add(ad);
     });
+
+    _currentPostIdController.stream.listen(_handleCurrentPostIdController);
+    _cmdCurrentPostIdController.stream.listen((postId) {
+      _currentPostIdController.sink.add(postId);
+    });
   }
 
   void dispose() {
@@ -101,6 +114,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentCampaignController.close();
     _currentAdController.close();
     _cmdCurrentAdController.close();
+    _currentPostIdController.close();
+    _cmdCurrentPostIdController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -125,5 +140,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentAdController(data) {
     currentAd = data;
+  }
+
+  void _handleCurrentPostIdController(data) {
+    currentPostId = data;
   }
 }

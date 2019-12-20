@@ -4,8 +4,10 @@ import 'dart:convert';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
+import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
+import 'package:ads_cloner/models/wall_post_list.dart';
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -61,8 +63,7 @@ class VkApi {
     return listOfAds;
   }
 
-  Future<AdsLayoutList> adsGetAdsLayout(
-      String accountId, Ad ad) async {
+  Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -75,14 +76,12 @@ class VkApi {
       },
     );
     print('URI 3 is ${uri}');
-
     var response = await _getRequest(uri);
     AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJSON(response);
     return listOfAdsLayout;
   }
 
-    Future<AdsTargetingList> adsGetAdsTargeting(
-      String accountId, Ad ad) async {
+  Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsTargeting',
@@ -95,10 +94,26 @@ class VkApi {
       },
     );
     print('URI 4 is ${uri}');
-
     var response = await _getRequest(uri);
-    AdsLayoutList listOfAdsTargeting = AdsTargetingList.fromJSON(response);
+    AdsTargetingList listOfAdsTargeting = AdsTargetingList.fromJSON(response);
     return listOfAdsTargeting;
+  }
+
+    Future<WallPostList> wallGetById(String postId) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/wall.getById',
+      <String, String>{
+        'posts': postId,
+        'copy_history_depth': '1',
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    print('URI 5 is ${uri}');
+    var response = await _getRequest(uri);
+    WallPostList listOfWallPost = WallPostList.fromJSON(response);
+    return listOfWallPost;
   }
 
   Future<String> _getRequest(Uri uri) async {

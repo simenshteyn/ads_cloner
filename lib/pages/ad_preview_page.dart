@@ -1,5 +1,4 @@
 import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
-import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_bloc.dart';
@@ -17,35 +16,44 @@ class AdPreviewPage extends StatelessWidget {
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
     bloc.getAdsLayoutList.add(AdsLayoutRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Объявление'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            AdInfoWidget(),
-            StreamBuilder<AdsLayoutList>(
-              stream: bloc.outAdsLayoutList,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Container(
-                    height: 600.0,
-                    child: WebView(
-                      initialUrl: snapshot.data.adsLayout[0].previewLink,
+      body: StreamBuilder<AdsLayoutList>(
+          stream: bloc.outAdsLayoutList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Column(
+                  children: <Widget>[
+                    AdInfoWidget(),
+                    Container(
+                      height: 600.0,
+                      child: WebView(
+                          initialUrl: snapshot.data.adsLayout[0].previewLink),
                     ),
-                  );
-                }
-                return Center(child: CircularProgressIndicator());
-              },
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.content_copy),
-        onPressed: () => _openClonePage(context),
-      ),
+                  ],
+                ),
+              );
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
+      floatingActionButton: StreamBuilder<AdsLayoutList>(
+          stream: bloc.outAdsLayoutList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return FloatingActionButton(
+                  child: Icon(Icons.content_copy),
+                  onPressed: () {
+                    appBloc.inCurrentPostId
+                        .add(_postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
+                    _openClonePage(context);
+                  });
+            }
+            return Container();
+          }),
     );
   }
 
@@ -58,5 +66,10 @@ class AdPreviewPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  String _postUrlConvertor(String linkUrl) {
+    //Convert linkUrl to postId
+    return linkUrl.substring(18);
   }
 }
