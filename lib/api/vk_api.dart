@@ -124,6 +124,24 @@ class VkApi {
     return listOfWallPost;
   }
 
+    Future<CreateAdsResultList> adsCreateAds(String accountId, CreateAdsList createAdsList) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.createAds',
+      <String, String>{
+        'account_id': accountId,
+        'data': createAdsList,
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    CreateAdsResultList listOfCreateAdsResult = CreateAdsResultList.fromJSON(response);
+    return listOfCreateAdsResult;
+  }
+
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
     var response = await request.close();
