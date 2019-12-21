@@ -9,13 +9,27 @@ import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class AdPreviewPage extends StatelessWidget {
+class AdPreviewPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _AdPreviewPageState createState() => _AdPreviewPageState();
+}
+
+class _AdPreviewPageState extends State<AdPreviewPage> {
+  @override
+  void initState() {
+    super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
     bloc.getAdsLayoutList.add(AdsLayoutRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
+    //bloc.getAdsLayoutList.add(AdsLayoutRequest(
+    //    appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
 
     return Scaffold(
       appBar: AppBar(
@@ -47,8 +61,8 @@ class AdPreviewPage extends StatelessWidget {
               return FloatingActionButton(
                   child: Icon(Icons.content_copy),
                   onPressed: () {
-                    appBloc.inCurrentPostId
-                        .add(_postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
+                    appBloc.inCurrentPostId.add(
+                        _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
                     _openClonePage(context);
                   });
             }

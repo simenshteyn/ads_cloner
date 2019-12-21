@@ -16,6 +16,8 @@ class AdsBloc implements BlocBase {
   StreamSink<AdsRequest> get getAdsList => _cmdAdsController.sink;
 
   AdsBloc() {
+    print("ADS BLOC CREATED");
+
     _adsController.stream.listen(_handleLogic);
 
     _cmdAdsController.stream.listen((AdsRequest request) {
@@ -24,13 +26,14 @@ class AdsBloc implements BlocBase {
           .adsGetAds(request.account.accountId.toString(), request.campaign.id)
           .then((list) {
         _ads = list;
-        print('ads_bloc list is ${list.ads.length}');
         _adsController.sink.add(_ads);
       });
     });
   }
 
   void dispose() {
+        print("ADS BLOC DISPOSED");
+
     _adsController.close();
     _cmdAdsController.close();
   }

@@ -16,19 +16,22 @@ class AccountsBloc implements BlocBase {
   StreamSink<VKAccessToken> get getAccountsList => _cmdController.sink;
 
   AccountsBloc() {
+    print("ACCOUNTS BLOC CREATED");
+
     _accountsController.stream.listen(_handleLogic);
 
     _cmdController.stream.listen((VKAccessToken token) {
       var vk = VkApi(userToken: token.token);
       vk.adsGetAccounts().then((list) {
         _accounts = list;
-        print('accounts_bloc list is ${list.accounts.length}');
         _accountsController.sink.add(_accounts);
       });
       //_accountsController.sink.add(_accounts);
     });
   }
   void dispose() {
+    print("ACCOUNTS BLOC DISPOSED");
+
     _accountsController.close();
     _cmdController.close();
   }

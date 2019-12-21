@@ -7,13 +7,27 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 
-class CampaignsPage extends StatelessWidget {
+class CampaignsPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _CampaignsPageState createState() => _CampaignsPageState();
+}
+
+class _CampaignsPageState extends State<CampaignsPage> {
+  @override
+  void initState() {
+    super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
     bloc.getCampaignsList
         .add(CampaignsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
+    //bloc.getCampaignsList
+    //    .add(CampaignsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
 
     return Scaffold(
       appBar: AppBar(

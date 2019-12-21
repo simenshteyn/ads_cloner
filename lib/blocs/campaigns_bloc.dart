@@ -17,12 +17,13 @@ class CampaignsBloc implements BlocBase {
       _cmdCampaignsController.sink;
 
   CampaignsBloc() {
+    print("CAMPAIGNS BLOC CREATED");
+
     _campaignsController.stream.listen(_handleLogic);
     _cmdCampaignsController.stream.listen((CampaignsRequest request) {
       var vk = VkApi(userToken: request.vkAccessToken.token);
       vk.adsGetCampaigns(request.account.accountId.toString()).then((list) {
         _campaigns = list;
-        print('campaigns_bloc list is ${list.campaigns.length}');
         _campaignsController.sink.add(_campaigns);
       });
     });
@@ -33,6 +34,8 @@ class CampaignsBloc implements BlocBase {
   }
 
   void dispose() {
+    print("CAMPAIGNS BLOC DISPOSED");
+
     _campaignsController.close();
     _cmdCampaignsController.close();
   }

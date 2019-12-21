@@ -18,13 +18,14 @@ class CloneBloc implements BlocBase {
       _cmdWallPostController.sink;
 
   CloneBloc() {
+    print("CLONE BLOC CREATED");
+
     _wallPostController.stream.listen(_handleLogic);
 
     _cmdWallPostController.stream.listen((WallPostRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
       vk.wallGetById(req.postId).then((list) {
         _wallPostList = list;
-        print('clone bloc is ${list.wallPosts.length}');
         _wallPostController.sink.add(_wallPostList);
       });
     });
@@ -33,6 +34,7 @@ class CloneBloc implements BlocBase {
   void dispose() {
     _wallPostController.close();
     _cmdWallPostController.close();
+    print("CLONE BLOC DISPOSED");
   }
 
   void _handleLogic(data) {

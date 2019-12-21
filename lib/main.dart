@@ -6,7 +6,7 @@ import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/login_bloc.dart';
 import 'package:ads_cloner/pages/login_page.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   FlutterVKSdk.init(appId: '7219294', apiVersion: '5.96');
   SystemChrome.setPreferredOrientations(

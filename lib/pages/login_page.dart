@@ -61,6 +61,7 @@ class LoginPage extends StatelessWidget {
       VKAccessToken token = await FlutterVKSdk.getAccessToken();
       bloc.inVkAccessToken.add(token);
       _openAccountsPage(context);
+      //bloc.getAccountsList.add(appBloc.vkAccessToken);
     }
   }
 

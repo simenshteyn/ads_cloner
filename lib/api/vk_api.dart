@@ -11,7 +11,7 @@ import 'package:ads_cloner/models/wall_post_list.dart';
 
 class VkApi {
   final baseUrl = 'api.vk.com';
-  final apiVersion = '5.96';
+  final apiVersion = '5.101';
   final userToken;
   final _httpClient = HttpClient();
 
@@ -27,6 +27,8 @@ class VkApi {
       },
     );
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     AccountsList listOfAccounts = AccountsList.fromJSON(response);
     return listOfAccounts;
   }
@@ -41,8 +43,9 @@ class VkApi {
         'v': apiVersion,
       },
     );
-    print('URI 2 is ${uri}');
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     CampaignsList listOfCampaigns = CampaignsList.fromJSON(response);
     return listOfCampaigns;
   }
@@ -59,6 +62,8 @@ class VkApi {
       },
     );
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     AdsList listOfAds = AdsList.fromJSON(response);
     return listOfAds;
   }
@@ -75,8 +80,9 @@ class VkApi {
         'v': apiVersion,
       },
     );
-    print('URI 3 is ${uri}');
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJSON(response);
     return listOfAdsLayout;
   }
@@ -93,13 +99,14 @@ class VkApi {
         'v': apiVersion,
       },
     );
-    print('URI 4 is ${uri}');
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     AdsTargetingList listOfAdsTargeting = AdsTargetingList.fromJSON(response);
     return listOfAdsTargeting;
   }
 
-    Future<WallPostList> wallGetById(String postId) async {
+  Future<WallPostList> wallGetById(String postId) async {
     var uri = Uri.https(
       baseUrl,
       'method/wall.getById',
@@ -110,8 +117,9 @@ class VkApi {
         'v': apiVersion,
       },
     );
-    print('URI 5 is ${uri}');
     var response = await _getRequest(uri);
+    print(uri);
+    print(response);
     WallPostList listOfWallPost = WallPostList.fromJSON(response);
     return listOfWallPost;
   }
@@ -119,6 +127,6 @@ class VkApi {
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
     var response = await request.close();
-    return response.transform(utf8.decoder).join();
+    return await response.transform(utf8.decoder).join();
   }
 }

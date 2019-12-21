@@ -8,12 +8,25 @@ import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/accounts_bloc.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 
-class AccountsPage extends StatelessWidget {
+class AccountsPage extends StatefulWidget {
+  @override
+  _AccountsPageState createState() => _AccountsPageState();
+}
+
+class _AccountsPageState extends State<AccountsPage> {
+  @override
+  void initState() {
+    super.initState();
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
+    bloc.getAccountsList.add(appBloc.vkAccessToken);
+  }
+
   @override
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
-    bloc.getAccountsList.add(appBloc.vkAccessToken);
+    //bloc.getAccountsList.add(appBloc.vkAccessToken);
     return Scaffold(
       appBar: AppBar(
         title: Text('Рекламные аккаунты'),
@@ -32,7 +45,8 @@ class AccountsPage extends StatelessWidget {
                       title: Text(snapshot.data.accounts[index].accountName),
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
-                        appBloc.inCurrentAccount.add(snapshot.data.accounts[index]);
+                        appBloc.inCurrentAccount
+                            .add(snapshot.data.accounts[index]);
                         print('Account tapped index is ${index}');
                         _openCampaignsPage(context);
                       },

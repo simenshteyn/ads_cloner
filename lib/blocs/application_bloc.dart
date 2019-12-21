@@ -65,6 +65,8 @@ class ApplicationBloc implements BlocBase {
   StreamSink get getCurrentPostId => _cmdCurrentPostIdController.sink;
 
   ApplicationBloc() {
+        print("APP BLOC CREATED");
+
     _tokenController.stream.listen(_handleLogicTokenController);
     _cmdTokenController.stream.listen((token) {
       _tokenController.sink.add(token);
@@ -102,6 +104,8 @@ class ApplicationBloc implements BlocBase {
   }
 
   void dispose() {
+        print("APP BLOC DISPOSED");
+
     _tokenController.close();
     _cmdTokenController.close();
     _accountsController.close();

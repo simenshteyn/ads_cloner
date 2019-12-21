@@ -18,19 +18,22 @@ class AdPreviewBloc implements BlocBase {
       _cmdAdsLayoutController.sink;
 
   AdPreviewBloc() {
+        print("AD PREVIEW BLOC CREATED");
+
     _adsLayoutController.stream.listen(_handleLayoutLogic);
 
     _cmdAdsLayoutController.stream.listen((AdsLayoutRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
       vk.adsGetAdsLayout(req.account.accountId.toString(), req.ad).then((list) {
         _adsLayout = list;
-        print('ads_bloc ads layout list is ${list.adsLayout.length}');
         _adsLayoutController.sink.add(_adsLayout);
       });
     });
   }
 
   void dispose() {
+        print("AD PREVIEW BLOC DISPOSED");
+
     _adsLayoutController.close();
     _cmdAdsLayoutController.close();
   }
