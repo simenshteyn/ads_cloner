@@ -26,9 +26,6 @@ class _CampaignsPageState extends State<CampaignsPage> {
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
-    //bloc.getCampaignsList
-    //    .add(CampaignsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
-
     return Scaffold(
       appBar: AppBar(
         title: Text(appBloc.currentAccount.accountName),

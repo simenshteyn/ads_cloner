@@ -5,6 +5,7 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
+import 'package:ads_cloner/models/create_ads_request.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';

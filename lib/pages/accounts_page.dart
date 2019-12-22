@@ -26,7 +26,6 @@ class _AccountsPageState extends State<AccountsPage> {
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
-    //bloc.getAccountsList.add(appBloc.vkAccessToken);
     return Scaffold(
       appBar: AppBar(
         title: Text('Рекламные аккаунты'),

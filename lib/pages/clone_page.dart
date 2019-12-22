@@ -16,7 +16,6 @@ class ClonePage extends StatelessWidget {
         .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Clone Ads'),
@@ -44,8 +43,14 @@ class ClonePage extends StatelessWidget {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.done),
-      ),
+          child: Icon(Icons.done),
+          onPressed: () {
+            _doneButtonPressed();
+          }),
     );
+  }
+
+  void _doneButtonPressed() {
+    print('Done button pressed');
   }
 }

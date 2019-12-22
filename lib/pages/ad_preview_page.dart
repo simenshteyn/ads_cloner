@@ -28,9 +28,6 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
-    //bloc.getAdsLayoutList.add(AdsLayoutRequest(
-    //    appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
-
     return Scaffold(
       appBar: AppBar(
         title: Text('Объявление'),
