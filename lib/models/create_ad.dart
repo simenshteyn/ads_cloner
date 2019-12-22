@@ -54,7 +54,10 @@ class CreateAd {
     this.targeting,
   });
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() {
+    var result = {};
+    result.addAll(
+     {
         'campaign_id': campaignId,
         'ad_format': adFormat,
         'autobidding': autobidding,
@@ -91,5 +94,8 @@ class CreateAd {
         'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
         'stats_url': statsUrl,
         'stats_url2': statsUrl2,
-      };
+      });
+  result.addAll(this.targeting.toJson());
+  return result;     
+  }
 }

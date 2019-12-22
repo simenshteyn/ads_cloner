@@ -49,4 +49,46 @@ class AdTargeting {
     this.campaignId = json['campaign_id'];
     this.id = json['id'];
   }
+
+  Map<String, dynamic> toJson() =>
+  {
+    'sex': sex,
+    'age_from': ageFrom,
+    'age_to': ageTo,
+    'birthday': birthday,
+    'country': country,
+    'cities': cities,
+    'cities_not': citiesNot,
+    'geo_near': geoNear,
+    'geo_point_type': geoPointType,
+    'statuses': statuses,
+    'groups': groups,
+    'groups_not': groupsNot,
+    'groups_active': groupsActive,
+    'apps': apps,
+    'appsNot': appsNot,
+    'districts': districts,
+    'stations': stations,
+    'streets': streets,
+    'schools': schools,
+    'positions': positions,
+    'religions': religions,
+    'interest_categories': interestCategories,
+    'interests': interests,
+    'user_devices': userDevices,
+    'user_os': userOs,
+    'user_browsers': userBrowsers,
+    'retargeting_groups': retargetingGroups,
+    'retargeting_groups_not': retargetingGroupsNot,
+    'events_retargeting_groups': eventsRetargetingGroups,
+    'paying': paying,
+    'travellers': travellers,
+    'scholl_from': schoolFrom,
+    'scholl_to': schoolTo,
+    'uni_from': uniFrom,
+    'uni_to': uniTo,
+    'count': count,
+    'campaign_id': campaignId,
+    'id': id,
+  };
 }

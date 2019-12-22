@@ -27,20 +27,24 @@ class ClonePage extends StatelessWidget {
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text('Some testing ${snapshot.data.wallPosts[0].ownerId}');
+                  return Text(
+                      'Some testing ${snapshot.data.wallPosts[0].ownerId}');
                 }
                 return CircularProgressIndicator();
               }),
           StreamBuilder<AdsTargetingList>(
-            stream: bloc.outAdsTargetingList,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                return Text('Some targeting info ${snapshot.data.adsTargeting[0].campaignId}');
-              }
-              return CircularProgressIndicator();
-            }
-          )
+              stream: bloc.outAdsTargetingList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text(
+                      'Some targeting info ${snapshot.data.adsTargeting[0].campaignId}');
+                }
+                return CircularProgressIndicator();
+              })
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.done),
       ),
     );
   }

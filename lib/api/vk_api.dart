@@ -7,6 +7,8 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
+import 'package:ads_cloner/models/create_ads_list.dart';
+import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 
 class VkApi {
@@ -130,7 +132,7 @@ class VkApi {
       'method/ads.createAds',
       <String, String>{
         'account_id': accountId,
-        'data': createAdsList,
+        'data': createAdsList.toJson().toString(),
         'access_token': userToken,
         'v': apiVersion,
       },
