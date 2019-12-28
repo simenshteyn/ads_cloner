@@ -7,15 +7,27 @@ import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
 
-class ClonePage extends StatelessWidget {
+class ClonePage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
+  _ClonePageState createState() => _ClonePageState();
+}
+
+class _ClonePageState extends State<ClonePage> {
+  @override
+  void initState() {
+    super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     bloc.getWallPostList
         .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Clone Ads'),

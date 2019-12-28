@@ -37,7 +37,7 @@ class LoginPage extends StatelessWidget {
           ],
         ),
       ),
-    );s
+    );
   }
 
   Future<bool> checkLoggedIn() async {

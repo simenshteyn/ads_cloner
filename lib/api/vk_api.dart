@@ -10,6 +10,8 @@ import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
+import 'package:flutter/foundation.dart';
+
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -121,7 +123,7 @@ class VkApi {
     );
     var response = await _getRequest(uri);
     print(uri);
-    print(response);
+    debugPrint(response, wrapWidth: 1024);
     WallPostList listOfWallPost = WallPostList.fromJSON(response);
     return listOfWallPost;
   }
