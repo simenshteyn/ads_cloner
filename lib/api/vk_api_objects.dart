@@ -53,7 +53,60 @@ class PostSource {
   }
 }
 
-//?ATTACHMENTS, more info at: https://vk.com/dev/objects/attachments_w
+// ATTACHMENTS, more info at: https://vk.com/dev/objects/attachments_w
+
+class PostAttachment {
+  String type;
+  Photo photo;
+  Video video;
+  Audio audio;
+  //Doc doc;
+  //Graffiti graffiti;
+  Link link;
+  Note note;
+  Poll poll; //TODO: make this
+  //Page page;
+  Album album;
+  //PhotosList photosList;
+  MarketItem market;
+  MarketAlbum marketAlbum;
+  //Sticker sticker;
+  PrettyCards prettyCards;
+  Event event;
+  PostAttachment.fromJSON(Map<String, dynamic> json) {
+    this.type = json['type'];
+    if (json.containsKey('photo')) {
+      this.photo = Photo.fromJSON(json['photo']);
+    }
+    if (json.containsKey('video')) {
+      this.video = Video.fromJSON(json['video']);
+    }
+    if (json.containsKey('audio')){
+      this.audio = Audio.fromJSON(json['audio']);
+    }
+    if (json.containsKey('link')){
+      this.link = Link.fromJSON(json['link']);
+    }
+    if (json.containsKey('note')){
+      this.note = Note.fromJSON(json['note']);
+    }
+    if (json.containsKey('album')){
+      this.album = Album.formJSON(json['album']);
+    }
+    if (json.containsKey('market')){
+      this.market = MarketItem.fromJSON(json['market']);
+    }
+    if (json.containsKey('market_album')){
+      this.marketAlbum = MarketAlbum.fromJSON(json['market_album']);
+    }
+    if (json.containsKey('pretty_cards')) {
+      this.prettyCards = PrettyCards.fromJSON(json['pretty_cards']);
+    }
+    if (json.containsKey('event')){
+      this.event = Event.fromJSON(json['event']);
+    }
+  }
+}
 
 class Photo {
   // More info at: https://vk.com/dev/objects/photo
@@ -377,5 +430,42 @@ class Event {
     this.buttonText = json['button_text'];
     var list = json['friends'] as List;
     this.friends = list.cast<int>();
+  }
+}
+
+// END OF ATTACHMENTS
+
+class Geo {
+  String type, coordinates;
+  Place place;
+  Geo.fromJSON(Map<String, dynamic> json) {
+    if (json.containsKey('type')){
+      this.type = json['type'];
+    }
+    if (json.containsKey('coordinates')) {
+      this.coordinates = json['coordinates'];
+    }
+    if (json.containsKey('place')){
+      this.place = Place.fromJSON(json['place']);
+    }
+  }
+}
+
+class Place {
+  int id, latitude, longitude, created, checkins, updated, type, country, city;
+  String title, icon, address;
+  Place.fromJSON(Map<String, dynamic> json){
+    this.id = json['id'];
+    this.title = json['title'];
+    this.latitude = json['latitude'];
+    this.longitude = json['longitude'];
+    this.created = json['created'];
+    this.icon = json['icon'];
+    this.checkins = json['checkins'];
+    this.updated = json['updated'];
+    this.type = json['type'];
+    this.country = json['country'];
+    this.city = json['city'];
+    this.address = json['address'];
   }
 }

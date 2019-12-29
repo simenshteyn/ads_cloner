@@ -11,8 +11,9 @@ class WallPost {
   Reposts reposts;
   Views views;
   PostSource postSource;
-  //attachments, geo
-  //copy_history,
+  List<PostAttachment> attachments;
+  Geo geo;
+  // copy_history,
 
   WallPost.fromJSON(Map<String, dynamic> json) {
     if (json.containsKey('id')) {
@@ -60,8 +61,14 @@ class WallPost {
     if (json.containsKey('post_source')) {
       this.postSource = PostSource.fromJSON(json['post_source']);
     }
-    //attachments
-    //geo
+    if (json.containsKey('attachments')) {
+      var list = json['attachments'] as List;
+      this.attachments = list.map((i) => PostAttachment.fromJSON(i)).toList();
+    }
+    if (json.containsKey('geo')) {
+      this.geo = Geo.fromJSON(json['geo']);
+    }
+
     if (json.containsKey('signer_id')) {
       this.signerId = json['signer_id'];
     }
