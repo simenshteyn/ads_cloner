@@ -9,13 +9,14 @@ import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:flutter/foundation.dart';
 
-
 class VkApi {
   final baseUrl = 'api.vk.com';
-  final apiVersion = '5.101';
+  final apiVersion = '5.103';
   final userToken;
   final _httpClient = HttpClient();
 
@@ -128,7 +129,8 @@ class VkApi {
     return listOfWallPost;
   }
 
-    Future<CreateAdsResultList> adsCreateAds(String accountId, CreateAdsList createAdsList) async {
+  Future<CreateAdsResultList> adsCreateAds(
+      String accountId, CreateAdsList createAdsList) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.createAds',
@@ -142,8 +144,28 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    CreateAdsResultList listOfCreateAdsResult = CreateAdsResultList.fromJSON(response);
+    CreateAdsResultList listOfCreateAdsResult =
+        CreateAdsResultList.fromJSON(response);
     return listOfCreateAdsResult;
+  }
+
+  Future<WallPostAdsStealthResult> wallPostAdsStealth(
+      String accountId, WallPostAdsStealth wallPostAdsStealth) async {
+    var baseMap = <String, String>{
+      'account_id': accountId,
+      'access_token': userToken,
+      'v': apiVersion,
+    };
+    var uri = Uri.https(
+      baseUrl,
+      'method/wall.postAdsStealth',
+      <String, String>{}..addAll(baseMap)..addAll(wallPostAdsStealth.toMap()));
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    WallPostAdsStealthResult adsStealthResult =
+        WallPostAdsStealthResult.fromJSON(response);
+    return adsStealthResult;
   }
 
   Future<String> _getRequest(Uri uri) async {

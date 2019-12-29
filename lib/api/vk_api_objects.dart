@@ -81,28 +81,28 @@ class PostAttachment {
     if (json.containsKey('video')) {
       this.video = Video.fromJSON(json['video']);
     }
-    if (json.containsKey('audio')){
+    if (json.containsKey('audio')) {
       this.audio = Audio.fromJSON(json['audio']);
     }
-    if (json.containsKey('link')){
+    if (json.containsKey('link')) {
       this.link = Link.fromJSON(json['link']);
     }
-    if (json.containsKey('note')){
+    if (json.containsKey('note')) {
       this.note = Note.fromJSON(json['note']);
     }
-    if (json.containsKey('album')){
+    if (json.containsKey('album')) {
       this.album = Album.formJSON(json['album']);
     }
-    if (json.containsKey('market')){
+    if (json.containsKey('market')) {
       this.market = MarketItem.fromJSON(json['market']);
     }
-    if (json.containsKey('market_album')){
+    if (json.containsKey('market_album')) {
       this.marketAlbum = MarketAlbum.fromJSON(json['market_album']);
     }
     if (json.containsKey('pretty_cards')) {
       this.prettyCards = PrettyCards.fromJSON(json['pretty_cards']);
     }
-    if (json.containsKey('event')){
+    if (json.containsKey('event')) {
       this.event = Event.fromJSON(json['event']);
     }
   }
@@ -220,15 +220,33 @@ class Link {
   Product product;
   Button button;
   Link.fromJSON(Map<String, dynamic> json) {
-    this.url = json['url'];
-    this.title = json['title'];
-    this.caption = json['caption'];
-    this.description = json['description'];
-    this.previewPage = json['preview_page'];
-    this.previewUrl = json['preview_url'];
-    this.photo = Photo.fromJSON(json['photo']);
-    this.product = Product.fromJSON(json['product']);
-    this.button = Button.fromJSON(json['button']);
+    if (json.containsKey('url')) {
+      this.url = json['url'];
+    }
+    if (json.containsKey('title')) {
+      this.title = json['title'];
+    }
+    if (json.containsKey('caption')) {
+      this.caption = json['caption'];
+    }
+    if (json.containsKey('description')) {
+      this.description = json['description'];
+    }
+    if (json.containsKey('preview_page')) {
+      this.previewPage = json['preview_page'];
+    }
+    if (json.containsKey('preview_url')) {
+      this.previewUrl = json['preview_url'];
+    }
+    if (json.containsKey('photo')) {
+      this.photo = Photo.fromJSON(json['photo']);
+    }
+    if (json.containsKey('product')) {
+      this.product = Product.fromJSON(json['product']);
+    }
+    if (json.containsKey('button')) {
+      this.button = Button.fromJSON(json['button']);
+    }
   }
 }
 
@@ -253,7 +271,9 @@ class Product {
   /// More info at: https://vk.com/dev/link_product
   Price price;
   Product.fromJSON(Map<String, dynamic> json) {
-    this.price = Price.fromJSON(json['price']);
+    if (json.containsKey('price')) {
+      this.price = Price.fromJSON(json['price']);
+    }
   }
 }
 
@@ -263,9 +283,15 @@ class Price {
   Currency currency;
   String text;
   Price.fromJSON(Map<String, dynamic> json) {
-    this.amount = json['amount'];
-    this.text = json['text'];
-    this.currency = Currency.fromJSON(json['currency']);
+    if (json.containsKey('amount')) {
+      this.amount = json['amount'];
+    }
+    if (json.containsKey('text')) {
+      this.text = json['text'];
+    }
+    if (json.containsKey('currency')) {
+      this.currency = Currency.fromJSON(json['currency']);
+    }
   }
 }
 
@@ -388,8 +414,7 @@ class PrettyCards {
 }
 
 class Card {
-  int cardId;
-  String linkUrl, title, price, priceOld;
+  String cardId, linkUrl, title, price, priceOld;
   List<CardImage> images;
   Button button;
   Card.fromJSON(Map<String, dynamic> json) {
@@ -439,13 +464,13 @@ class Geo {
   String type, coordinates;
   Place place;
   Geo.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('type')){
+    if (json.containsKey('type')) {
       this.type = json['type'];
     }
     if (json.containsKey('coordinates')) {
       this.coordinates = json['coordinates'];
     }
-    if (json.containsKey('place')){
+    if (json.containsKey('place')) {
       this.place = Place.fromJSON(json['place']);
     }
   }
@@ -454,7 +479,7 @@ class Geo {
 class Place {
   int id, latitude, longitude, created, checkins, updated, type, country, city;
   String title, icon, address;
-  Place.fromJSON(Map<String, dynamic> json){
+  Place.fromJSON(Map<String, dynamic> json) {
     this.id = json['id'];
     this.title = json['title'];
     this.latitude = json['latitude'];
