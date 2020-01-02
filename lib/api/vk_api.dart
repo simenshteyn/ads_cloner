@@ -150,16 +150,17 @@ class VkApi {
   }
 
   Future<WallPostAdsStealthResult> wallPostAdsStealth(
-      String accountId, WallPostAdsStealth wallPostAdsStealth) async {
+      WallPostAdsStealth wallPostAdsStealth) async {
     var baseMap = <String, String>{
-      'account_id': accountId,
       'access_token': userToken,
       'v': apiVersion,
     };
     var uri = Uri.https(
-      baseUrl,
-      'method/wall.postAdsStealth',
-      <String, String>{}..addAll(baseMap)..addAll(wallPostAdsStealth.toMap()));
+        baseUrl,
+        'method/wall.postAdsStealth',
+        <String, String>{}
+          ..addAll(baseMap)
+          ..addAll(wallPostAdsStealth.toMap()));
     var response = await _getRequest(uri);
     print(uri);
     print(response);

@@ -73,6 +73,7 @@ class PostAttachment {
   //Sticker sticker;
   PrettyCards prettyCards;
   Event event;
+
   PostAttachment.fromJSON(Map<String, dynamic> json) {
     this.type = json['type'];
     if (json.containsKey('photo')) {
@@ -160,6 +161,7 @@ class Video {
   String player, platform, accessKey;
   int processing, live, upcoming;
   bool isFavorite;
+
   Video.fromJSON(Map<String, dynamic> json) {
     this.id = json['id'];
     this.ownerId = json['owner_id'];
@@ -246,7 +248,7 @@ class Link {
     }
     if (json.containsKey('button')) {
       this.button = Button.fromJSON(json['button']);
-    }
+    } 
   }
 }
 

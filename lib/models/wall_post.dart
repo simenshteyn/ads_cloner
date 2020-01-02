@@ -15,6 +15,79 @@ class WallPost {
   Geo geo;
   // copy_history,
 
+  String get attachmentsToString {
+    // Returns attachments in string for PostAdsStealth Creation
+    // More info at https://vk.com/dev/wall.postAdsStealth
+    String _result = '';
+    for (var attachment in this.attachments) {
+      switch (attachment.type) {
+        case 'photo':
+          _result += attachment.type;
+          _result += attachment.photo.ownerId.toString();
+          _result += '_' + attachment.photo.id.toString() + ',';
+          break;
+        case 'video':
+          _result += attachment.type;
+          _result += attachment.video.ownerId.toString();
+          _result += '_' + attachment.video.id.toString() + ',';
+          break;
+        case 'audio':
+          _result += attachment.type;
+          _result += attachment.audio.ownerId.toString();
+          _result += '_' + attachment.audio.id.toString() + ',';
+          break;
+        case 'link':
+          //_result += attachment.type;
+          _result += attachment.link.url + ',';
+          break;
+        // case 'doc':
+        //   _result += attachment.doc.ownerId.toString();
+        //   break;
+        // TODO: after Doc attachment is made!
+        // case 'page':
+        //   _result += attachment.page.ownerId.toString();
+        //   break;
+        // TODO: after WikiPage attachment is made!
+        case 'note':
+          _result += attachment.type;
+          _result += attachment.note.ownerId.toString();
+          _result += '_' + attachment.note.id.toString() + ',';
+          break;
+        // case 'poll':
+        //   _result += attachment.poll.ownerId.toString();
+        //   break;
+        // TODO after Poll attachment is made;
+        case 'album':
+          _result += attachment.type;
+          _result += attachment.album.ownerId.toString();
+          _result += '_' + attachment.album.id.toString() + ',';
+          break;
+        case 'market':
+          _result += attachment.type;
+          _result += attachment.market.ownerId.toString();
+          _result += '_' + attachment.market.id.toString() + ',';
+          break;
+        case 'market_album':
+          _result += attachment.type;
+          _result += attachment.marketAlbum.ownerId.toString();
+          _result += attachment.marketAlbum.id.toString() + ',';
+          break;
+        case 'pretty_cards':
+          for (var card in attachment.prettyCards.cards) {
+            _result += 'pretty_card' + card.cardId.toString() + ',';
+          }
+          break;
+        default:
+          break;
+      }
+    }
+    print(_result);
+    if (_result != '') {
+      return _result.substring(0, _result.length - 1);
+    } else
+      return 'no result';
+  }
+
   WallPost.fromJSON(Map<String, dynamic> json) {
     if (json.containsKey('id')) {
       this.id = json['id'];

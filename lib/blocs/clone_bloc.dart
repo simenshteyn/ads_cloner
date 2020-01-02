@@ -1,12 +1,12 @@
 import 'dart:async';
-
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
-import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_request.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth_request.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 
@@ -14,6 +14,7 @@ class CloneBloc implements BlocBase {
   WallPostList _wallPostList;
   AdsTargetingList _adsTargetingList;
   CreateAdsResultList _createAdsResultList;
+  WallPostAdsStealthResult _wallPostAdsStealthResult;
 
   StreamController<WallPostList> _wallPostController =
       StreamController<WallPostList>.broadcast();
@@ -23,15 +24,33 @@ class CloneBloc implements BlocBase {
   StreamSink<WallPostRequest> get getWallPostList =>
       _cmdWallPostController.sink;
 
-  StreamController<AdsTargetingList> _adsTargetingController = StreamController<AdsTargetingList>.broadcast();
-  Stream<AdsTargetingList> get outAdsTargetingList => _adsTargetingController.stream;
-  StreamController<AdsTargetingRequest> _cmdAdsTargetingController = StreamController<AdsTargetingRequest>.broadcast();
-  StreamSink<AdsTargetingRequest> get getAdsTargetingList => _cmdAdsTargetingController.sink;
+  StreamController<AdsTargetingList> _adsTargetingController =
+      StreamController<AdsTargetingList>.broadcast();
+  Stream<AdsTargetingList> get outAdsTargetingList =>
+      _adsTargetingController.stream;
+  StreamController<AdsTargetingRequest> _cmdAdsTargetingController =
+      StreamController<AdsTargetingRequest>.broadcast();
+  StreamSink<AdsTargetingRequest> get getAdsTargetingList =>
+      _cmdAdsTargetingController.sink;
 
-  StreamController<CreateAdsResultList> _createAdsResultController = StreamController<CreateAdsResultList>.broadcast();
-  Stream<CreateAdsResultList> get outCreateAdsResultList => _createAdsResultController.stream;
-  StreamController<CreateAdsRequest> _cmdCreateAdsResultController = StreamController<CreateAdsRequest>.broadcast();
-  StreamSink<CreateAdsRequest> get getCreateAdsResultList => _cmdCreateAdsResultController.sink;
+  StreamController<CreateAdsResultList> _createAdsResultController =
+      StreamController<CreateAdsResultList>.broadcast();
+  Stream<CreateAdsResultList> get outCreateAdsResultList =>
+      _createAdsResultController.stream;
+  StreamController<CreateAdsRequest> _cmdCreateAdsResultController =
+      StreamController<CreateAdsRequest>.broadcast();
+  StreamSink<CreateAdsRequest> get getCreateAdsResultList =>
+      _cmdCreateAdsResultController.sink;
+
+  StreamController<WallPostAdsStealthResult>
+      _wallPostAdsStealthResultController =
+      StreamController<WallPostAdsStealthResult>.broadcast();
+  Stream<WallPostAdsStealthResult> get outWallPostAdsStealthResult =>
+      _wallPostAdsStealthResultController.stream;
+  StreamController<WallPostAdsStealthRequest> _cmdWallPostAdsStealthController =
+      StreamController<WallPostAdsStealthRequest>.broadcast();
+  StreamSink<WallPostAdsStealthRequest> get getWallPostAdsStealthResult =>
+      _cmdWallPostAdsStealthController.sink;
 
   CloneBloc() {
     print("CLONE BLOC CREATED");
@@ -39,6 +58,8 @@ class CloneBloc implements BlocBase {
     _wallPostController.stream.listen(_handleLogic);
     _adsTargetingController.stream.listen(_handleTargetingLogic);
     _createAdsResultController.stream.listen(_handleCreateAdsResultLogic);
+    _wallPostAdsStealthResultController.stream
+        .listen(_handleWallPostAdsStealthResultLogic);
 
     _cmdWallPostController.stream.listen((WallPostRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
@@ -50,17 +71,30 @@ class CloneBloc implements BlocBase {
 
     _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.adsGetAdsTargeting(req.account.accountId.toString(), req.ad).then((list) {
+      vk
+          .adsGetAdsTargeting(req.account.accountId.toString(), req.ad)
+          .then((list) {
         _adsTargetingList = list;
         _adsTargetingController.sink.add(_adsTargetingList);
       });
     });
 
-    _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req){
+    _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.adsCreateAds(req.account.accountId.toString(), req.createAdsList).then((list) {
+      vk
+          .adsCreateAds(req.account.accountId.toString(), req.createAdsList)
+          .then((list) {
         _createAdsResultList = list;
         _createAdsResultController.sink.add(_createAdsResultList);
+      });
+    });
+
+    _cmdWallPostAdsStealthController.stream
+        .listen((WallPostAdsStealthRequest req) {
+      var vk = VkApi(userToken: req.vkAccessToken.token);
+      vk.wallPostAdsStealth(req.wallPostAdsStealth).then((list) {
+        _wallPostAdsStealthResult = list;
+        _wallPostAdsStealthResultController.sink.add(_wallPostAdsStealthResult);
       });
     });
   }
@@ -72,6 +106,8 @@ class CloneBloc implements BlocBase {
     _cmdAdsTargetingController.close();
     _createAdsResultController.close();
     _cmdCreateAdsResultController.close();
+    _wallPostAdsStealthResultController.close();
+    _cmdWallPostAdsStealthController.close();
     print("CLONE BLOC DISPOSED");
   }
 
@@ -85,5 +121,9 @@ class CloneBloc implements BlocBase {
 
   void _handleCreateAdsResultLogic(data) {
     _createAdsResultList = data;
+  }
+
+  void _handleWallPostAdsStealthResultLogic(data) {
+    _wallPostAdsStealthResult = data;
   }
 }

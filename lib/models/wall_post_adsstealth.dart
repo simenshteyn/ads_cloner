@@ -1,7 +1,12 @@
+import 'package:ads_cloner/models/wall_post.dart';
+import 'dart:math';
+import 'dart:convert';
+
 class WallPostAdsStealth {
-  String ownerId, message;
+  static final Random _random = Random.secure();
+  String message;
   String attachments, guid, linkButton, linkTitle, linkImage, linkVideo;
-  int signed, placeId;
+  int ownerId, signed, placeId;
   double lat, long;
 
   WallPostAdsStealth(
@@ -18,10 +23,60 @@ class WallPostAdsStealth {
       this.linkImage,
       this.linkVideo});
 
+  static String createCryptoRandomString([int length = 32]) {
+    // Static function to generate random guid
+    var values = List<int>.generate(length, (i) => _random.nextInt(256));
+    return base64Url.encode(values);
+  }
+
+  WallPostAdsStealth.fromWallPost(WallPost wallPost) {
+    if (wallPost.ownerId != null) {
+      this.ownerId = wallPost.ownerId;
+    }
+
+    if (wallPost.text != null) {
+      this.message = wallPost.text;
+    }
+
+    if (wallPost.attachments != null) {
+      this.attachments = wallPost.attachmentsToString;
+    }
+
+    if (wallPost.signerId != null) {
+      this.signed = 1;
+    } else {
+      this.signed = 0;
+    }
+
+    if (wallPost.geo != null) {
+      this.lat = 0.00; //TODO fix that mock later
+      this.long = 0.00; //TODO fix that mock later
+    }
+
+    if (wallPost.geo?.place != null) {
+      this.placeId = wallPost.geo.place.id;
+    }
+
+    this.guid = createCryptoRandomString();
+
+    if (wallPost.attachments != null) {
+      for (var attachment in wallPost.attachments) {
+        if (attachment.link?.button != null) {
+          this.linkButton = attachment.link.button.action.type;
+          this.linkTitle = attachment.link?.title;
+          //TODO linkVideo to done yet
+        }
+        if (attachment.link?.photo != null) {
+          this.linkImage = attachment.link.photo.sizes.last.url;
+        }
+      }
+    }
+  }
+
   Map<String, String> toMap() {
     var _map = Map<String, String>();
     if (ownerId != null) {
-      _map['owner_id'] = ownerId;
+      _map['owner_id'] = ownerId.toString();
     }
     if (message != null) {
       _map['message'] = message;
