@@ -15,7 +15,7 @@ void main() {
         'https://sun9-127.userapi.com/c850032/v850032360/16b0fd/qFr0nMuZyeA.jpg');
     expect(adsStealth.linkButton, 'open_url');
     expect(adsStealth.linkTitle, "Руководитель. Уровень Бог");
-        print(adsStealth.attachments);
+    print(adsStealth.attachments);
     print(adsStealth.guid);
     print(adsStealth.message);
     print(adsStealth.ownerId);
@@ -46,5 +46,63 @@ void main() {
     print(adsStealth.signed);
     print(adsStealth.lat);
     print(adsStealth.long);
+  });
+
+  test('Ads Stealth third test', () async {
+    final stringPostJson = r'''{
+	"response": [{
+		"id": 392,
+		"from_id": -156794055,
+		"owner_id": -156794055,
+		"date": 1576555752,
+		"marked_as_ads": 0,
+		"post_type": "post_ads",
+		"text": "Если ваш бывший муж уже который месяц не платит алименты…😱 Если его белая ЗП — 4000₽, из которых он готов «щедро» отдать 1000₽ на ребенка… Если вы хотите знать, на что имеете ПРАВО по закону…☝ подписывайтесь, поможем.",
+		"can_edit": 1,
+		"created_by": 21307092,
+		"attachments": [{
+			"type": "link",
+			"link": {
+				"url": "https:\/\/vk.com\/public156794055",
+				"title": "Юрист Евгений Терехов поможет ⇒",
+				"caption": "vk.com",
+				"description": "Запись на консультацию <img class=\"emoji\" src=\"\/emoji\/e\/e2988e.png\" al",
+				"button": {
+					"title": "Подписаться",
+					"action": {
+						"type": "join_group_and_open_url",
+						"group_id": 156794055,
+						"url": "https:\/\/vk.com\/public156794055"
+					}
+				},
+				"is_favorite": false
+			}
+		}],
+		"post_source": {
+			"type": "vk"
+		},
+		"comments": {
+			"count": 0,
+			"can_post": 0
+		},
+		"likes": {
+			"count": 7,
+			"user_likes": 0,
+			"can_like": 1,
+			"can_publish": 1
+		},
+		"reposts": {
+			"count": 1,
+			"user_reposted": 0
+		},
+		"is_favorite": false,
+		"is_promoted_post_stealth": true
+	}]
+}
+    ''';
+    final wallPosts = WallPostList.fromJSON(stringPostJson);
+    expect(wallPosts.wallPosts.length, 1);
+    final adsStealth = WallPostAdsStealth.fromWallPost(wallPosts.wallPosts[0]);
+    print(adsStealth.attachments);
   });
 }

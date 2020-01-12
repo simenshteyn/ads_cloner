@@ -2,14 +2,24 @@ import 'package:flutter/foundation.dart';
 
 class Comments {
   /// https://vk.com/dev/objects/post -- comments object
-  int count, canPost, groupsCanPost;
-  bool canClose, canOpen;
+  int count, canPost, canClose;
+  bool groupsCanPost, canOpen;
   Comments.fromJSON(Map<String, dynamic> json) {
-    this.count = json['count'];
-    this.canPost = json['can_post'];
-    this.groupsCanPost = json['groups_can_post'];
-    this.canClose = json['can_close'];
-    this.canOpen = json['can_open'];
+    if (json.containsKey('count')) {
+      this.count = json['count'];
+    }
+    if (json.containsKey('can_post')) {
+      this.canPost = json['can_post'];
+    }
+    if (json.containsKey('groups_can_post')) {
+      this.groupsCanPost = json['groups_can_post'];
+    }
+    if (json.containsKey('can_close')) {
+      this.canClose = json['can_close'];
+    }
+    if (json.containsKey('can_open')) {
+      this.canOpen = json['can_open'];
+    }
   }
 }
 
@@ -17,7 +27,9 @@ class Likes {
   /// https://vk.com/dev/objects/post -- likes object
   int count, userLikes, canLike, canPublish;
   Likes.fromJSON(Map<String, dynamic> json) {
-    this.count = json['count'];
+    if (json.containsKey('count')) {
+      this.count = json['count'];
+    }
     this.userLikes = json['user_likes'];
     this.canLike = json['can_like'];
     this.canPublish = json['can_publish'];
@@ -233,6 +245,7 @@ class Link {
     }
     if (json.containsKey('description')) {
       this.description = json['description'];
+      //Can contain shit that cause JSON parsing error
     }
     if (json.containsKey('preview_page')) {
       this.previewPage = json['preview_page'];
@@ -248,7 +261,7 @@ class Link {
     }
     if (json.containsKey('button')) {
       this.button = Button.fromJSON(json['button']);
-    } 
+    }
   }
 }
 
