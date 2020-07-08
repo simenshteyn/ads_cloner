@@ -10,6 +10,7 @@ import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
+import 'package:ads_cloner/widgets/clone_options_widget.dart';
 
 class ClonePage extends StatefulWidget {
   @override
@@ -40,6 +41,7 @@ class _ClonePageState extends State<ClonePage> {
       ),
       body: Column(
         children: <Widget>[
+          CloneOptionsWidget(),
           StreamBuilder<WallPostList>(
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
