@@ -10,6 +10,7 @@ import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
+import 'package:ads_cloner/widgets/clone_options_widget.dart';
 
 class ClonePage extends StatefulWidget {
   @override
@@ -40,10 +41,12 @@ class _ClonePageState extends State<ClonePage> {
       ),
       body: Column(
         children: <Widget>[
+          CloneOptionsWidget(),
           StreamBuilder<WallPostList>(
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                // Check list length to prevent error with clone of deleted vk posts
+                if ((snapshot.hasData) && (snapshot.data.wallPosts.length != 0)) {
                   this.wallPost = snapshot.data.wallPosts[0];
                   return Text(
                       'Some testing ${snapshot.data.wallPosts[0].ownerId}');
@@ -84,16 +87,5 @@ class _ClonePageState extends State<ClonePage> {
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     bloc.getWallPostAdsStealthResult
         .add(WallPostAdsStealthRequest(appBloc.vkAccessToken, adsStealth));
-    // print(adsStealth.guid);
-    // print(adsStealth.message);
-    // print(adsStealth.ownerId);
-    // print(adsStealth.message);
-    // print(adsStealth.signed);
-    // print(adsStealth.lat);
-    // print(adsStealth.long);
-    // print(adsStealth.linkButton);
-    // print(adsStealth.linkTitle);
-    // print(adsStealth.attachments);
-    // print(adsStealth.linkImage);
   }
 }

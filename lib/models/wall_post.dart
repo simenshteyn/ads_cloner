@@ -88,6 +88,65 @@ class WallPost {
       return 'no result';
   }
 
+  String get attachmentsToLinkButton {
+    // Returns proper link_button string for method wall.postAdsStealth
+    // More info: https://vk.com/dev/wall.postAdsStealth
+    String _result;
+    var _map = {
+      "Запустить": "app_join",
+      "Перейти": "open_url",
+      "Открыть": "open",
+      "Подробнее": "more",
+      "Позвонить": "call",
+      "Забронировать": "book",
+      "Записаться": "enroll",
+      "Зарегистрироваться": "register",
+      "Купить": "buy",
+      "Купить билет": "buy_ticket",
+      "Заказать": "order",
+      "Создать": "create",
+      "Установить": "install",
+      //"Связаться": "contact", для внешних сайтов
+      "Заполнить": "fill",
+      "Подписаться": "join_public",
+      "Я пойду": "join_event",
+      "Вступить": "join",
+      "Связаться": "im",
+      "Написать": "im2",
+      "Начать": "begin",
+      "Получить": "get",
+      "Смотреть": "watch",
+      "Скачать": "download",
+      "Участвовать": "participate",
+      "Играть": "play",
+      "Подать заявку": "apply",
+      "Получить предолжение": "get_an_offer",
+      //"Написать": "to_write",  для внешних сайтов
+      "Откликнуться": "reply",
+    };
+
+    for (var attachment in this.attachments) {
+      if (attachment.type == 'link') {
+        _result = _map[attachment.link.button.title];
+      }
+    }
+    return _result;
+  }
+
+  String get attachmentsToLinkVideo {
+    // Returns proper link_video in format <owner_id>_<media_id> to work
+    // in wall.postAdsStealth method: https://vk.com/dev/wall.postAdsStealth
+    String _result;
+    for (var attachment in this.attachments) {
+      if ((attachment.type == 'link') && (attachment.link.video != null)) {
+        _result = "${attachment.link.video.ownerId}"
+            "_"
+            "${attachment.link.video.id}";
+      }
+    }
+    return _result;
+  }
+
   WallPost.fromJSON(Map<String, dynamic> json) {
     if (json.containsKey('id')) {
       this.id = json['id'];

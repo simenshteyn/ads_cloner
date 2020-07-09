@@ -61,13 +61,16 @@ class WallPostAdsStealth {
 
     if (wallPost.attachments != null) {
       for (var attachment in wallPost.attachments) {
-        if (attachment.link?.button != null) {
-          this.linkButton = attachment.link.button.action.type;
-          this.linkTitle = attachment.link?.title;
-          //TODO linkVideo to done yet
-        }
         if (attachment.link?.photo != null) {
           this.linkImage = attachment.link.photo.sizes.last.url;
+        }
+        if (attachment.link?.button != null) {
+          this.linkButton = wallPost.attachmentsToLinkButton;
+          this.linkTitle = attachment.link?.title;
+        }
+        if (attachment.link?.video != null) {
+          this.linkVideo = wallPost.attachmentsToLinkVideo;
+          //Auto-load this time...
         }
       }
     }
