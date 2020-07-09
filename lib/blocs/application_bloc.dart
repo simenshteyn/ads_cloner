@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/account.dart';
 import 'package:ads_cloner/models/ad.dart';
+import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/campaign.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
@@ -14,6 +15,7 @@ class ApplicationBloc implements BlocBase {
   Account currentAccount;
   Campaign currentCampaign;
   Ad currentAd;
+  AdLayout currentAdLayout;
   String currentPostId;
 
   StreamController<VKAccessToken> _tokenController =
@@ -57,6 +59,13 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdCurrentAdController = StreamController();
   StreamSink get getCurrentAd => _cmdCurrentAdController.sink;
 
+  StreamController<AdLayout> _currentAdLayoutController =
+      StreamController<AdLayout>.broadcast();
+  StreamSink<AdLayout> get inCurrentAdLayout => _currentAdLayoutController.sink;
+  Stream<AdLayout> get outCurrentAdLayout => _currentAdLayoutController.stream;
+  StreamController _cmdCurrentAdLayoutController = StreamController();
+  StreamSink get getCurrentAdLayout => _cmdCurrentAdLayoutController.sink;
+
   StreamController<String> _currentPostIdController =
       StreamController<String>.broadcast();
   StreamSink<String> get inCurrentPostId => _currentPostIdController.sink;
@@ -65,7 +74,7 @@ class ApplicationBloc implements BlocBase {
   StreamSink get getCurrentPostId => _cmdCurrentPostIdController.sink;
 
   ApplicationBloc() {
-        print("APP BLOC CREATED");
+    print("APP BLOC CREATED");
 
     _tokenController.stream.listen(_handleLogicTokenController);
     _cmdTokenController.stream.listen((token) {
@@ -97,6 +106,11 @@ class ApplicationBloc implements BlocBase {
       _currentAdController.sink.add(ad);
     });
 
+    _currentAdLayoutController.stream.listen(_handleCurrentAdLayoutController);
+    _cmdCurrentAdLayoutController.stream.listen((adLayout) {
+      _currentAdLayoutController.sink.add(adLayout);
+    });
+
     _currentPostIdController.stream.listen(_handleCurrentPostIdController);
     _cmdCurrentPostIdController.stream.listen((postId) {
       _currentPostIdController.sink.add(postId);
@@ -104,7 +118,7 @@ class ApplicationBloc implements BlocBase {
   }
 
   void dispose() {
-        print("APP BLOC DISPOSED");
+    print("APP BLOC DISPOSED");
 
     _tokenController.close();
     _cmdTokenController.close();
@@ -118,6 +132,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentCampaignController.close();
     _currentAdController.close();
     _cmdCurrentAdController.close();
+    _currentAdLayoutController.close();
+    _cmdCurrentAdLayoutController.close();
     _currentPostIdController.close();
     _cmdCurrentPostIdController.close();
   }
@@ -144,6 +160,10 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentAdController(data) {
     currentAd = data;
+  }
+
+  void _handleCurrentAdLayoutController(data) {
+    currentAdLayout = data;
   }
 
   void _handleCurrentPostIdController(data) {

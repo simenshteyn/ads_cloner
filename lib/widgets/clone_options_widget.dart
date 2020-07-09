@@ -26,7 +26,7 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                 ),
                 child: Center(
                   child: Text(
-                    "Card ${i + i}",
+                    "Card ${i}",
                     style: TextStyle(fontSize: 32),
                   ),
                 ),
