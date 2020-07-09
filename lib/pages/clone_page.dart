@@ -45,7 +45,8 @@ class _ClonePageState extends State<ClonePage> {
           StreamBuilder<WallPostList>(
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                // Check list length to prevent error with clone of deleted vk posts
+                if ((snapshot.hasData) && (snapshot.data.wallPosts.length != 0)) {
                   this.wallPost = snapshot.data.wallPosts[0];
                   return Text(
                       'Some testing ${snapshot.data.wallPosts[0].ownerId}');
