@@ -86,16 +86,5 @@ class _ClonePageState extends State<ClonePage> {
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     bloc.getWallPostAdsStealthResult
         .add(WallPostAdsStealthRequest(appBloc.vkAccessToken, adsStealth));
-    // print(adsStealth.guid);
-    // print(adsStealth.message);
-    // print(adsStealth.ownerId);
-    // print(adsStealth.message);
-    // print(adsStealth.signed);
-    // print(adsStealth.lat);
-    // print(adsStealth.long);
-    // print(adsStealth.linkButton);
-    // print(adsStealth.linkTitle);
-    // print(adsStealth.attachments);
-    // print(adsStealth.linkImage);
   }
 }

@@ -231,6 +231,7 @@ class Link {
   /// More info at: https://vk.com/dev/objects/link
   String url, title, caption, description, previewPage, previewUrl;
   Photo photo;
+  Video video;
   Product product;
   Button button;
   Link.fromJSON(Map<String, dynamic> json) {
@@ -255,6 +256,9 @@ class Link {
     }
     if (json.containsKey('photo')) {
       this.photo = Photo.fromJSON(json['photo']);
+    }
+    if (json.containsKey('video')) {
+      this.video = Video.fromJSON(json['video']);
     }
     if (json.containsKey('product')) {
       this.product = Product.fromJSON(json['product']);
