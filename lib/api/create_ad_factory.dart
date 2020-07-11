@@ -1,31 +1,48 @@
+import 'package:ads_cloner/models/ad.dart';
+import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:ads_cloner/models/create_ad.dart';
 import 'package:ads_cloner/models/wall_post.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth.dart';
+import 'package:flutter_vk_sdk/vk_api/vk_api.dart';
+import 'package:ads_cloner/api/vk_api.dart';
 
-enum OptionType { post, target }
+enum CloneType { text, pure }
 
-class CloneOption {
-  OptionType type;
-  String param;
+class CloneTask {
+  CloneType type;
   String value;
 
-  CloneOption(this.type, this.param, this.value);
+  CloneTask({this.type, this.value});
 }
 
 class CloneFactory {
-  WallPost _wallPost;
-  AdTargeting _adTargeting;
-  CloneOption _cloneOption;
+  VkApi vkApi;
 
-  buildAdList(
-      WallPost wallPost, AdTargeting adTargeting, CloneOption cloneOption) {
-    switch (cloneOption.type) {
-      case OptionType.post:
-       //something
+  CloneFactory(this.vkApi);
+
+  Future<CreateAd> buildAd(Ad originalAd, AdTargeting adTargeting,
+      AdLayout adLayout, WallPost adWallPost, CloneTask cloneTask) async {
+    var result;
+    switch (cloneTask.type) {
+      case CloneType.text:
+        {
+          var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(adWallPost);
+          wallPostAdsStealth.message = cloneTask.value;
+          var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
+          var link = newStealth.wallLink(wallPostAdsStealth);
+          var createAd = CreateAd.bulder(
+              originalAd, adLayout, adTargeting, wallPostAdsStealth);
+          createAd.linkUrl = link;
+          print(createAd.linkUrl);
+          result = createAd;
+        }
         break;
-      case OptionType.target:
-        //something
+      //clone text
+      case CloneType.pure:
+        //pure clone
         break;
     }
+    return result;
   }
 }

@@ -1,5 +1,8 @@
 import 'dart:convert' show jsonDecode;
 
+import 'package:ads_cloner/models/ad.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth.dart';
+
 class WallPostAdsStealthResult {
   int postId, errorCode;
   String errorDesc;
@@ -17,4 +20,8 @@ class WallPostAdsStealthResult {
       this.errorDesc = json['error_desc'];
     }
   }
+
+  String wallLink (WallPostAdsStealth wall) {
+    return "https://vk.com/wall" "${wall.ownerId}" "_" "${this.postId}";
+  } 
 }

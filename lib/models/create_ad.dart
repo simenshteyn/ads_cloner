@@ -1,4 +1,7 @@
+import 'package:ads_cloner/models/ad.dart';
+import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
+import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 
 class CreateAd {
   int campaignId, adFormat, autobidding, costType, goalType, impressionsLimit;
@@ -54,48 +57,89 @@ class CreateAd {
     this.targeting,
   });
 
+  CreateAd.bulder(Ad ad, AdLayout adLayout, AdTargeting adTargeting,
+      WallPostAdsStealth wallPostAdsStealth) {
+    this.campaignId = ad.campaignId;
+    this.adFormat = ad.adFormat;
+    this.autobidding = ad.autobidding;
+    this.costType = ad.costType;
+    this.goalType = ad.goalType;
+    this.impressionsLimit = ad.impressionsLimit;
+    this.impressionsLimited = ad.impressionsLimited;
+    this.adPlatformNoWall = ad.adPlatformNoWall;
+    this.adPlatformNoAdNetwork = ad.adPlatformNoAdNetwork;
+    this.dayLimit = int.tryParse(ad.dayLimit);
+    this.allLimit = int.tryParse(ad.allLimit);
+    this.category1Id = int.tryParse(ad.category1Id);
+    this.category2Id = int.tryParse(ad.category2Id);
+    this.ageRestriction = int.tryParse(ad.ageRestriction);
+    this.status = ad.status;
+    this.repeatVideo = 1; //can't find this in other objects
+    this.disclaimerMedical = ad.disclaimerMedical;
+    this.disclaimerSpecialist = ad.disclaimerSpecialist;
+    this.disclaimerSupplements = ad.disclaimerSupplements;
+    this.weeklyScheduleUseHolidays = ad.weeklyScheduleUseHolidays;
+    this.adPlatform = ad.adPlatform;
+    this.name = ad.name;
+    this.title = adLayout.title;
+    this.description = "cant find"; //can't find this in other objects
+    this.linkUrl = adLayout.linkUrl;
+    this.linkDomain = adLayout.linkDomain;
+    this.linkTitle = wallPostAdsStealth.linkTitle;
+    this.linkButton = wallPostAdsStealth.linkButton;
+    this.photo = ""; //can't find
+    this.photoIcon = ""; //can't find
+    this.video = ""; //result of video uploading to server
+    this.statsUrl = ""; //pixel of external stats
+    this.statsUrl2 = ""; //pixe of external stats
+    this.cpc = (ad.cpc != null) ? (ad.cpm / 100) : null;
+    this.cpm = (ad.cpm != null) ? (ad.cpm / 100) : null;
+    this.ocpm = (ad.ocpm != null) ? (ad.ocpm / 100) : null;
+    this.weeklyScheduleHours = ad.weeklyScheduleHours;
+    this.targeting = adTargeting;
+  }
+
   Map<String, dynamic> toJson() {
     var result = {};
-    result.addAll(
-     {
-        'campaign_id': campaignId,
-        'ad_format': adFormat,
-        'autobidding': autobidding,
-        'cost_type': costType,
-        'cpc': cpc,
-        'cpm': cpm,
-        'ocpm': ocpm,
-        'goal_type': goalType,
-        'impressions_limit': impressionsLimit,
-        'impresstions_limited': impressionsLimited,
-        'ad_platform': adPlatform,
-        'ad_platform_no_wall': adPlatformNoWall,
-        'day_limit': dayLimit,
-        'all_limit': allLimit,
-        'category1_id': category1Id,
-        'category2_id': category2Id,
-        'age_restriction': ageRestriction,
-        'status': status,
-        'name': name,
-        'title': title,
-        'description': description,
-        'link_url': linkUrl,
-        'link_domain': linkDomain,
-        'link_title': linkTitle,
-        'link_button': linkButton,
-        'photo': photo,
-        'photo_icon': photoIcon,
-        'video': video,
-        'repeat_video': repeatVideo,
-        'disclaimer_medical': disclaimerMedical,
-        'disclaimer_specialist': disclaimerSpecialist,
-        'disclaimer_supplements': disclaimerSupplements,
-        'weekly_schedule_hours': weeklyScheduleHours,
-        'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
-        'stats_url': statsUrl,
-        'stats_url2': statsUrl2,
-      });
-  result.addAll(this.targeting.toJson());
-  return result;     
+    result.addAll({
+      'campaign_id': campaignId,
+      'ad_format': adFormat,
+      'autobidding': autobidding,
+      'cost_type': costType,
+      'cpc': cpc,
+      'cpm': cpm,
+      'ocpm': ocpm,
+      'goal_type': goalType,
+      'impressions_limit': impressionsLimit,
+      'impresstions_limited': impressionsLimited,
+      'ad_platform': adPlatform,
+      'ad_platform_no_wall': adPlatformNoWall,
+      'day_limit': dayLimit,
+      'all_limit': allLimit,
+      'category1_id': category1Id,
+      'category2_id': category2Id,
+      'age_restriction': ageRestriction,
+      'status': status,
+      'name': name,
+      'title': title,
+      'description': description,
+      'link_url': linkUrl,
+      'link_domain': linkDomain,
+      'link_title': linkTitle,
+      'link_button': linkButton,
+      'photo': photo,
+      'photo_icon': photoIcon,
+      'video': video,
+      'repeat_video': repeatVideo,
+      'disclaimer_medical': disclaimerMedical,
+      'disclaimer_specialist': disclaimerSpecialist,
+      'disclaimer_supplements': disclaimerSupplements,
+      'weekly_schedule_hours': weeklyScheduleHours,
+      'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
+      'stats_url': statsUrl,
+      'stats_url2': statsUrl2,
+    });
+    result.addAll(this.targeting.toJson());
+    return result;
   }
 }

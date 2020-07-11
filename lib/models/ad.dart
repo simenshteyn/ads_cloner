@@ -15,8 +15,8 @@ class Ad {
       startTime,
       stopTime,
       category1Id;
-  String category2Id, ageRestriction, name, cpm, adPlatform;
-  String cpc, ocpm;
+  String category2Id, ageRestriction, name, adPlatform;
+  int cpc, ocpm, cpm;
   int impressionsLimited, adPlatformNoWall, autobidding, autobiddingMaxCost;
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
   List<String> weeklyScheduleHours;
@@ -37,13 +37,13 @@ class Ad {
       this.costType = json['cost_type'];
     }
     if (json.containsKey('cpc')) {
-      this.cpc = json['cpc'];
+      this.cpc = int.tryParse(json['cpc']);
     }
     if (json.containsKey('cpm')) {
-      this.cpm = json['cpm'];
+      this.cpm = int.tryParse(json['cpm']);
     }
     if (json.containsKey('ocpm')) {
-      this.ocpm = json['ocpm'];
+      this.ocpm = int.tryParse(json['ocpm']);
     }
     if (json.containsKey('goal_type')) {
       this.goalType = json['goal_type'];

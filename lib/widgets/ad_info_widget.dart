@@ -55,7 +55,8 @@ class AdInfoWidget extends StatelessWidget {
                   ListTile(
                     title: Text('Цена за 1000 показов', style: _textStyleUp),
                     subtitle: Text(
-                        '${snapshot.data.cpm.substring(0, snapshot.data.cpm.length - 2)}.${snapshot.data.cpm.substring(snapshot.data.cpm.length - 2)} ₽',
+                        //'${snapshot.data.cpm.substring(0, snapshot.data.cpm.length - 2)}.${snapshot.data.cpm.substring(snapshot.data.cpm.length - 2)} ₽',
+                        '${snapshot.data.cpm}',
                         style: _textStyleDown),
                   ),
                 ],
