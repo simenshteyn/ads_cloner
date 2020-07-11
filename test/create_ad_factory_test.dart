@@ -4,7 +4,7 @@ import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:ads_cloner/models/wall_post.dart';
 import 'package:test/test.dart';
-import 'package:ads_cloner/api/create_ad_factory.dart';
+import 'package:ads_cloner/api/clone_factory.dart';
 import 'dart:async';
 
 void main() {

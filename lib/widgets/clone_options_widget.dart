@@ -1,3 +1,8 @@
+import 'package:ads_cloner/api/clone_factory.dart';
+import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:ads_cloner/blocs/clone_text_bloc.dart';
+import 'package:ads_cloner/models/option_card.dart';
+import 'package:ads_cloner/pages/clone_text_page.dart';
 import 'package:flutter/material.dart';
 
 class CloneOptionsWidget extends StatefulWidget {
@@ -7,13 +12,18 @@ class CloneOptionsWidget extends StatefulWidget {
 
 class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
   int _index = 0;
+  List<OptionCard> cards = [
+    OptionCard(title: "Text", type: CloneType.text),
+    OptionCard(title: "Pure", type: CloneType.pure),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Center(
       child: SizedBox(
         height: 200,
         child: PageView.builder(
-          itemCount: 10,
+          itemCount: cards.length,
           controller: PageController(viewportFraction: 0.7),
           onPageChanged: (int index) => setState(() => _index = index),
           itemBuilder: (_, i) {
@@ -24,10 +34,17 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Center(
-                  child: Text(
-                    "Card ${i}",
-                    style: TextStyle(fontSize: 32),
+                child: InkWell(
+                  splashColor: Colors.blue.withAlpha(30),
+                  onTap: () {
+                    print('Card ${cards[i].title} tapped');
+                    _openCloneTextPage(context);
+                  },
+                  child: Center(
+                    child: Text(
+                      "${cards[i].title}",
+                      style: TextStyle(fontSize: 32),
+                    ),
                   ),
                 ),
               ),
@@ -36,5 +53,15 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
         ),
       ),
     );
+  }
+
+  void _openCloneTextPage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return BlocProvider<CloneTextBloc>(
+        bloc: CloneTextBloc(),
+        child: CloneTextPage(),
+      );
+    }));
   }
 }
