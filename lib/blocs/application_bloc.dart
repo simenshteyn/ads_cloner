@@ -5,6 +5,8 @@ import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/campaign.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
+import 'package:ads_cloner/models/wall_post.dart';
+import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
@@ -19,6 +21,7 @@ class ApplicationBloc implements BlocBase {
   AdLayout currentAdLayout;
   String currentPostId;
   CreateAdsList currentCreateAdsList;
+  WallPostList currentWallPostList;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -85,6 +88,16 @@ class ApplicationBloc implements BlocBase {
   StreamSink get getCurrentCreateAdsList =>
       _cmdCurrentCreateAdsListController.sink;
 
+  StreamController<WallPostList> _currentWallPostListController =
+      StreamController<WallPostList>.broadcast();
+  StreamSink<WallPostList> get inCurrentWallPostList =>
+      _currentWallPostListController.sink;
+  Stream<WallPostList> get outCurrentWallPostList =>
+      _currentWallPostListController.stream;
+  StreamController _cmdCurrentWallPostListController = StreamController();
+  StreamSink get getCurrentWallPostList =>
+      _cmdCurrentWallPostListController.sink;
+
   ApplicationBloc() {
     print("APP BLOC CREATED");
 
@@ -133,6 +146,12 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentCreateAdsListController.stream.listen((createAdsList) {
       _currentCreateAdsListController.sink.add(createAdsList);
     });
+
+    _currentWallPostListController.stream
+        .listen(_handleCurrentWallPostListController);
+    _cmdCurrentWallPostListController.stream.listen((wallPostList) {
+      _currentWallPostListController.sink.add(wallPostList);
+    });
   }
 
   void dispose() {
@@ -156,6 +175,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentPostIdController.close();
     _currentCreateAdsListController.close();
     _cmdCurrentCreateAdsListController.close();
+    _currentWallPostListController.close();
+    _cmdCurrentWallPostListController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -192,5 +213,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentCreateAdsListController(data) {
     currentCreateAdsList = data;
+  }
+
+  void _handleCurrentWallPostListController(data) {
+    currentWallPostList = data;
   }
 }

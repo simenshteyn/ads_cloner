@@ -12,7 +12,6 @@ import 'package:ads_cloner/models/wall_post_request.dart';
 
 class CloneBloc implements BlocBase {
   WallPostList _wallPostList;
-  AdsTargetingList _adsTargetingList;
   CreateAdsResultList _createAdsResultList;
   WallPostAdsStealthResult _wallPostAdsStealthResult;
 
@@ -23,15 +22,6 @@ class CloneBloc implements BlocBase {
       StreamController<WallPostRequest>.broadcast();
   StreamSink<WallPostRequest> get getWallPostList =>
       _cmdWallPostController.sink;
-
-  StreamController<AdsTargetingList> _adsTargetingController =
-      StreamController<AdsTargetingList>.broadcast();
-  Stream<AdsTargetingList> get outAdsTargetingList =>
-      _adsTargetingController.stream;
-  StreamController<AdsTargetingRequest> _cmdAdsTargetingController =
-      StreamController<AdsTargetingRequest>.broadcast();
-  StreamSink<AdsTargetingRequest> get getAdsTargetingList =>
-      _cmdAdsTargetingController.sink;
 
   StreamController<CreateAdsResultList> _createAdsResultController =
       StreamController<CreateAdsResultList>.broadcast();
@@ -56,7 +46,6 @@ class CloneBloc implements BlocBase {
     print("CLONE BLOC CREATED");
 
     _wallPostController.stream.listen(_handleLogic);
-    _adsTargetingController.stream.listen(_handleTargetingLogic);
     _createAdsResultController.stream.listen(_handleCreateAdsResultLogic);
     _wallPostAdsStealthResultController.stream
         .listen(_handleWallPostAdsStealthResultLogic);
@@ -66,16 +55,6 @@ class CloneBloc implements BlocBase {
       vk.wallGetById(req.postId).then((list) {
         _wallPostList = list;
         _wallPostController.sink.add(_wallPostList);
-      });
-    });
-
-    _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) {
-      var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk
-          .adsGetAdsTargeting(req.account.accountId.toString(), req.ad)
-          .then((list) {
-        _adsTargetingList = list;
-        _adsTargetingController.sink.add(_adsTargetingList);
       });
     });
 
@@ -102,8 +81,6 @@ class CloneBloc implements BlocBase {
   void dispose() {
     _wallPostController.close();
     _cmdWallPostController.close();
-    _adsTargetingController.close();
-    _cmdAdsTargetingController.close();
     _createAdsResultController.close();
     _cmdCreateAdsResultController.close();
     _wallPostAdsStealthResultController.close();
@@ -113,10 +90,6 @@ class CloneBloc implements BlocBase {
 
   void _handleLogic(data) {
     _wallPostList = data;
-  }
-
-  void _handleTargetingLogic(data) {
-    _adsTargetingList = data;
   }
 
   void _handleCreateAdsResultLogic(data) {
