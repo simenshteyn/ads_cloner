@@ -27,8 +27,7 @@ class _ClonePageState extends State<ClonePage> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     appBloc.getCurrentCreateAdsList.add('give me');
-    bloc.getWallPostList
-        .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
+
         
 //    bloc.getAdsTargetingList.add(AdsTargetingRequest(
 //        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));

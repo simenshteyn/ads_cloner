@@ -8,6 +8,9 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
+import 'package:ads_cloner/models/wall_post.dart';
+import 'package:ads_cloner/models/wall_post_list.dart';
+import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:flutter/material.dart';
@@ -34,9 +37,16 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
   Widget build(BuildContext context) {
     AdLayout _currentLayout;
     AdTargeting _currentTargeting;
+    WallPost _currentWallPost;
 
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
+    bloc.outWallPostList.listen((wallPostList) {
+      print('WALL POST IS OK!!!');
+      print(wallPostList.wallPosts.length);
+      _currentWallPost = wallPostList.wallPosts[0];
+    });
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Объявление'),
@@ -47,7 +57,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
           StreamBuilder<AdsTargetingList>(
             stream: bloc.outAdsTargetingList,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if ((snapshot.hasData) &&
+                  (snapshot.data.adsTargeting.length > 0)) {
                 _currentTargeting = snapshot.data.adsTargeting[0];
                 var show = snapshot.data.adsTargeting[0].toJson().toString();
                 return Text(show);
@@ -61,6 +72,11 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
                     _currentLayout = snapshot.data.adsLayout[0];
+                    appBloc.inCurrentPostId.add(
+                        _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
+                    bloc.getWallPostList.add(WallPostRequest(
+                        appBloc.vkAccessToken, appBloc.currentPostId));
+
                     return WebView(
                         initialUrl: snapshot.data.adsLayout[0].previewLink);
                   }
@@ -76,10 +92,9 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
               return FloatingActionButton(
                   child: Icon(Icons.content_copy),
                   onPressed: () {
-                    appBloc.inCurrentPostId.add(
-                        _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
                     appBloc.inCurrentAdLayout.add(snapshot.data.adsLayout[0]);
-
+                    appBloc.inCurrentAdTargeting.add(_currentTargeting);
+                    appBloc.inCurrentWallPost.add(_currentWallPost);
                     _openClonePage(context);
                   });
             }
