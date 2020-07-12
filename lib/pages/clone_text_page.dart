@@ -9,74 +9,87 @@ class CloneTextPage extends StatefulWidget {
 }
 
 class _CloneTextPageState extends State<CloneTextPage> {
+  String _textField;
+  final _textController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textController.dispose();
+    super.dispose();
+  }
+
   @override
   void initState() {
     super.initState();
-//    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-//    CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
-//    bloc.addTextToList.add("Some");
-//    CloneBloc cloneBloc = BlocProvider.of<CloneBloc>(context);
-//    cloneBloc.getWallPostList
-//        .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
-//    cloneBloc.getAdsTargetingList.add(AdsTargetingRequest(
-//        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+    _textController.addListener(_saveLastValue);
   }
 
   @override
   Widget build(BuildContext context) {
-  //  ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    //CloneBloc cloneBloc = BlocProvider.of<CloneBloc>(context);
     CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
-
+    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
     return Scaffold(
       appBar: AppBar(
         title: Text('Enter text'),
       ),
-      body: SingleChildScrollView(
-        child: Column(
-          children: <Widget>[
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20.0),
-              child: StreamBuilder<String>(
-                stream: bloc.outTextStream,
-                builder: (context, AsyncSnapshot<String> textStream) {
-                  return TextField(
-                    onChanged: (String text) => bloc.inTextStream.add(text),
-                    autofocus: true,
-                    decoration: InputDecoration(
-                      errorText: textStream.hasError ? textStream.error : null,
-                      suffix: IconButton(
-                        icon: Icon(Icons.add),
-                        onPressed: () {
-                          //something when button clicked
-                        },
-                      ),
-                    ),
-                  );
-                }
+      body: Column(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.all(20),
+            child: TextField(
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
+              controller: _textController,
+              autofocus: true,
+              decoration: InputDecoration(
+                hintText: 'Введите текст',
+                suffix: IconButton(
+                  icon: Icon(Icons.add),
+                  onPressed: () {
+                    if (_textField != "") {
+                      bloc.addTextToList.add(_textField);
+                      _textController.clear();
+                      FocusScope.of(context).unfocus();
+                    }
+                  },
+                ),
               ),
             ),
-            SizedBox(
-              height: MediaQuery.of(context).size.height,
-              child: StreamBuilder<List<String>>(
-                  stream: bloc.outTextList,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(snapshot.data[index]),
-                          );
-                        },
-                      );
-                    }
-                    return Text('Пока текстов нет…');
-                  }),
-            ),
-          ],
-        ),
+          ),
+          Flexible(
+            child: StreamBuilder<List<String>>(
+                stream: bloc.outTextList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.separated(
+                      separatorBuilder: (BuildContext context, int index) =>
+                          Divider(),
+                      itemCount: snapshot.data.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(snapshot.data[index]),
+                        );
+                      },
+                    );
+                  }
+                  return Center(
+                    child: Text('Пока текстов нет…'),
+                  );
+                }),
+          ),
+        ],
       ),
+      floatingActionButton: showFab
+          ? FloatingActionButton(
+              child: Icon(Icons.add),
+              onPressed: () {},
+            )
+          : null,
     );
+  }
+
+  void _saveLastValue() {
+    print("Text field now is ${_textController.text}");
+    _textField = _textController.text;
   }
 }
