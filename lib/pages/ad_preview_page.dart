@@ -15,6 +15,7 @@ import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'dart:async';
 
 class AdPreviewPage extends StatefulWidget {
   @override
@@ -22,6 +23,11 @@ class AdPreviewPage extends StatefulWidget {
 }
 
 class _AdPreviewPageState extends State<AdPreviewPage> {
+  StreamSubscription wallPostListSubscription;
+  AdLayout _currentLayout;
+  AdTargeting _currentTargeting;
+  WallPost _currentWallPost;
+
   @override
   void initState() {
     super.initState();
@@ -31,21 +37,23 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    AdLayout _currentLayout;
-    AdTargeting _currentTargeting;
-    WallPost _currentWallPost;
-
-    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
-    bloc.outWallPostList.listen((wallPostList) {
+    wallPostListSubscription = bloc.outWallPostList.listen((wallPostList) {
       print('WALL POST IS OK!!!');
       print(wallPostList.wallPosts.length);
       _currentWallPost = wallPostList.wallPosts[0];
     });
+  }
+
+  @override
+  void dispose() {
+    wallPostListSubscription?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
 
     return Scaffold(
       appBar: AppBar(
@@ -92,7 +100,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
               return FloatingActionButton(
                   child: Icon(Icons.content_copy),
                   onPressed: () {
-                    appBloc.inCurrentAdLayout.add(snapshot.data.adsLayout[0]);
+                    appBloc.inCurrentAdLayout.add(_currentLayout);
                     appBloc.inCurrentAdTargeting.add(_currentTargeting);
                     appBloc.inCurrentWallPost.add(_currentWallPost);
                     _openClonePage(context);

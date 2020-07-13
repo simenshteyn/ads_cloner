@@ -1,3 +1,5 @@
+import 'package:ads_cloner/api/clone_factory.dart';
+import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
@@ -12,6 +14,7 @@ class CloneTextPage extends StatefulWidget {
 class _CloneTextPageState extends State<CloneTextPage> {
   String _textField;
   final _textController = TextEditingController();
+  List<String> _cloneTextList;
 
   @override
   void dispose() {
@@ -27,6 +30,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
 
   @override
   Widget build(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
     final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
     //final bool showFab = true;
@@ -64,6 +68,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
                   stream: bloc.outTextList,
                   builder: (context, snapshot) {
                     if (snapshot.hasData) {
+                      _cloneTextList = snapshot.data;
                       return ListView.separated(
                         separatorBuilder: (BuildContext context, int index) =>
                             Divider(),
@@ -94,7 +99,20 @@ class _CloneTextPageState extends State<CloneTextPage> {
                   position: BadgePosition.topRight(top: -3, right: -3),
                   child: FloatingActionButton(
                     child: Icon(Icons.send),
-                    onPressed: () {},
+                    onPressed: () {
+                      final vk = VkApi(userToken: appBloc.vkAccessToken);
+                      final adsFactory = CloneFactory(vk);
+                      for (var text in _cloneTextList) {
+                        var cloneTask =
+                            CloneTask(type: CloneType.text, value: text);
+                        var createdAd = adsFactory.buildAd(
+                            appBloc.currentAd,
+                            appBloc.currentAdTargeting,
+                            appBloc.currentAdLayout,
+                            appBloc.currentWallPost,
+                            cloneTask);
+                      }
+                    },
                   ),
                 );
               }
