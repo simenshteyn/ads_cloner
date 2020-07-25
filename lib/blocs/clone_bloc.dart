@@ -11,17 +11,8 @@ import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 
 class CloneBloc implements BlocBase {
-  WallPostList _wallPostList;
   CreateAdsResultList _createAdsResultList;
   WallPostAdsStealthResult _wallPostAdsStealthResult;
-
-  StreamController<WallPostList> _wallPostController =
-      StreamController<WallPostList>.broadcast();
-  Stream<WallPostList> get outWallPostList => _wallPostController.stream;
-  StreamController<WallPostRequest> _cmdWallPostController =
-      StreamController<WallPostRequest>.broadcast();
-  StreamSink<WallPostRequest> get getWallPostList =>
-      _cmdWallPostController.sink;
 
   StreamController<CreateAdsResultList> _createAdsResultController =
       StreamController<CreateAdsResultList>.broadcast();
@@ -45,18 +36,9 @@ class CloneBloc implements BlocBase {
   CloneBloc() {
     print("CLONE BLOC CREATED");
 
-    _wallPostController.stream.listen(_handleLogic);
     _createAdsResultController.stream.listen(_handleCreateAdsResultLogic);
     _wallPostAdsStealthResultController.stream
         .listen(_handleWallPostAdsStealthResultLogic);
-
-    _cmdWallPostController.stream.listen((WallPostRequest req) {
-      var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.wallGetById(req.postId).then((list) {
-        _wallPostList = list;
-        _wallPostController.sink.add(_wallPostList);
-      });
-    });
 
     _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
@@ -79,17 +61,11 @@ class CloneBloc implements BlocBase {
   }
 
   void dispose() {
-    _wallPostController.close();
-    _cmdWallPostController.close();
     _createAdsResultController.close();
     _cmdCreateAdsResultController.close();
     _wallPostAdsStealthResultController.close();
     _cmdWallPostAdsStealthController.close();
     print("CLONE BLOC DISPOSED");
-  }
-
-  void _handleLogic(data) {
-    _wallPostList = data;
   }
 
   void _handleCreateAdsResultLogic(data) {

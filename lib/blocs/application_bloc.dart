@@ -3,6 +3,7 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/account.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ad_layout.dart';
+import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:ads_cloner/models/campaign.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/wall_post.dart';
@@ -19,9 +20,10 @@ class ApplicationBloc implements BlocBase {
   Campaign currentCampaign;
   Ad currentAd;
   AdLayout currentAdLayout;
+  AdTargeting currentAdTargeting;
   String currentPostId;
   CreateAdsList currentCreateAdsList;
-  WallPostList currentWallPostList;
+  WallPost currentWallPost;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -71,6 +73,15 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdCurrentAdLayoutController = StreamController();
   StreamSink get getCurrentAdLayout => _cmdCurrentAdLayoutController.sink;
 
+  StreamController<AdTargeting> _currentAdTargetingController =
+      StreamController<AdTargeting>.broadcast();
+  StreamSink<AdTargeting> get inCurrentAdTargeting =>
+      _currentAdTargetingController.sink;
+  Stream<AdTargeting> get outCurrentAdTargeting =>
+      _currentAdTargetingController.stream;
+  StreamController _cmdCurrentAdTargetingController = StreamController();
+  StreamSink get getCurrentAdTargeting => _cmdCurrentAdTargetingController.sink;
+
   StreamController<String> _currentPostIdController =
       StreamController<String>.broadcast();
   StreamSink<String> get inCurrentPostId => _currentPostIdController.sink;
@@ -88,15 +99,15 @@ class ApplicationBloc implements BlocBase {
   StreamSink get getCurrentCreateAdsList =>
       _cmdCurrentCreateAdsListController.sink;
 
-  StreamController<WallPostList> _currentWallPostListController =
-      StreamController<WallPostList>.broadcast();
-  StreamSink<WallPostList> get inCurrentWallPostList =>
-      _currentWallPostListController.sink;
-  Stream<WallPostList> get outCurrentWallPostList =>
-      _currentWallPostListController.stream;
-  StreamController _cmdCurrentWallPostListController = StreamController();
-  StreamSink get getCurrentWallPostList =>
-      _cmdCurrentWallPostListController.sink;
+  StreamController<WallPost> _currentWallPostController =
+      StreamController<WallPost>.broadcast();
+  StreamSink<WallPost> get inCurrentWallPost =>
+      _currentWallPostController.sink;
+  Stream<WallPost> get outCurrentWallPost =>
+      _currentWallPostController.stream;
+  StreamController _cmdCurrentWallPostController = StreamController();
+  StreamSink get getCurrentWallPost =>
+      _cmdCurrentWallPostController.sink;
 
   ApplicationBloc() {
     print("APP BLOC CREATED");
@@ -136,6 +147,12 @@ class ApplicationBloc implements BlocBase {
       _currentAdLayoutController.sink.add(adLayout);
     });
 
+    _currentAdTargetingController.stream
+        .listen(_handleCurrentAdTargetingController);
+    _cmdCurrentAdTargetingController.stream.listen((adTargeting) {
+      _currentAdTargetingController.sink.add(adTargeting);
+    });
+
     _currentPostIdController.stream.listen(_handleCurrentPostIdController);
     _cmdCurrentPostIdController.stream.listen((postId) {
       _currentPostIdController.sink.add(postId);
@@ -147,10 +164,10 @@ class ApplicationBloc implements BlocBase {
       _currentCreateAdsListController.sink.add(createAdsList);
     });
 
-    _currentWallPostListController.stream
-        .listen(_handleCurrentWallPostListController);
-    _cmdCurrentWallPostListController.stream.listen((wallPostList) {
-      _currentWallPostListController.sink.add(wallPostList);
+    _currentWallPostController.stream
+        .listen(_handleCurrentWallPostController);
+    _cmdCurrentWallPostController.stream.listen((wallPost) {
+      _currentWallPostController.sink.add(wallPost);
     });
   }
 
@@ -171,12 +188,14 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentAdController.close();
     _currentAdLayoutController.close();
     _cmdCurrentAdLayoutController.close();
+    _currentAdTargetingController.close();
+    _cmdCurrentAdTargetingController.close();
     _currentPostIdController.close();
     _cmdCurrentPostIdController.close();
     _currentCreateAdsListController.close();
     _cmdCurrentCreateAdsListController.close();
-    _currentWallPostListController.close();
-    _cmdCurrentWallPostListController.close();
+    _currentWallPostController.close();
+    _cmdCurrentWallPostController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -207,6 +226,10 @@ class ApplicationBloc implements BlocBase {
     currentAdLayout = data;
   }
 
+  void _handleCurrentAdTargetingController(data) {
+    currentAdTargeting = data;
+  }
+
   void _handleCurrentPostIdController(data) {
     currentPostId = data;
   }
@@ -215,7 +238,7 @@ class ApplicationBloc implements BlocBase {
     currentCreateAdsList = data;
   }
 
-  void _handleCurrentWallPostListController(data) {
-    currentWallPostList = data;
+  void _handleCurrentWallPostController(data) {
+    currentWallPost = data;
   }
 }
