@@ -86,7 +86,6 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                     .add(_postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
                 bloc.getWallPostList.add(WallPostRequest(
                     appBloc.vkAccessToken, appBloc.currentPostId));
-
                 return DraggableScrollableSheet(
                   initialChildSize: 0.3,
                   maxChildSize: 0.8,
@@ -94,36 +93,26 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                   builder: (context, controller) {
                     return SingleChildScrollView(
                       controller: controller,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.grey[200]),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(30),
+                              topRight: Radius.circular(30),
+                              bottomLeft: Radius.circular(30),
+                              bottomRight: Radius.circular(30)),
+                        ),
                         child: Container(
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 5,
-                                blurRadius: 7,
-                                offset: Offset(0, 3),
-                              ),
-                            ],
-                            color: Colors.white,
-                            borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(10),
-                                topRight: Radius.circular(10),
-                                bottomLeft: Radius.circular(10),
-                                bottomRight: Radius.circular(10)),
-                          ),
-                          child: Container(
-                            height: 600,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                child: WebView(
-                                  gestureNavigationEnabled: false,
-                                  javascriptMode: JavascriptMode.disabled,
-                                  initialUrl:
-                                      snapshot.data.adsLayout[0].previewLink,
-                                ),
+                          height: 600,
+                          child: Padding(
+                            padding: const EdgeInsets.all(10.0),
+                            child: Container(
+                              child: WebView(
+                                gestureNavigationEnabled: false,
+                                javascriptMode: JavascriptMode.disabled,
+                                initialUrl:
+                                    snapshot.data.adsLayout[0].previewLink,
                               ),
                             ),
                           ),
