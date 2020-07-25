@@ -59,40 +59,79 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
       appBar: AppBar(
         title: Text('Объявление'),
       ),
-      body: Column(
-        children: <Widget>[
-          AdInfoWidget(),
-          StreamBuilder<AdsTargetingList>(
-            stream: bloc.outAdsTargetingList,
+      body: Stack(children: <Widget>[
+        Column(
+          children: [
+            AdInfoWidget(),
+            StreamBuilder<AdsTargetingList>(
+              stream: bloc.outAdsTargetingList,
+              builder: (context, snapshot) {
+                if ((snapshot.hasData) &&
+                    (snapshot.data.adsTargeting.length > 0)) {
+                  _currentTargeting = snapshot.data.adsTargeting[0];
+                  var show = snapshot.data.adsTargeting[0].toJson().toString();
+                  return Text(show);
+                }
+                return Text('No data');
+              },
+            ),
+          ],
+        ),
+        StreamBuilder<AdsLayoutList>(
+            stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
-              if ((snapshot.hasData) &&
-                  (snapshot.data.adsTargeting.length > 0)) {
-                _currentTargeting = snapshot.data.adsTargeting[0];
-                var show = snapshot.data.adsTargeting[0].toJson().toString();
-                return Text(show);
-              }
-              return Text('No data');
-            },
-          ),
-          Flexible(
-            child: StreamBuilder<AdsLayoutList>(
-                stream: bloc.outAdsLayoutList,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    _currentLayout = snapshot.data.adsLayout[0];
-                    appBloc.inCurrentPostId.add(
-                        _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
-                    bloc.getWallPostList.add(WallPostRequest(
-                        appBloc.vkAccessToken, appBloc.currentPostId));
+              if (snapshot.hasData) {
+                _currentLayout = snapshot.data.adsLayout[0];
+                appBloc.inCurrentPostId
+                    .add(_postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
+                bloc.getWallPostList.add(WallPostRequest(
+                    appBloc.vkAccessToken, appBloc.currentPostId));
 
-                    return WebView(
-                        initialUrl: snapshot.data.adsLayout[0].previewLink);
-                  }
-                  return Center(child: CircularProgressIndicator());
-                }),
-          ),
-        ],
-      ),
+                return DraggableScrollableSheet(
+                  initialChildSize: 0.3,
+                  maxChildSize: 0.8,
+                  minChildSize: 0.1,
+                  builder: (context, controller) {
+                    return SingleChildScrollView(
+                      controller: controller,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.grey.withOpacity(0.5),
+                                spreadRadius: 2,
+                                blurRadius: 2,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                            color: Colors.white,
+                            borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(20),
+                                topRight: Radius.circular(20)),
+                          ),
+                          child: Container(
+                            height: 600,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: WebView(
+                                gestureNavigationEnabled: false,
+                                javascriptMode: JavascriptMode.disabled,
+                                initialUrl:
+                                    snapshot.data.adsLayout[0].previewLink,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              return Center(child: CircularProgressIndicator());
+            }),
+      ]),
       floatingActionButton: StreamBuilder<AdsLayoutList>(
           stream: bloc.outAdsLayoutList,
           builder: (context, snapshot) {
