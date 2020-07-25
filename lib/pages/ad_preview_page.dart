@@ -101,25 +101,29 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                             boxShadow: [
                               BoxShadow(
                                 color: Colors.grey.withOpacity(0.5),
-                                spreadRadius: 2,
-                                blurRadius: 2,
-                                offset: Offset(0, 2),
+                                spreadRadius: 5,
+                                blurRadius: 7,
+                                offset: Offset(0, 3),
                               ),
                             ],
                             color: Colors.white,
                             borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(20),
-                                topRight: Radius.circular(20)),
+                                topLeft: Radius.circular(10),
+                                topRight: Radius.circular(10),
+                                bottomLeft: Radius.circular(10),
+                                bottomRight: Radius.circular(10)),
                           ),
                           child: Container(
                             height: 600,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
-                              child: WebView(
-                                gestureNavigationEnabled: false,
-                                javascriptMode: JavascriptMode.disabled,
-                                initialUrl:
-                                    snapshot.data.adsLayout[0].previewLink,
+                              child: Container(
+                                child: WebView(
+                                  gestureNavigationEnabled: false,
+                                  javascriptMode: JavascriptMode.disabled,
+                                  initialUrl:
+                                      snapshot.data.adsLayout[0].previewLink,
+                                ),
                               ),
                             ),
                           ),
