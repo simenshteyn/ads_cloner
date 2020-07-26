@@ -136,7 +136,7 @@ class VkApi {
       'method/ads.createAds',
       <String, String>{
         'account_id': accountId,
-        'data': createAdsList.toJson().toString(),
+        'data': json.encode(createAdsList.toJson()),
         'access_token': userToken,
         'v': apiVersion,
       },

@@ -8,7 +8,7 @@ class CreateAdsList {
   }
 
   List<Map<String, dynamic>> toJson() {
-    var _createAdsListJson = [];
+    List<Map<String, dynamic>> _createAdsListJson = [];
     for (var ad in createAdsList) {
       _createAdsListJson.add(ad.toJson());
     }

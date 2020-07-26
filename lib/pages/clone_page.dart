@@ -89,5 +89,6 @@ class _ClonePageState extends State<ClonePage> {
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCreateAdsList);
     bloc.getCreateAdsResultList.add(req);
+    appBloc.inCurrentCreateAdsList.add(CreateAdsList());
   }
 }

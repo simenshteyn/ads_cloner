@@ -30,9 +30,15 @@ class Likes {
     if (json.containsKey('count')) {
       this.count = json['count'];
     }
-    this.userLikes = json['user_likes'];
-    this.canLike = json['can_like'];
-    this.canPublish = json['can_publish'];
+    if (json.containsKey('user_likes')) {
+      this.userLikes = json['user_likes'];
+    }
+    if (json.containsKey('can_like')) {
+      this.canLike = json['can_like'];
+    }
+    if (json.containsKey('can_publish')) {
+      this.canPublish = json['can_publish'];
+    }
   }
 }
 
@@ -40,8 +46,12 @@ class Reposts {
   /// https://vk.com/dev/objects/post -- reposts object
   int count, userReposted;
   Reposts.fromJSON(Map<String, dynamic> json) {
-    this.count = json['count'];
-    this.userReposted = json['user_reposted'];
+    if (json.containsKey('count')) {
+      this.count = json['count'];
+    }
+    if (json.containsKey('user_reposted')) {
+      this.userReposted = json['user_reposted'];
+    }
   }
 }
 
@@ -49,7 +59,9 @@ class Views {
   /// https://vk.com/dev/objects/post -- views object
   int count;
   Views.fromJSON(Map<String, dynamic> json) {
-    this.count = json['count'];
+    if (json.containsKey('count')) {
+      this.count = json['count'];
+    }
   }
 }
 
@@ -58,10 +70,18 @@ class PostSource {
   /// More info at: https://vk.com/dev/objects/post_source
   String type, platform, data, url;
   PostSource.fromJSON(Map<String, dynamic> json) {
-    this.type = json['type'];
-    this.platform = json['platform'];
-    this.data = json['data'];
-    this.url = json['url'];
+    if (json.containsKey('type')) {
+      this.type = json['type'];
+    }
+    if (json.containsKey('platform')) {
+      this.platform = json['platform'];
+    }
+    if (json.containsKey('data')) {
+      this.data = json['data'];
+    }
+    if (json.containsKey('url')) {
+      this.url = json['url'];
+    }
   }
 }
 
@@ -127,16 +147,34 @@ class Photo {
   String text;
   List<PhotoSizesObject> sizes;
   Photo.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.albumId = json['album_id'];
-    this.ownerId = json['owner_id'];
-    this.userId = json['user_id'];
-    this.date = json['date'];
-    var list = json['sizes'] as List;
-    this.sizes = list.map((i) => PhotoSizesObject.jromJSON(i)).toList();
-    this.width = json['width'];
-    this.height = json['height'];
-    this.text = json['text'];
+    if (json.containsKey('id')) {
+      this.id = json['id'];
+    }
+    if (json.containsKey('album_id')) {
+      this.albumId = json['album_id'];
+    }
+    if (json.containsKey('owner_id')) {
+      this.ownerId = json['owner_id'];
+    }
+    if (json.containsKey('user_id')) {
+      this.userId = json['user_id'];
+    }
+    if (json.containsKey('date')) {
+      this.date = json['date'];
+    }
+    if (json.containsKey('sizes')) {
+      var list = json['sizes'] as List;
+      this.sizes = list.map((i) => PhotoSizesObject.jromJSON(i)).toList();
+    }
+    if (json.containsKey('width')) {
+      this.width = json['width'];
+    }
+    if (json.containsKey('height')) {
+      this.height = json['height'];
+    }
+    if (json.containsKey('text')) {
+      this.text = json['text'];
+    }
   }
 }
 
@@ -145,10 +183,18 @@ class PhotoSizesObject {
   String type, url;
   int width, height;
   PhotoSizesObject.jromJSON(Map<String, dynamic> json) {
-    this.type = json['type'];
-    this.url = json['url'];
-    this.width = json['width'];
-    this.height = json['height'];
+    if (json.containsKey('type')) {
+      this.type = json['type'];
+    }
+    if (json.containsKey('url')) {
+      this.url = json['url'];
+    }
+    if (json.containsKey('width')) {
+      this.width = json['width'];
+    }
+    if (json.containsKey('height')) {
+      this.height = json['height'];
+    }
   }
 }
 
@@ -273,16 +319,24 @@ class Button {
   String title;
   Action action;
   Button.fromJSON(Map<String, dynamic> json) {
-    this.title = json['title'];
-    this.action = Action.fromJSON(json['action']);
+    if (json.containsKey('title')) {
+      this.title = json['title'];
+    }
+    if (json.containsKey('action')) {
+      this.action = Action.fromJSON(json['action']);
+    }
   }
 }
 
 class Action {
   String type, url;
   Action.fromJSON(Map<String, dynamic> json) {
-    this.type = json['type'];
-    this.url = json['url'];
+    if (json.containsKey('type')) {
+      this.type = json['type'];
+    }
+    if (json.containsKey('url')) {
+      this.url = json['url'];
+    }
   }
 }
 
@@ -319,8 +373,12 @@ class Currency {
   int id;
   String name;
   Currency.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.name = json['name'];
+    if (json.containsKey('id')) {
+      this.id = json['id'];
+    }
+    if (json.containsKey('name')) {
+      this.name = json['name'];
+    }
   }
 }
 

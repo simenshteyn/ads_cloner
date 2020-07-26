@@ -19,7 +19,7 @@ class Ad {
   int cpc, ocpm, cpm;
   int impressionsLimited, adPlatformNoWall, autobidding, autobiddingMaxCost;
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
-  List<String> weeklyScheduleHours;
+  List weeklyScheduleHours;
   int weeklyScheduleUseHolidays;
   // TODO: "events_retargeting_groups"
 

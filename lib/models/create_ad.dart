@@ -82,16 +82,16 @@ class CreateAd {
     this.adPlatform = ad.adPlatform;
     this.name = ad.name;
     this.title = adLayout.title;
-    this.description = "cant find"; //can't find this in other objects
+    this.description; //can't find this in other objects
     this.linkUrl = adLayout.linkUrl;
     this.linkDomain = adLayout.linkDomain;
-    this.linkTitle = wallPostAdsStealth.linkTitle;
-    this.linkButton = wallPostAdsStealth.linkButton;
-    this.photo = ""; //can't find
-    this.photoIcon = ""; //can't find
-    this.video = ""; //result of video uploading to server
-    this.statsUrl = ""; //pixel of external stats
-    this.statsUrl2 = ""; //pixe of external stats
+    this.linkTitle; // = wallPostAdsStealth.linkTitle;
+    this.linkButton; // = wallPostAdsStealth.linkButton;
+    this.photo; //can't find
+    this.photoIcon; //can't find
+    this.video; //result of video uploading to server
+    this.statsUrl; //pixel of external stats
+    this.statsUrl2; //pixe of external stats
     this.cpc = (ad.cpc != null) ? (ad.cpm / 100) : null;
     this.cpm = (ad.cpm != null) ? (ad.cpm / 100) : null;
     this.ocpm = (ad.ocpm != null) ? (ad.ocpm / 100) : null;
@@ -100,8 +100,7 @@ class CreateAd {
   }
 
   Map<String, dynamic> toJson() {
-    var result = {};
-    result.addAll({
+    var result = {
       'campaign_id': campaignId,
       'ad_format': adFormat,
       'autobidding': autobidding,
@@ -138,7 +137,7 @@ class CreateAd {
       'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
       'stats_url': statsUrl,
       'stats_url2': statsUrl2,
-    }..removeWhere((key, value) => key == null || value == null));
+    }..removeWhere((key, value) => key == null || value == null);
     result.addAll(this.targeting.toJson());
     return result;
   }
