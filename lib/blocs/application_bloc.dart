@@ -97,7 +97,7 @@ class ApplicationBloc implements BlocBase {
   Stream<CreateAdsList> get outCurrentCreateAdsList =>
       _currentCreateAdsListController.stream;
   StreamController _cmdCurrentCreateAdsListController = StreamController();
-  StreamSink get appendToCurrentCreateAdsList =>
+  StreamSink get getCurrentCreateAdsList =>
       _cmdCurrentCreateAdsListController.sink;
 
   StreamController<WallPost> _currentWallPostController =
@@ -158,10 +158,9 @@ class ApplicationBloc implements BlocBase {
 
     _currentCreateAdsListController.stream
         .listen(_handleCurrentCreateAdsListController);
-    _cmdCurrentCreateAdsListController.stream.listen((createAd) {
-      var list = currentCreateAdsList;
-      list.appendAd(createAd);
-      _currentCreateAdsListController.sink.add(list);
+    _cmdCurrentCreateAdsListController.stream.listen((_) {
+      var createAdsList = currentCreateAdsList;
+      _currentCreateAdsListController.sink.add(createAdsList);
     });
 
     _currentWallPostController.stream.listen(_handleCurrentWallPostController);
