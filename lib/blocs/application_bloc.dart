@@ -5,6 +5,7 @@ import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:ads_cloner/models/campaign.dart';
+import 'package:ads_cloner/models/create_ad.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/wall_post.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
@@ -96,18 +97,15 @@ class ApplicationBloc implements BlocBase {
   Stream<CreateAdsList> get outCurrentCreateAdsList =>
       _currentCreateAdsListController.stream;
   StreamController _cmdCurrentCreateAdsListController = StreamController();
-  StreamSink get getCurrentCreateAdsList =>
+  StreamSink get appendToCurrentCreateAdsList =>
       _cmdCurrentCreateAdsListController.sink;
 
   StreamController<WallPost> _currentWallPostController =
       StreamController<WallPost>.broadcast();
-  StreamSink<WallPost> get inCurrentWallPost =>
-      _currentWallPostController.sink;
-  Stream<WallPost> get outCurrentWallPost =>
-      _currentWallPostController.stream;
+  StreamSink<WallPost> get inCurrentWallPost => _currentWallPostController.sink;
+  Stream<WallPost> get outCurrentWallPost => _currentWallPostController.stream;
   StreamController _cmdCurrentWallPostController = StreamController();
-  StreamSink get getCurrentWallPost =>
-      _cmdCurrentWallPostController.sink;
+  StreamSink get getCurrentWallPost => _cmdCurrentWallPostController.sink;
 
   ApplicationBloc() {
     print("APP BLOC CREATED");
@@ -160,12 +158,13 @@ class ApplicationBloc implements BlocBase {
 
     _currentCreateAdsListController.stream
         .listen(_handleCurrentCreateAdsListController);
-    _cmdCurrentCreateAdsListController.stream.listen((createAdsList) {
-      _currentCreateAdsListController.sink.add(createAdsList);
+    _cmdCurrentCreateAdsListController.stream.listen((createAd) {
+      var list = currentCreateAdsList;
+      list.appendAd(createAd);
+      _currentCreateAdsListController.sink.add(list);
     });
 
-    _currentWallPostController.stream
-        .listen(_handleCurrentWallPostController);
+    _currentWallPostController.stream.listen(_handleCurrentWallPostController);
     _cmdCurrentWallPostController.stream.listen((wallPost) {
       _currentWallPostController.sink.add(wallPost);
     });
