@@ -34,7 +34,6 @@ class CloneFactory {
           var createAd = CreateAd.bulder(
               originalAd, adLayout, adTargeting, wallPostAdsStealth);
           createAd.linkUrl = link;
-          print(createAd.linkUrl);
           result = createAd;
         }
         break;

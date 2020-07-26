@@ -12,7 +12,7 @@ class CreateAd {
   String adPlatform, name, title, description, linkUrl, linkDomain;
   String linkTitle, linkButton, photo, photoIcon, video, statsUrl, statsUrl2;
   double cpc, cpm, ocpm;
-  List<String> weeklyScheduleHours;
+  List weeklyScheduleHours;
   AdTargeting targeting;
   // information about fields: https://vk.com/dev/ads.createAds
 

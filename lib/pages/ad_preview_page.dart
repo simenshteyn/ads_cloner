@@ -23,7 +23,7 @@ class AdPreviewPage extends StatefulWidget {
 }
 
 class _AdPreviewPageState extends State<AdPreviewPage> {
-  StreamSubscription wallPostListSubscription;
+  //StreamSubscription wallPostListSubscription;
   AdLayout _currentLayout;
   AdTargeting _currentTargeting;
   WallPost _currentWallPost;
@@ -37,16 +37,16 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
-    wallPostListSubscription = bloc.outWallPostList.listen((wallPostList) {
-      print('WALL POST IS OK!!!');
-      print(wallPostList.wallPosts.length);
-      _currentWallPost = wallPostList.wallPosts[0];
-    });
+    //bloc.getWallPostList.add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
+    //wallPostListSubscription = bloc.outWallPostList.listen((wallPostList) {
+    //  _currentWallPost = wallPostList.wallPosts[0];
+    //}
+    //);
   }
 
   @override
   void dispose() {
-    wallPostListSubscription?.cancel();
+    //wallPostListSubscription?.cancel();
     super.dispose();
   }
 
@@ -75,6 +75,16 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                 return Text('No data');
               },
             ),
+            StreamBuilder<WallPostList>(
+                stream: bloc.outWallPostList,
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    _currentWallPost = snapshot.data.wallPosts[0];
+                    var show = snapshot.data.wallPosts[0].id;
+                    return Text('${show}');
+                  }
+                  return Text('No WP data');
+                }),
           ],
         ),
         StreamBuilder<AdsLayoutList>(
@@ -84,8 +94,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                 _currentLayout = snapshot.data.adsLayout[0];
                 appBloc.inCurrentPostId
                     .add(_postUrlConvertor(snapshot.data.adsLayout[0].linkUrl));
-                bloc.getWallPostList.add(WallPostRequest(
-                    appBloc.vkAccessToken, appBloc.currentPostId));
+
                 return DraggableScrollableSheet(
                   initialChildSize: 0.3,
                   maxChildSize: 0.8,
@@ -129,6 +138,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
           stream: bloc.outAdsLayoutList,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
+              bloc.getWallPostList.add(WallPostRequest(
+                  appBloc.vkAccessToken, appBloc.currentPostId));
               return FloatingActionButton(
                   child: Icon(Icons.content_copy),
                   onPressed: () {

@@ -16,6 +16,8 @@ class _CloneTextPageState extends State<CloneTextPage> {
   String _textField;
   final _textController = TextEditingController();
   List<String> _cloneTextList;
+  CloneFactory adsFactory;
+  CreateAdsList createAdsList;
 
   @override
   void dispose() {
@@ -27,6 +29,10 @@ class _CloneTextPageState extends State<CloneTextPage> {
   void initState() {
     super.initState();
     _textController.addListener(_saveLastValue);
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    final vk = VkApi(userToken: appBloc.vkAccessToken.token);
+    adsFactory = CloneFactory(vk);
+    createAdsList = CreateAdsList();
   }
 
   @override
@@ -99,14 +105,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
                   child: FloatingActionButton(
                     child: Icon(Icons.send),
                     onPressed: () async {
-                      final vk = VkApi(userToken: appBloc.vkAccessToken.token);
-                      print(vk);
-                      print(appBloc.vkAccessToken.token);
-                      final adsFactory = CloneFactory(vk);
-                      final createAdsList = CreateAdsList();
                       for (var text in snapshot.data) {
-                        print(text);
-                        print('ok');
                         var cloneTask =
                             CloneTask(type: CloneType.text, value: text);
                         var createdAd = await adsFactory.buildAd(
@@ -115,13 +114,9 @@ class _CloneTextPageState extends State<CloneTextPage> {
                             appBloc.currentAdLayout,
                             appBloc.currentWallPost,
                             cloneTask);
-                        print('ad created!');
-                        print(createdAd.toString());
                         createAdsList.appendAd(createdAd);
-                        print('add appended');
                       }
                       appBloc.inCurrentCreateAdsList.add(createAdsList);
-                      //print('number of ads ${appBloc.currentCreateAdsList.createAdsList.length}');
                       Navigator.pop(context);
                     },
                   ),

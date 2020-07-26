@@ -46,7 +46,6 @@ class _CampaignsPageState extends State<CampaignsPage> {
                       onTap: () {
                         appBloc.inCurrentCampaign
                             .add(snapshot.data.campaigns[index]);
-                        print('Account tapped index is ${index}');
                         _openAdsPage(context);
                       },
                     );

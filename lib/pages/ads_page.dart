@@ -45,7 +45,6 @@ class _AdsPageState extends State<AdsPage> {
                       trailing: Icon(Icons.keyboard_arrow_right),
                       onTap: () {
                         appBloc.inCurrentAd.add(snapshot.data.ads[index]);
-                        print('Ads tapped index is ${index}');
                         _openAdPreviewPage(context);
                       },
                     );

@@ -44,7 +44,6 @@ class _AccountsPageState extends State<AccountsPage> {
                       onTap: () {
                         appBloc.inCurrentAccount
                             .add(snapshot.data.accounts[index]);
-                        print('Account tapped index is ${index}');
                         _openCampaignsPage(context);
                       },
                     );

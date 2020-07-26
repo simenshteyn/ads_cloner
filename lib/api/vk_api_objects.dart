@@ -221,35 +221,93 @@ class Video {
   bool isFavorite;
 
   Video.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.ownerId = json['owner_id'];
-    this.duration = json['duration'];
-    this.date = json['date'];
-    this.addingDate = json['adding_date'];
-    this.views = json['views'];
-    this.comments = json['comments'];
-    this.canEdit = json['can_edit'];
-    this.canAdd = json['can_add'];
-    this.isPrivate = json['is_private'];
-    this.title = json['title'];
-    this.description = json['description'];
-    this.photo130 = json['photo_130'];
-    this.photo320 = json['photo_320'];
-    this.photo640 = json['photo_640'];
-    this.photo800 = json['photo_800'];
-    this.photo1280 = json['photo_1280'];
-    this.firstFrame130 = json['first_frame_130'];
-    this.firstFrame320 = json['first_frame_320'];
-    this.firstFrame640 = json['first_frame_640'];
-    this.firstFrame800 = json['first_frame_800'];
-    this.firstFrame1280 = json['first_frame_1280'];
-    this.player = json['player'];
-    this.platform = json['platform'];
-    this.accessKey = json['access_key'];
-    this.processing = json['processing'];
-    this.live = json['live'];
-    this.upcoming = json['upcoming'];
-    this.isFavorite = json['is_favorite'];
+    if (json.containsKey('id')) {
+      this.id = json['id'];
+    }
+    if (json.containsKey('owner_id')) {
+      this.ownerId = json['owner_id'];
+    }
+    if (json.containsKey('duration')) {
+      this.duration = json['duration'];
+    }
+    if (json.containsKey('date')) {
+      this.date = json['date'];
+    }
+    if (json.containsKey('adding_date')) {
+      this.addingDate = json['adding_date'];
+    }
+    if (json.containsKey('views')) {
+      this.views = json['views'];
+    }
+    if (json.containsKey('comments')) {
+      this.comments = json['comments'];
+    }
+    if (json.containsKey('can_edit')) {
+      this.canEdit = json['can_edit'];
+    }
+    if (json.containsKey('can_add')) {
+      this.canAdd = json['can_add'];
+    }
+    if (json.containsKey('is_private')) {
+      this.isPrivate = json['is_private'];
+    }
+    if (json.containsKey('title')) {
+      this.title = json['title'];
+    }
+    if (json.containsKey('description')) {
+      this.description = json['description'];
+    }
+    if (json.containsKey('photo_130')) {
+      this.photo130 = json['photo_130'];
+    }
+    if (json.containsKey('photo_320')) {
+      this.photo320 = json['photo_320'];
+    }
+    if (json.containsKey('photo_640')) {
+      this.photo640 = json['photo_640'];
+    }
+    if (json.containsKey('photo_800')) {
+      this.photo800 = json['photo_800'];
+    }
+    if (json.containsKey('photo_1280')) {
+      this.photo1280 = json['photo_1280'];
+    }
+    if (json.containsKey('first_frame_130')) {
+      this.firstFrame130 = json['first_frame_130'];
+    }
+    if (json.containsKey('first_frame_320')) {
+      this.firstFrame320 = json['first_frame_320'];
+    }
+    if (json.containsKey('first_frame_640')) {
+      this.firstFrame640 = json['first_frame_640'];
+    }
+    if (json.containsKey('first_frame_800')) {
+      this.firstFrame800 = json['first_frame_800'];
+    }
+    if (json.containsKey('first_frame_1280')) {
+      this.firstFrame1280 = json['first_frame_1280'];
+    }
+    if (json.containsKey('player')) {
+      this.player = json['player'];
+    }
+    if (json.containsKey('platform')) {
+      this.platform = json['platform'];
+    }
+    if (json.containsKey('access_key')) {
+      this.accessKey = json['access_key'];
+    }
+    if (json.containsKey('processing')) {
+      this.processing = json['processing'];
+    }
+    if (json.containsKey('live')) {
+      this.live = json['live'];
+    }
+    if (json.containsKey('upcoming')) {
+      this.upcoming = json['upcoming'];
+    }
+    if (json.containsKey('is_favorite')) {
+      this.isFavorite = json['is_favorite'];
+    }
   }
 }
 
@@ -387,14 +445,30 @@ class Note {
   int id, ownerId, date, comments, readComments;
   String title, text, viewUrl;
   Note.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.ownerId = json['owner_id'];
-    this.title = json['title'];
-    this.text = json['text'];
-    this.date = json['date'];
-    this.comments = json['comments'];
-    this.readComments = json['read_comments'];
-    this.viewUrl = json['view_url'];
+    if (json.containsKey('id')) {
+      this.id = json['id'];
+    }
+    if (json.containsKey('owner_id')) {
+      this.ownerId = json['owner_id'];
+    }
+    if (json.containsKey('title')) {
+      this.title = json['title'];
+    }
+    if (json.containsKey('text')) {
+      this.text = json['text'];
+    }
+    if (json.containsKey('date')) {
+      this.date = json['date'];
+    }
+    if (json.containsKey('comments')) {
+      this.comments = json['comments'];
+    }
+    if (json.containsKey('read_comments')) {
+      this.readComments = json['read_comments'];
+    }
+    if (json.containsKey('view_url')) {
+      this.viewUrl = json['view_url'];
+    }
   }
 }
 

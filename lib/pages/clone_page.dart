@@ -22,13 +22,12 @@ class ClonePage extends StatefulWidget {
 }
 
 class _ClonePageState extends State<ClonePage> {
-  WallPost wallPost; //remove this later
 
   @override
   void initState() {
     super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
+    //CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     appBloc.getCurrentCreateAdsList.add('give me');
   }
 
@@ -47,8 +46,6 @@ class _ClonePageState extends State<ClonePage> {
             stream: appBloc.outCurrentCreateAdsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print('clone ads ${snapshot.data.createAdsList.length}');
-                //  return Text('Ads to clone ${snapshot.data.createAdsList.length}');
                 return Expanded(
                   child: ListView.separated(
                       separatorBuilder: (BuildContext context, int index) =>

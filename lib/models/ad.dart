@@ -17,7 +17,8 @@ class Ad {
       category1Id;
   String category2Id, ageRestriction, name, adPlatform;
   int cpc, ocpm, cpm;
-  int impressionsLimited, adPlatformNoWall, autobidding, autobiddingMaxCost;
+  int impressionsLimited, adPlatformNoWall, autobidding;
+  String autobiddingMaxCost;
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
   List weeklyScheduleHours;
   int weeklyScheduleUseHolidays;
