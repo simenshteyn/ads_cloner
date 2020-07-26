@@ -165,5 +165,5 @@ class AdTargeting {
         'count': count,
         'campaign_id': campaignId,
         'id': id,
-      };
+      }..removeWhere((key, value) => key == null || value == null);
 }

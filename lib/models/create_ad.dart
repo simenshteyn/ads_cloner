@@ -138,7 +138,7 @@ class CreateAd {
       'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
       'stats_url': statsUrl,
       'stats_url2': statsUrl2,
-    });
+    }..removeWhere((key, value) => key == null || value == null));
     result.addAll(this.targeting.toJson());
     return result;
   }

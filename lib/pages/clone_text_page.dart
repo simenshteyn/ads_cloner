@@ -3,6 +3,7 @@ import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
+import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 
@@ -32,8 +33,6 @@ class _CloneTextPageState extends State<CloneTextPage> {
   Widget build(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
-    final bool showFab = MediaQuery.of(context).viewInsets.bottom == 0.0;
-    //final bool showFab = true;
 
     return Scaffold(
         appBar: AppBar(
@@ -99,19 +98,31 @@ class _CloneTextPageState extends State<CloneTextPage> {
                   position: BadgePosition.topRight(top: -3, right: -3),
                   child: FloatingActionButton(
                     child: Icon(Icons.send),
-                    onPressed: () {
-                      final vk = VkApi(userToken: appBloc.vkAccessToken);
+                    onPressed: () async {
+                      final vk = VkApi(userToken: appBloc.vkAccessToken.token);
+                      print(vk);
+                      print(appBloc.vkAccessToken.token);
                       final adsFactory = CloneFactory(vk);
-                      for (var text in _cloneTextList) {
+                      final createAdsList = CreateAdsList();
+                      for (var text in snapshot.data) {
+                        print(text);
+                        print('ok');
                         var cloneTask =
                             CloneTask(type: CloneType.text, value: text);
-                        var createdAd = adsFactory.buildAd(
+                        var createdAd = await adsFactory.buildAd(
                             appBloc.currentAd,
                             appBloc.currentAdTargeting,
                             appBloc.currentAdLayout,
                             appBloc.currentWallPost,
                             cloneTask);
+                        print('ad created!');
+                        print(createdAd.toString());
+                        createAdsList.appendAd(createdAd);
+                        print('add appended');
                       }
+                      appBloc.inCurrentCreateAdsList.add(createAdsList);
+                      //print('number of ads ${appBloc.currentCreateAdsList.createAdsList.length}');
+                      Navigator.pop(context);
                     },
                   ),
                 );

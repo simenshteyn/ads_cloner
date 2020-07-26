@@ -92,7 +92,7 @@ class ApplicationBloc implements BlocBase {
 
   StreamController<CreateAdsList> _currentCreateAdsListController =
       StreamController<CreateAdsList>.broadcast();
-  StreamSink<CreateAdsList> get inCurrentAdsList =>
+  StreamSink<CreateAdsList> get inCurrentCreateAdsList =>
       _currentCreateAdsListController.sink;
   Stream<CreateAdsList> get outCurrentCreateAdsList =>
       _currentCreateAdsListController.stream;
