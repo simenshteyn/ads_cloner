@@ -49,9 +49,17 @@ class _ClonePageState extends State<ClonePage> {
                 if (snapshot.hasData) {
                   var _currentWallPost = snapshot.data.wallPosts[0];
                   appBloc.inCurrentWallPost.add(_currentWallPost);
-                  return Text('${_currentWallPost.toString()}');
+                  return Text('${_currentWallPost.id}');
                 }
                 return Text('No WP data');
+              }),
+          StreamBuilder<CreateAdsResultList>(
+              stream: bloc.outCreateAdsResultList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Text('${snapshot.data.toString()}');
+                }
+                return Text('No ads still cloned');
               }),
           StreamBuilder<CreateAdsList>(
             stream: appBloc.outCurrentCreateAdsList,
@@ -72,14 +80,6 @@ class _ClonePageState extends State<ClonePage> {
               return Text('Clone ads first');
             },
           ),
-          StreamBuilder<CreateAdsResultList>(
-              stream: bloc.outCreateAdsResultList,
-              builder: (context, snapshot) {
-                if (snapshot.hasData) {
-                  return Text('${snapshot.data.toString()}');
-                }
-                return Text('No ads still cloned');
-              }),
         ],
       ),
       floatingActionButton: FloatingActionButton(
