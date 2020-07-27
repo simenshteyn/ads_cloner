@@ -13,6 +13,7 @@ import 'package:ads_cloner/models/wall_post_request.dart';
 class CloneBloc implements BlocBase {
   CreateAdsResultList _createAdsResultList;
   WallPostAdsStealthResult _wallPostAdsStealthResult;
+  WallPostList _wallPostList;
 
   StreamController<CreateAdsResultList> _createAdsResultController =
       StreamController<CreateAdsResultList>.broadcast();
@@ -32,6 +33,14 @@ class CloneBloc implements BlocBase {
       StreamController<WallPostAdsStealthRequest>.broadcast();
   StreamSink<WallPostAdsStealthRequest> get getWallPostAdsStealthResult =>
       _cmdWallPostAdsStealthController.sink;
+
+  StreamController<WallPostList> _wallPostController =
+      StreamController<WallPostList>.broadcast();
+  Stream<WallPostList> get outWallPostList => _wallPostController.stream;
+  StreamController<WallPostRequest> _cmdWallPostController =
+      StreamController<WallPostRequest>.broadcast();
+  StreamSink<WallPostRequest> get getWallPostList =>
+      _cmdWallPostController.sink;
 
   CloneBloc() {
     print("CLONE BLOC CREATED");
@@ -58,6 +67,16 @@ class CloneBloc implements BlocBase {
         _wallPostAdsStealthResultController.sink.add(_wallPostAdsStealthResult);
       });
     });
+
+    _wallPostController.stream.listen(_handleLogic);
+
+    _cmdWallPostController.stream.listen((WallPostRequest req) {
+      var vk = VkApi(userToken: req.vkAccessToken.token);
+      vk.wallGetById(req.postId).then((list) {
+        _wallPostList = list;
+        _wallPostController.sink.add(_wallPostList);
+      });
+    });
   }
 
   void dispose() {
@@ -65,7 +84,13 @@ class CloneBloc implements BlocBase {
     _cmdCreateAdsResultController.close();
     _wallPostAdsStealthResultController.close();
     _cmdWallPostAdsStealthController.close();
+    _wallPostController.close();
+    _cmdWallPostController.close();
     print("CLONE BLOC DISPOSED");
+  }
+
+  void _handleLogic(data) {
+    _wallPostList = data;
   }
 
   void _handleCreateAdsResultLogic(data) {

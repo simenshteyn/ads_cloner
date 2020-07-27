@@ -9,19 +9,20 @@ class WallPostAdsStealthResult {
 
   WallPostAdsStealthResult.fromJSON(String jsonString) {
     final json = jsonDecode(jsonString)['response'];
-    
-    if (json.containsKey('post_id')) {
-      this.postId = json['post_id'];
-    }
-    if (json.containsKey('error_code')) {
-      this.errorCode = json['error_code'];
-    }
-    if (json.containsKey('error_desc')) {
-      this.errorDesc = json['error_desc'];
+    if (json != null) {
+      if (json.containsKey('post_id')) {
+        this.postId = json['post_id'];
+      }
+      if (json.containsKey('error_code')) {
+        this.errorCode = json['error_code'];
+      }
+      if (json.containsKey('error_desc')) {
+        this.errorDesc = json['error_desc'];
+      }
     }
   }
 
-  String wallLink (WallPostAdsStealth wall) {
+  String wallLink(WallPostAdsStealth wall) {
     return "https://vk.com/wall" "${wall.ownerId}" "_" "${this.postId}";
-  } 
+  }
 }

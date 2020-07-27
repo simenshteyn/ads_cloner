@@ -8,8 +8,10 @@ class AdsLayoutList {
     final _map = jsonDecode(jsonString);
     adsLayout = [];
     final List _adsLayoutList = _map['response'];
-    for (var adLayout in _adsLayoutList) {
-      adsLayout.add(AdLayout.fromJSON(adLayout));
+    if (_adsLayoutList?.length > 0) {
+      for (var adLayout in _adsLayoutList) {
+        adsLayout.add(AdLayout.fromJSON(adLayout));
+      }
     }
   }
 }

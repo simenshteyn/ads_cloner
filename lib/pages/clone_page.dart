@@ -22,12 +22,13 @@ class ClonePage extends StatefulWidget {
 }
 
 class _ClonePageState extends State<ClonePage> {
-
   @override
   void initState() {
     super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    //CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
+    CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
+    bloc.getWallPostList
+        .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     appBloc.getCurrentCreateAdsList.add('give me');
   }
 
@@ -42,6 +43,16 @@ class _ClonePageState extends State<ClonePage> {
       body: Column(
         children: <Widget>[
           CloneOptionsWidget(),
+          StreamBuilder<WallPostList>(
+              stream: bloc.outWallPostList,
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var _currentWallPost = snapshot.data.wallPosts[0];
+                  appBloc.inCurrentWallPost.add(_currentWallPost);
+                  return Text('${_currentWallPost.toString()}');
+                }
+                return Text('No WP data');
+              }),
           StreamBuilder<CreateAdsList>(
             stream: appBloc.outCurrentCreateAdsList,
             builder: (context, snapshot) {

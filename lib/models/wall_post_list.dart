@@ -9,8 +9,10 @@ class WallPostList {
     final _map = jsonDecode(jsonString);
     wallPosts = [];
     final List _wallPosts = _map['response'];
-    for (var post in _wallPosts) {
-      wallPosts.add(WallPost.fromJSON(post));
+    if (_wallPosts?.length > 0) {
+      for (var post in _wallPosts) {
+        wallPosts.add(WallPost.fromJSON(post));
+      }
     }
   }
 }
