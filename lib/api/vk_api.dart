@@ -5,6 +5,7 @@ import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
+import 'package:ads_cloner/models/campaign.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
@@ -81,6 +82,24 @@ class VkApi {
         'account_id': accountId,
         'campaign_ids': '[${ad.campaignId}]',
         'ad_ids': '[${ad.id}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJSON(response);
+    return listOfAdsLayout;
+  }
+
+  Future<AdsLayoutList> adsGetCampaignLayout(String accountId, Campaign campaign) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getAdsLayout',
+      <String, String>{
+        'account_id': accountId,
+        'campaign_ids': '[${campaign.id}]',
         'access_token': userToken,
         'v': apiVersion,
       },

@@ -17,6 +17,7 @@ environment:
   sdk: ">=2.1.0 <3.0.0"
 
 dependencies:
+  provider: ^4.3.1
   badges: ^1.1.1
   flutter_vk_sdk: ^0.1.0+3
   webview_flutter: ^0.3.22+1
