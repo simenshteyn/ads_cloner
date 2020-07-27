@@ -44,11 +44,11 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
     //);
   }
 
-  @override
-  void dispose() {
-    //wallPostListSubscription?.cancel();
-    super.dispose();
-  }
+//  @override
+//  void dispose() {
+//    //wallPostListSubscription?.cancel();
+//    super.dispose();
+//  }
 
   @override
   Widget build(BuildContext context) {
