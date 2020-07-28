@@ -1,88 +1,57 @@
 //import 'package:flutter/foundation.dart';
 
+import 'package:json_annotation/json_annotation.dart';
+part 'vk_api_objects.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Comments {
   /// https://vk.com/dev/objects/post -- comments object
   int count, canPost, canClose;
   bool groupsCanPost, canOpen;
-  Comments.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('count')) {
-      this.count = json['count'];
-    }
-    if (json.containsKey('can_post')) {
-      this.canPost = json['can_post'];
-    }
-    if (json.containsKey('groups_can_post')) {
-      this.groupsCanPost = json['groups_can_post'];
-    }
-    if (json.containsKey('can_close')) {
-      this.canClose = json['can_close'];
-    }
-    if (json.containsKey('can_open')) {
-      this.canOpen = json['can_open'];
-    }
-  }
+  Comments(this.count, this.canPost, this.canClose, this.groupsCanPost,
+      this.canOpen);
+  factory Comments.fromJSON(Map<String, dynamic> json) =>
+      _$CommentsFromJson(json);
+  Map<String, dynamic> toJson() => _$CommentsToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Likes {
   /// https://vk.com/dev/objects/post -- likes object
   int count, userLikes, canLike, canPublish;
-  Likes.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('count')) {
-      this.count = json['count'];
-    }
-    if (json.containsKey('user_likes')) {
-      this.userLikes = json['user_likes'];
-    }
-    if (json.containsKey('can_like')) {
-      this.canLike = json['can_like'];
-    }
-    if (json.containsKey('can_publish')) {
-      this.canPublish = json['can_publish'];
-    }
-  }
+  Likes(this.count, this.userLikes, this.canLike, this.canPublish);
+  factory Likes.fromJSON(Map<String, dynamic> json) => _$LikesFromJson(json);
+  Map<String, dynamic> toJson() => _$LikesToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Reposts {
   /// https://vk.com/dev/objects/post -- reposts object
   int count, userReposted;
-  Reposts.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('count')) {
-      this.count = json['count'];
-    }
-    if (json.containsKey('user_reposted')) {
-      this.userReposted = json['user_reposted'];
-    }
-  }
+  Reposts(this.count, this.userReposted);
+  factory Reposts.fromJSON(Map<String, dynamic> json) =>
+      _$RepostsFromJson(json);
+  Map<String, dynamic> toJson() => _$RepostsToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Views {
   /// https://vk.com/dev/objects/post -- views object
   int count;
-  Views.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('count')) {
-      this.count = json['count'];
-    }
-  }
+  Views(this.count);
+  factory Views.fromJSON(Map<String, dynamic> json) => _$ViewsFromJson(json);
+  Map<String, dynamic> toJson() => _$ViewsToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class PostSource {
   /// https://vk.com/dev/objects/post - post_source object
   /// More info at: https://vk.com/dev/objects/post_source
   String type, platform, data, url;
-  PostSource.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('type')) {
-      this.type = json['type'];
-    }
-    if (json.containsKey('platform')) {
-      this.platform = json['platform'];
-    }
-    if (json.containsKey('data')) {
-      this.data = json['data'];
-    }
-    if (json.containsKey('url')) {
-      this.url = json['url'];
-    }
-  }
+  PostSource(this.type, this.platform, this.data, this.url);
+  factory PostSource.fromJSON(Map<String, dynamic> json) =>
+      _$PostSourceFromJson(json);
+  Map<String, dynamic> toJson() => _$PostSourceToJson(this);
 }
 
 // ATTACHMENTS, more info at: https://vk.com/dev/objects/attachments_w
@@ -440,36 +409,23 @@ class Currency {
   }
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Note {
   /// Additional info at https://vk.com/dev/objects/note
   int id, ownerId, date, comments, readComments;
   String title, text, viewUrl;
-  Note.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('id')) {
-      this.id = json['id'];
-    }
-    if (json.containsKey('owner_id')) {
-      this.ownerId = json['owner_id'];
-    }
-    if (json.containsKey('title')) {
-      this.title = json['title'];
-    }
-    if (json.containsKey('text')) {
-      this.text = json['text'];
-    }
-    if (json.containsKey('date')) {
-      this.date = json['date'];
-    }
-    if (json.containsKey('comments')) {
-      this.comments = json['comments'];
-    }
-    if (json.containsKey('read_comments')) {
-      this.readComments = json['read_comments'];
-    }
-    if (json.containsKey('view_url')) {
-      this.viewUrl = json['view_url'];
-    }
-  }
+  Note(
+    this.id,
+    this.ownerId,
+    this.date,
+    this.comments,
+    this.readComments,
+    this.title,
+    this.text,
+    this.viewUrl,
+  );
+  factory Note.fromJSON(Map<String, dynamic> json) => _$NoteFromJson(json);
+  Map<String, dynamic> toJson() => _$NoteToJson(this);
 }
 
 class Poll {
@@ -627,21 +583,24 @@ class Geo {
   }
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Place {
   int id, latitude, longitude, created, checkins, updated, type, country, city;
   String title, icon, address;
-  Place.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.title = json['title'];
-    this.latitude = json['latitude'];
-    this.longitude = json['longitude'];
-    this.created = json['created'];
-    this.icon = json['icon'];
-    this.checkins = json['checkins'];
-    this.updated = json['updated'];
-    this.type = json['type'];
-    this.country = json['country'];
-    this.city = json['city'];
-    this.address = json['address'];
-  }
+  Place(
+    this.id,
+    this.latitude,
+    this.longitude,
+    this.created,
+    this.checkins,
+    this.updated,
+    this.type,
+    this.country,
+    this.city,
+    this.title,
+    this.icon,
+    this.address,
+  );
+  factory Place.fromJSON(Map<String, dynamic> json) => _$PlaceFromJson(json);
+  Map<String, dynamic> toJson() => _$PlaceToJson(this);
 }

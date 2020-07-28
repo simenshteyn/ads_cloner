@@ -1,22 +1,34 @@
+import 'package:json_annotation/json_annotation.dart';
+part 'ad_layout.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class AdLayout {
   int campaignId, goalType, costType, adFormat;
   String id, ageRestriction, title, linkUrl, linkDomain, previewLink, imageSrc;
-  String imageSrc2x, iconSrc, iconSrc2x;
+  @JsonKey(name: 'image_src_2x')
+  String imageSrc2x;
+  String iconSrc;
+  @JsonKey(name: 'icon_src_2x')
+  String iconSrc2x;
 
-  AdLayout.fromJSON(Map<String, dynamic> json) {
-    this.campaignId = json['campaign_id'];
-    this.goalType = json['goal_type'];
-    this.costType = json['cost_type'];
-    this.adFormat = json['ad_format'];
-    this.id = json['id'];
-    this.ageRestriction = json['age_restriction'];
-    this.title = json['title'];
-    this.linkUrl = json['link_url'];
-    this.linkDomain = json['link_domain'];
-    this.previewLink = json['preview_link'];
-    this.imageSrc = json['image_src'];
-    this.imageSrc2x = json['image_src_2x'];
-    this.iconSrc = json['icon_src'];
-    this.iconSrc2x = json['icon_src_2x'];
-  }
+  AdLayout(
+    this.campaignId,
+    this.goalType,
+    this.costType,
+    this.adFormat,
+    this.id,
+    this.ageRestriction,
+    this.title,
+    this.linkUrl,
+    this.linkDomain,
+    this.previewLink,
+    this.imageSrc,
+    this.imageSrc2x,
+    this.iconSrc,
+    this.iconSrc2x,
+  );
+
+  factory AdLayout.fromJSON(Map<String, dynamic> json) =>
+      _$AdLayoutFromJson(json);
+  Map<String, dynamic> toJson() => _$AdLayoutToJson(this);
 }
