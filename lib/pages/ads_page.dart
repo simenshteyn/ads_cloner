@@ -75,6 +75,13 @@ class ListWidget extends StatelessWidget {
           child: AdPreviewPage(),
         );
       }),
-    );
+    ).whenComplete(() {
+      ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+      AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+      final req = AdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
+          appBloc.currentCampaign);
+      bloc.getAdsList.add(req);
+      bloc.getAdsLayoutList.add(req);
+    });
   }
 }
