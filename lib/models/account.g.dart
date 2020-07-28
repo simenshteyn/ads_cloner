@@ -16,10 +16,19 @@ Account _$AccountFromJson(Map<String, dynamic> json) {
   );
 }
 
-Map<String, dynamic> _$AccountToJson(Account instance) => <String, dynamic>{
-      'account_id': instance.accountId,
-      'account_status': instance.accountStatus,
-      'account_type': instance.accountType,
-      'account_name': instance.accountName,
-      'access_role': instance.accessRole,
-    };
+Map<String, dynamic> _$AccountToJson(Account instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('account_id', instance.accountId);
+  writeNotNull('account_status', instance.accountStatus);
+  writeNotNull('account_type', instance.accountType);
+  writeNotNull('account_name', instance.accountName);
+  writeNotNull('access_role', instance.accessRole);
+  return val;
+}

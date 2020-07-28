@@ -92,8 +92,8 @@ class CreateAd {
     this.video; //result of video uploading to server
     this.statsUrl; //pixel of external stats
     this.statsUrl2; //pixe of external stats
-    this.cpc = (ad.cpc != null) ? (ad.cpm / 100) : null;
-    this.cpm = (ad.cpm != null) ? (ad.cpm / 100) : null;
+    this.cpc = (ad.cpc != null) ? (int.tryParse(ad.cpm) / 100) : null;
+    this.cpm = (ad.cpm != null) ? (int.tryParse(ad.cpm) / 100) : null;
     this.ocpm = (ad.ocpm != null) ? (ad.ocpm / 100) : null;
     this.weeklyScheduleHours = ad.weeklyScheduleHours;
     this.targeting = adTargeting;
