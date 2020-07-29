@@ -8,7 +8,7 @@ class AdTargeting {
   String apps, appsNot, districts, stations, streets, schools, positions;
   String religions, interestCategories, interests, userDevices, userOs;
   String userBrowsers, retargetingGroups, retargetingGroupsNot;
-  Map<String, List<int>> eventsRetargetingGroups;
+  //Map<String, List<int>> eventsRetargetingGroups;
   String paying, travellers, schoolFrom;
   String schoolTo, uniFrom, uniTo;
   String count, campaignId, id; //not targeting, but still exists.
@@ -43,7 +43,7 @@ class AdTargeting {
     this.userBrowsers,
     this.retargetingGroups,
     this.retargetingGroupsNot,
-    this.eventsRetargetingGroups,
+    //this.eventsRetargetingGroups,
     this.paying,
     this.travellers,
     this.schoolFrom,

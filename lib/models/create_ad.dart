@@ -13,6 +13,7 @@ class CreateAd {
   String linkTitle, linkButton, photo, photoIcon, video, statsUrl, statsUrl2;
   double cpc, cpm, ocpm;
   List weeklyScheduleHours;
+  Map<String, List<int>> eventsRetargetingGroups; //interesting to check
   AdTargeting targeting;
   // information about fields: https://vk.com/dev/ads.createAds
 
@@ -54,6 +55,7 @@ class CreateAd {
     this.cpm,
     this.ocpm,
     this.weeklyScheduleHours,
+    this.eventsRetargetingGroups,
     this.targeting,
   });
 
@@ -96,6 +98,7 @@ class CreateAd {
     this.cpm = (ad.cpm != null) ? (int.tryParse(ad.cpm) / 100) : null;
     this.ocpm = (ad.ocpm != null) ? (ad.ocpm / 100) : null;
     this.weeklyScheduleHours = ad.weeklyScheduleHours;
+    this.eventsRetargetingGroups = ad.eventsRetargetingGroups;
     this.targeting = adTargeting;
   }
 
@@ -137,6 +140,7 @@ class CreateAd {
       'weekly_schedule_use_holidays': weeklyScheduleUseHolidays,
       'stats_url': statsUrl,
       'stats_url2': statsUrl2,
+      'events_retargeting_groups': eventsRetargetingGroups,
     }..removeWhere((key, value) => key == null || value == null);
     result.addAll(this.targeting.toJson());
     return result;
