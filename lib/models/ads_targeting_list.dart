@@ -1,15 +1,14 @@
 import 'package:ads_cloner/models/ad_targeting.dart';
-import 'dart:convert' show jsonDecode;
+import 'package:json_annotation/json_annotation.dart';
+part 'ads_targeting_list.g.dart';
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class AdsTargetingList {
+  @JsonKey(name: 'response')
   List<AdTargeting> adsTargeting;
+  AdsTargetingList(this.adsTargeting);
 
-  AdsTargetingList.fromJSON(String jsonString) {
-    final _map = jsonDecode(jsonString);
-    adsTargeting = [];
-    final List _adsTargetingList = _map['response'];
-    for (var adTargeting in _adsTargetingList) {
-      adsTargeting.add(AdTargeting.fromJSON(adTargeting));
-    }
-  }
+  factory AdsTargetingList.fromJson(Map<String, dynamic> json) =>
+      _$AdsTargetingListFromJson(json);
+  Map<String, dynamic> toJson() => _$AdsTargetingListToJson(this);
 }

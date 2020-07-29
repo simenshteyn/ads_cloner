@@ -28,7 +28,7 @@ class AdLayout {
     this.iconSrc2x,
   );
 
-  factory AdLayout.fromJSON(Map<String, dynamic> json) =>
+  factory AdLayout.fromJson(Map<String, dynamic> json) =>
       _$AdLayoutFromJson(json);
   Map<String, dynamic> toJson() => _$AdLayoutToJson(this);
 }

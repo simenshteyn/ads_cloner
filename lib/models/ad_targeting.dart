@@ -54,6 +54,6 @@ class AdTargeting {
     this.id,
   );
 
-  factory AdTargeting.fromJSON(Map<String, dynamic> json) => _$AdTargetingFromJson(json);
+  factory AdTargeting.fromJson(Map<String, dynamic> json) => _$AdTargetingFromJson(json);
   Map<String, dynamic> toJson() => _$AdTargetingToJson(this);
 }

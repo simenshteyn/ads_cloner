@@ -1,17 +1,13 @@
 import 'package:ads_cloner/models/ad_layout.dart';
-import 'dart:convert' show jsonDecode;
+import 'package:json_annotation/json_annotation.dart';
+part 'ads_layout_list.g.dart';
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class AdsLayoutList {
+  @JsonKey(name: 'response')
   List<AdLayout> adsLayout;
-
-  AdsLayoutList.fromJSON(String jsonString) {
-    final _map = jsonDecode(jsonString);
-    adsLayout = [];
-    final List _adsLayoutList = _map['response'];
-    if (_adsLayoutList?.length > 0) {
-      for (var adLayout in _adsLayoutList) {
-        adsLayout.add(AdLayout.fromJSON(adLayout));
-      }
-    }
-  }
+  AdsLayoutList(this.adsLayout);
+  factory AdsLayoutList.fromJson(Map<String, dynamic> json) =>
+      _$AdsLayoutListFromJson(json);
+  Map<String, dynamic> toJson() => _$AdsLayoutListToJson(this);
 }

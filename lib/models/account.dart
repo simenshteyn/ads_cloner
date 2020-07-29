@@ -8,7 +8,7 @@ class Account {
   Account(this.accountId, this.accountStatus, this.accountType,
       this.accountName, this.accessRole);
 
-  factory Account.fromJSON(Map<String, dynamic> json) =>
+  factory Account.fromJson(Map<String, dynamic> json) =>
       _$AccountFromJson(json);
   Map<String, dynamic> toJson() => _$AccountToJson(this);
 }

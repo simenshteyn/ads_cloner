@@ -46,7 +46,7 @@ class _ClonePageState extends State<ClonePage> {
           StreamBuilder<WallPostList>(
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && (snapshot.data.wallPosts.length > 0)) {
                   var _currentWallPost = snapshot.data.wallPosts[0];
                   appBloc.inCurrentWallPost.add(_currentWallPost);
                   return Text('${_currentWallPost.id}');

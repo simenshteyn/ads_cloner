@@ -1,28 +1,27 @@
-import 'dart:convert' show jsonDecode;
-
-import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
+import 'package:json_annotation/json_annotation.dart';
+part 'wall_post_adsstealth_result.g.dart';
 
-class WallPostAdsStealthResult {
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallPostAdsStealthResultObject {
   int postId, errorCode;
   String errorDesc;
+  WallPostAdsStealthResultObject(this.postId, this.errorCode, this.errorDesc);
+  factory WallPostAdsStealthResultObject.fromJson(Map<String, dynamic> json) =>
+      _$WallPostAdsStealthResultObjectFromJson(json);
+  Map<String, dynamic> toJson() => _$WallPostAdsStealthResultObjectToJson(this);
+}
 
-  WallPostAdsStealthResult.fromJSON(String jsonString) {
-    final json = jsonDecode(jsonString)['response'];
-    if (json != null) {
-      if (json.containsKey('post_id')) {
-        this.postId = json['post_id'];
-      }
-      if (json.containsKey('error_code')) {
-        this.errorCode = json['error_code'];
-      }
-      if (json.containsKey('error_desc')) {
-        this.errorDesc = json['error_desc'];
-      }
-    }
-  }
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallPostAdsStealthResult {
+  @JsonKey(name: 'response')
+  WallPostAdsStealthResultObject result;
+  WallPostAdsStealthResult(this.result);
+  factory WallPostAdsStealthResult.fromJson(Map<String, dynamic> json) =>
+      _$WallPostAdsStealthResultFromJson(json);
+  Map<String, dynamic> toJson() => _$WallPostAdsStealthResultToJson(this);
 
   String wallLink(WallPostAdsStealth wall) {
-    return "https://vk.com/wall" "${wall.ownerId}" "_" "${this.postId}";
+    return "https://vk.com/wall" "${wall.ownerId}" "_" "${this.result?.postId}";
   }
 }

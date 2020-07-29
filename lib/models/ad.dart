@@ -64,6 +64,6 @@ class Ad {
     this.weeklyScheduleUseHolidays,
   );
 
-  factory Ad.fromJSON(Map<String, dynamic> json) => _$AdFromJson(json);
+  factory Ad.fromJson(Map<String, dynamic> json) => _$AdFromJson(json);
   Map<String, dynamic> toJson() => _$AdToJson(this);
 }

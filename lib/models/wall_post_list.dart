@@ -1,18 +1,14 @@
-import 'package:ads_cloner/models/ad.dart';
-import 'dart:convert' show jsonDecode;
 import 'package:ads_cloner/models/wall_post.dart';
 
-class WallPostList {
-  List<WallPost> wallPosts;
+import 'package:json_annotation/json_annotation.dart';
+part 'wall_post_list.g.dart';
 
-  WallPostList.fromJSON(String jsonString) {
-    final _map = jsonDecode(jsonString);
-    wallPosts = [];
-    final List _wallPosts = _map['response'];
-    if (_wallPosts?.length > 0) {
-      for (var post in _wallPosts) {
-        wallPosts.add(WallPost.fromJSON(post));
-      }
-    }
-  }
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallPostList {
+  @JsonKey(name: 'response')
+  List<WallPost> wallPosts;
+  WallPostList(this.wallPosts);
+  factory WallPostList.fromJson(Map<String, dynamic> json) =>
+      _$WallPostListFromJson(json);
+  Map<String, dynamic> toJson() => _$WallPostListToJson(this);
 }

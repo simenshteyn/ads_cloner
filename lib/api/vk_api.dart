@@ -35,7 +35,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    AccountsList listOfAccounts = AccountsList.fromJSON(response);
+    final _map = jsonDecode(response);
+    AccountsList listOfAccounts = AccountsList.fromJson(_map);
     return listOfAccounts;
   }
 
@@ -52,7 +53,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    CampaignsList listOfCampaigns = CampaignsList.fromJSON(response);
+    final _map = jsonDecode(response);
+    CampaignsList listOfCampaigns = CampaignsList.fromJson(_map);
     return listOfCampaigns;
   }
 
@@ -70,7 +72,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    AdsList listOfAds = AdsList.fromJSON(response);
+    final _map = jsonDecode(response);
+    AdsList listOfAds = AdsList.fromJson(_map);
     return listOfAds;
   }
 
@@ -89,7 +92,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJSON(response);
+    final _map = jsonDecode(response);
+    AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJson(_map);
     return listOfAdsLayout;
   }
 
@@ -107,7 +111,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJSON(response);
+    final _map = jsonDecode(response);
+    AdsLayoutList listOfAdsLayout = AdsLayoutList.fromJson(_map);
     return listOfAdsLayout;
   }
 
@@ -126,7 +131,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
-    AdsTargetingList listOfAdsTargeting = AdsTargetingList.fromJSON(response);
+    final _map = jsonDecode(response);
+    AdsTargetingList listOfAdsTargeting = AdsTargetingList.fromJson(_map);
     return listOfAdsTargeting;
   }
 
@@ -144,7 +150,8 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     debugPrint(response, wrapWidth: 1024);
-    WallPostList listOfWallPost = WallPostList.fromJSON(response);
+    final _map = jsonDecode(response);
+    WallPostList listOfWallPost = WallPostList.fromJson(_map);
     return listOfWallPost;
   }
 
@@ -163,8 +170,9 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
+    final _map = jsonDecode(response);
     CreateAdsResultList listOfCreateAdsResult =
-        CreateAdsResultList.fromJSON(response);
+        CreateAdsResultList.fromJson(_map);
     return listOfCreateAdsResult;
   }
 
@@ -183,8 +191,9 @@ class VkApi {
     var response = await _getRequest(uri);
     print(uri);
     print(response);
+    final _map = jsonDecode(response);
     WallPostAdsStealthResult adsStealthResult =
-        WallPostAdsStealthResult.fromJSON(response);
+        WallPostAdsStealthResult.fromJson(_map);
     return adsStealthResult;
   }
 

@@ -1,15 +1,14 @@
 import 'package:ads_cloner/models/campaign.dart';
-import 'dart:convert' show jsonDecode;
+import 'package:json_annotation/json_annotation.dart';
 
+part 'campaigns_list.g.dart';
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class CampaignsList {
+  @JsonKey(name: 'response')
   List<Campaign> campaigns;
-
-  CampaignsList.fromJSON(String jsonString) {
-    final _map = jsonDecode(jsonString);
-    campaigns = [];
-    final List _campaignsList = _map['response'];
-    for (var campaign in _campaignsList) {
-      campaigns.add(Campaign.fromJSON(campaign));
-    }
-  }
+  CampaignsList(this.campaigns);
+  factory CampaignsList.fromJson(Map<String, dynamic> json) =>
+      _$CampaignsListFromJson(json);
+  Map<String, dynamic> toJson() => _$CampaignsListToJson(this);
 }

@@ -26,7 +26,7 @@ class Campaign {
     this.updateTime,
   );
 
-  factory Campaign.fromJSON(Map<String, dynamic> json) =>
+  factory Campaign.fromJson(Map<String, dynamic> json) =>
       _$CampaignFromJson(json);
   Map<String, dynamic> toJson() => _$CampaignToJson(this);
 }

@@ -1,15 +1,14 @@
 import 'package:ads_cloner/models/ad.dart';
-import 'dart:convert' show jsonDecode;
+import 'package:json_annotation/json_annotation.dart';
+part 'ads_list.g.dart';
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class AdsList {
+  @JsonKey(name: 'response')
   List<Ad> ads;
+  AdsList(this.ads);
 
-  AdsList.fromJSON(String jsonString) {
-    final _map = jsonDecode(jsonString);
-    ads = [];
-    final List _adsList = _map['response'];
-    for (var ad in _adsList) {
-      ads.add(Ad.fromJSON(ad));
-    }
-  }
+  factory AdsList.fromJson(Map<String, dynamic> json) =>
+      _$AdsListFromJson(json);
+  Map<String, dynamic> toJson() => _$AdsListToJson(this);
 }

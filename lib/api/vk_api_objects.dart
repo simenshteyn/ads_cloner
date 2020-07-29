@@ -1,5 +1,3 @@
-//import 'package:flutter/foundation.dart';
-
 import 'package:json_annotation/json_annotation.dart';
 part 'vk_api_objects.g.dart';
 
@@ -10,7 +8,7 @@ class Comments {
   bool groupsCanPost, canOpen;
   Comments(this.count, this.canPost, this.canClose, this.groupsCanPost,
       this.canOpen);
-  factory Comments.fromJSON(Map<String, dynamic> json) =>
+  factory Comments.fromJson(Map<String, dynamic> json) =>
       _$CommentsFromJson(json);
   Map<String, dynamic> toJson() => _$CommentsToJson(this);
 }
@@ -20,7 +18,7 @@ class Likes {
   /// https://vk.com/dev/objects/post -- likes object
   int count, userLikes, canLike, canPublish;
   Likes(this.count, this.userLikes, this.canLike, this.canPublish);
-  factory Likes.fromJSON(Map<String, dynamic> json) => _$LikesFromJson(json);
+  factory Likes.fromJson(Map<String, dynamic> json) => _$LikesFromJson(json);
   Map<String, dynamic> toJson() => _$LikesToJson(this);
 }
 
@@ -29,7 +27,7 @@ class Reposts {
   /// https://vk.com/dev/objects/post -- reposts object
   int count, userReposted;
   Reposts(this.count, this.userReposted);
-  factory Reposts.fromJSON(Map<String, dynamic> json) =>
+  factory Reposts.fromJson(Map<String, dynamic> json) =>
       _$RepostsFromJson(json);
   Map<String, dynamic> toJson() => _$RepostsToJson(this);
 }
@@ -39,7 +37,7 @@ class Views {
   /// https://vk.com/dev/objects/post -- views object
   int count;
   Views(this.count);
-  factory Views.fromJSON(Map<String, dynamic> json) => _$ViewsFromJson(json);
+  factory Views.fromJson(Map<String, dynamic> json) => _$ViewsFromJson(json);
   Map<String, dynamic> toJson() => _$ViewsToJson(this);
 }
 
@@ -49,13 +47,13 @@ class PostSource {
   /// More info at: https://vk.com/dev/objects/post_source
   String type, platform, data, url;
   PostSource(this.type, this.platform, this.data, this.url);
-  factory PostSource.fromJSON(Map<String, dynamic> json) =>
+  factory PostSource.fromJson(Map<String, dynamic> json) =>
       _$PostSourceFromJson(json);
   Map<String, dynamic> toJson() => _$PostSourceToJson(this);
 }
 
 // ATTACHMENTS, more info at: https://vk.com/dev/objects/attachments_w
-
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class PostAttachment {
   String type;
   Photo photo;
@@ -65,7 +63,7 @@ class PostAttachment {
   //Graffiti graffiti;
   Link link;
   Note note;
-  Poll poll; //TODO: make this
+  //Poll poll; //TODO: make this
   //Page page;
   Album album;
   //PhotosList photosList;
@@ -74,99 +72,47 @@ class PostAttachment {
   //Sticker sticker;
   PrettyCards prettyCards;
   Event event;
-
-  PostAttachment.fromJSON(Map<String, dynamic> json) {
-    this.type = json['type'];
-    if (json.containsKey('photo')) {
-      this.photo = Photo.fromJSON(json['photo']);
-    }
-    if (json.containsKey('video')) {
-      this.video = Video.fromJSON(json['video']);
-    }
-    if (json.containsKey('audio')) {
-      this.audio = Audio.fromJSON(json['audio']);
-    }
-    if (json.containsKey('link')) {
-      this.link = Link.fromJSON(json['link']);
-    }
-    if (json.containsKey('note')) {
-      this.note = Note.fromJSON(json['note']);
-    }
-    if (json.containsKey('album')) {
-      this.album = Album.formJSON(json['album']);
-    }
-    if (json.containsKey('market')) {
-      this.market = MarketItem.fromJSON(json['market']);
-    }
-    if (json.containsKey('market_album')) {
-      this.marketAlbum = MarketAlbum.fromJSON(json['market_album']);
-    }
-    if (json.containsKey('pretty_cards')) {
-      this.prettyCards = PrettyCards.fromJSON(json['pretty_cards']);
-    }
-    if (json.containsKey('event')) {
-      this.event = Event.fromJSON(json['event']);
-    }
-  }
+  PostAttachment(
+      this.type,
+      this.photo,
+      this.video,
+      this.audio,
+      this.link,
+      this.note,
+      this.album,
+      this.market,
+      this.marketAlbum,
+      this.prettyCards,
+      this.event);
+  factory PostAttachment.fromJson(Map<String, dynamic> json) =>
+      _$PostAttachmentFromJson(json);
+  Map<String, dynamic> toJson() => _$PostAttachmentToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Photo {
   // More info at: https://vk.com/dev/objects/photo
   int id, albumId, ownerId, userId, date, width, height;
   String text;
   List<PhotoSizesObject> sizes;
-  Photo.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('id')) {
-      this.id = json['id'];
-    }
-    if (json.containsKey('album_id')) {
-      this.albumId = json['album_id'];
-    }
-    if (json.containsKey('owner_id')) {
-      this.ownerId = json['owner_id'];
-    }
-    if (json.containsKey('user_id')) {
-      this.userId = json['user_id'];
-    }
-    if (json.containsKey('date')) {
-      this.date = json['date'];
-    }
-    if (json.containsKey('sizes')) {
-      var list = json['sizes'] as List;
-      this.sizes = list.map((i) => PhotoSizesObject.jromJSON(i)).toList();
-    }
-    if (json.containsKey('width')) {
-      this.width = json['width'];
-    }
-    if (json.containsKey('height')) {
-      this.height = json['height'];
-    }
-    if (json.containsKey('text')) {
-      this.text = json['text'];
-    }
-  }
+  Photo(this.id, this.albumId, this.ownerId, this.userId, this.date, this.width,
+      this.height, this.text, this.sizes);
+  factory Photo.fromJson(Map<String, dynamic> json) => _$PhotoFromJson(json);
+  Map<String, dynamic> toJson() => _$PhotoToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class PhotoSizesObject {
   /// To use with Photo class
   String type, url;
   int width, height;
-  PhotoSizesObject.jromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('type')) {
-      this.type = json['type'];
-    }
-    if (json.containsKey('url')) {
-      this.url = json['url'];
-    }
-    if (json.containsKey('width')) {
-      this.width = json['width'];
-    }
-    if (json.containsKey('height')) {
-      this.height = json['height'];
-    }
-  }
+  PhotoSizesObject(this.type, this.url, this.width, this.height);
+  factory PhotoSizesObject.fromJson(Map<String, dynamic> json) =>
+      _$PhotoSizesObjectFromJson(json);
+  Map<String, dynamic> toJson() => _$PhotoSizesObjectToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Video {
   /// More info at: https://vk.com/dev/objects/video
   int id,
@@ -179,127 +125,88 @@ class Video {
       canEdit,
       canAdd,
       isPrivate;
-  String title, description, photo130, photo320, photo640, photo800, photo1280;
-  String firstFrame130,
-      firstFrame320,
-      firstFrame640,
-      firstFrame800,
-      firstFrame1280;
+  String title, description;
+  @JsonKey(name: 'photo_130')
+  String photo130;
+  @JsonKey(name: 'photo_320')
+  String photo320;
+  @JsonKey(name: 'photo_640')
+  String photo640;
+  @JsonKey(name: 'photo_800')
+  String photo800;
+  @JsonKey(name: 'photo_1280')
+  String photo1280;
+  @JsonKey(name: 'first_frame_130')
+  String firstFrame130;
+  @JsonKey(name: 'first_frame_320')
+  String firstFrame320;
+  @JsonKey(name: 'first_frame_640')
+  String firstFrame640;
+  @JsonKey(name: 'first_frame_800')
+  String firstFrame800;
+  @JsonKey(name: 'first_frame_1280')
+  String firstFrame1280;
   String player, platform, accessKey;
   int processing, live, upcoming;
   bool isFavorite;
-
-  Video.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('id')) {
-      this.id = json['id'];
-    }
-    if (json.containsKey('owner_id')) {
-      this.ownerId = json['owner_id'];
-    }
-    if (json.containsKey('duration')) {
-      this.duration = json['duration'];
-    }
-    if (json.containsKey('date')) {
-      this.date = json['date'];
-    }
-    if (json.containsKey('adding_date')) {
-      this.addingDate = json['adding_date'];
-    }
-    if (json.containsKey('views')) {
-      this.views = json['views'];
-    }
-    if (json.containsKey('comments')) {
-      this.comments = json['comments'];
-    }
-    if (json.containsKey('can_edit')) {
-      this.canEdit = json['can_edit'];
-    }
-    if (json.containsKey('can_add')) {
-      this.canAdd = json['can_add'];
-    }
-    if (json.containsKey('is_private')) {
-      this.isPrivate = json['is_private'];
-    }
-    if (json.containsKey('title')) {
-      this.title = json['title'];
-    }
-    if (json.containsKey('description')) {
-      this.description = json['description'];
-    }
-    if (json.containsKey('photo_130')) {
-      this.photo130 = json['photo_130'];
-    }
-    if (json.containsKey('photo_320')) {
-      this.photo320 = json['photo_320'];
-    }
-    if (json.containsKey('photo_640')) {
-      this.photo640 = json['photo_640'];
-    }
-    if (json.containsKey('photo_800')) {
-      this.photo800 = json['photo_800'];
-    }
-    if (json.containsKey('photo_1280')) {
-      this.photo1280 = json['photo_1280'];
-    }
-    if (json.containsKey('first_frame_130')) {
-      this.firstFrame130 = json['first_frame_130'];
-    }
-    if (json.containsKey('first_frame_320')) {
-      this.firstFrame320 = json['first_frame_320'];
-    }
-    if (json.containsKey('first_frame_640')) {
-      this.firstFrame640 = json['first_frame_640'];
-    }
-    if (json.containsKey('first_frame_800')) {
-      this.firstFrame800 = json['first_frame_800'];
-    }
-    if (json.containsKey('first_frame_1280')) {
-      this.firstFrame1280 = json['first_frame_1280'];
-    }
-    if (json.containsKey('player')) {
-      this.player = json['player'];
-    }
-    if (json.containsKey('platform')) {
-      this.platform = json['platform'];
-    }
-    if (json.containsKey('access_key')) {
-      this.accessKey = json['access_key'];
-    }
-    if (json.containsKey('processing')) {
-      this.processing = json['processing'];
-    }
-    if (json.containsKey('live')) {
-      this.live = json['live'];
-    }
-    if (json.containsKey('upcoming')) {
-      this.upcoming = json['upcoming'];
-    }
-    if (json.containsKey('is_favorite')) {
-      this.isFavorite = json['is_favorite'];
-    }
-  }
+  Video(
+    this.id,
+    this.ownerId,
+    this.duration,
+    this.date,
+    this.addingDate,
+    this.views,
+    this.comments,
+    this.canEdit,
+    this.canAdd,
+    this.isPrivate,
+    this.title,
+    this.description,
+    this.photo130,
+    this.photo320,
+    this.photo640,
+    this.photo800,
+    this.photo1280,
+    this.firstFrame130,
+    this.firstFrame320,
+    this.firstFrame640,
+    this.firstFrame800,
+    this.firstFrame1280,
+    this.player,
+    this.platform,
+    this.accessKey,
+    this.processing,
+    this.live,
+    this.upcoming,
+    this.isFavorite,
+  );
+  factory Video.fromJson(Map<String, dynamic> json) => _$VideoFromJson(json);
+  Map<String, dynamic> toJson() => _$VideoToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Audio {
   /// More info at: https://vk.com/dev/objects/audio
   int id, ownerId, duration, lyricsId, albumId, genreId, date, noSearch, isHq;
   String artist, title, url;
-  Audio.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.ownerId = json['owner_id'];
-    this.duration = json['duration'];
-    this.lyricsId = json['lyrics_id'];
-    this.albumId = json['album_id'];
-    this.genreId = json['genre_id'];
-    this.date = json['date'];
-    this.noSearch = json['no_search'];
-    this.isHq = json['is_hq'];
-    this.artist = json['artist'];
-    this.title = json['title'];
-    this.url = json['url'];
-  }
+  Audio(
+      this.id,
+      this.ownerId,
+      this.duration,
+      this.lyricsId,
+      this.albumId,
+      this.genreId,
+      this.date,
+      this.noSearch,
+      this.isHq,
+      this.artist,
+      this.title,
+      this.url);
+  factory Audio.fromJson(Map<String, dynamic> json) => _$AudioFromJson(json);
+  Map<String, dynamic> toJson() => _$AudioToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Link {
   /// More info at: https://vk.com/dev/objects/link
   String url, title, caption, description, previewPage, previewUrl;
@@ -307,106 +214,59 @@ class Link {
   Video video;
   Product product;
   Button button;
-  Link.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('url')) {
-      this.url = json['url'];
-    }
-    if (json.containsKey('title')) {
-      this.title = json['title'];
-    }
-    if (json.containsKey('caption')) {
-      this.caption = json['caption'];
-    }
-    if (json.containsKey('description')) {
-      this.description = json['description'];
-      //Can contain shit that cause JSON parsing error
-    }
-    if (json.containsKey('preview_page')) {
-      this.previewPage = json['preview_page'];
-    }
-    if (json.containsKey('preview_url')) {
-      this.previewUrl = json['preview_url'];
-    }
-    if (json.containsKey('photo')) {
-      this.photo = Photo.fromJSON(json['photo']);
-    }
-    if (json.containsKey('video')) {
-      this.video = Video.fromJSON(json['video']);
-    }
-    if (json.containsKey('product')) {
-      this.product = Product.fromJSON(json['product']);
-    }
-    if (json.containsKey('button')) {
-      this.button = Button.fromJSON(json['button']);
-    }
-  }
+  Link(this.url, this.title, this.caption, this.description, this.previewPage,
+      this.previewUrl, this.photo, this.video, this.product, this.button);
+  factory Link.fromJson(Map<String, dynamic> json) => _$LinkFromJson(json);
+  Map<String, dynamic> toJson() => _$LinkToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Button {
   String title;
   Action action;
-  Button.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('title')) {
-      this.title = json['title'];
-    }
-    if (json.containsKey('action')) {
-      this.action = Action.fromJSON(json['action']);
-    }
-  }
+  Button(this.title, this.action);
+  factory Button.fromJson(Map<String, dynamic> json) => _$ButtonFromJson(json);
+  Map<String, dynamic> toJson() => _$ButtonToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Action {
   String type, url;
-  Action.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('type')) {
-      this.type = json['type'];
-    }
-    if (json.containsKey('url')) {
-      this.url = json['url'];
-    }
-  }
+  Action(this.type, this.url);
+  factory Action.fromJson(Map<String, dynamic> json) => _$ActionFromJson(json);
+  Map<String, dynamic> toJson() => _$ActionToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Product {
   /// More info at: https://vk.com/dev/link_product
   Price price;
-  Product.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('price')) {
-      this.price = Price.fromJSON(json['price']);
-    }
-  }
+  Product(this.price);
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
+  Map<String, dynamic> toJson() => _$ProductToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Price {
   /// More info at: https://vk.com/dev/price
   int amount;
   Currency currency;
   String text;
-  Price.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('amount')) {
-      this.amount = json['amount'];
-    }
-    if (json.containsKey('text')) {
-      this.text = json['text'];
-    }
-    if (json.containsKey('currency')) {
-      this.currency = Currency.fromJSON(json['currency']);
-    }
-  }
+  Price(this.amount, this.currency, this.text);
+  factory Price.fromJson(Map<String, dynamic> json) => _$PriceFromJson(json);
+  Map<String, dynamic> toJson() => _$PriceToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Currency {
   /// More info at: https://vk.com/dev/price
   int id;
   String name;
-  Currency.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('id')) {
-      this.id = json['id'];
-    }
-    if (json.containsKey('name')) {
-      this.name = json['name'];
-    }
-  }
+  Currency(this.id, this.name);
+  factory Currency.fromJson(Map<String, dynamic> json) =>
+      _$CurrencyFromJson(json);
+  Map<String, dynamic> toJson() => _$CurrencyToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
@@ -424,7 +284,7 @@ class Note {
     this.text,
     this.viewUrl,
   );
-  factory Note.fromJSON(Map<String, dynamic> json) => _$NoteFromJson(json);
+  factory Note.fromJson(Map<String, dynamic> json) => _$NoteFromJson(json);
   Map<String, dynamic> toJson() => _$NoteToJson(this);
 }
 
@@ -432,23 +292,19 @@ class Poll {
   /// TODO, https://vk.com/dev/objects/poll
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Album {
   /// More info at https://vk.com/dev/objects/attachments_w
   int id, ownerId, created, updated, size;
   String title, description;
   Photo thumb;
-  Album.formJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.thumb = Photo.fromJSON(json['thumb']);
-    this.ownerId = json['owner_id'];
-    this.title = json['title'];
-    this.description = json['description'];
-    this.created = json['created'];
-    this.updated = json['updated'];
-    this.size = json['size'];
-  }
+  Album(this.id, this.ownerId, this.created, this.updated, this.size,
+      this.title, this.description, this.thumb);
+  factory Album.fromJson(Map<String, dynamic> json) => _$AlbumFromJson(json);
+  Map<String, dynamic> toJson() => _$AlbumToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class MarketItem {
   /// More info at: https://vk.com/dev/objects/market_item
   /// TODO: add optional fields for extended=1
@@ -457,130 +313,114 @@ class MarketItem {
   Price price;
   MarketItemCategory category;
   bool isFavorite;
-  MarketItem.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.ownerId = json['owner_id'];
-    this.title = json['title'];
-    this.description = json['description'];
-    this.price = Price.fromJSON(json['price']);
-    this.category = MarketItemCategory.fromJSON(json['category']);
-    this.thumbPhoto = json['thumb_photo'];
-    this.date = json['date'];
-    this.availability = json['availability'];
-    this.isFavorite = json['is_favorite'];
-  }
+  MarketItem(
+      this.id,
+      this.ownerId,
+      this.date,
+      this.availability,
+      this.title,
+      this.description,
+      this.thumbPhoto,
+      this.price,
+      this.category,
+      this.isFavorite);
+  factory MarketItem.fromJson(Map<String, dynamic> json) =>
+      _$MarketItemFromJson(json);
+  Map<String, dynamic> toJson() => _$MarketItemToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class MarketItemCategory {
   /// To work with MarketItem Class
   /// More info: https://vk.com/dev/objects/market_item
   int id;
   String name;
   Section section;
-  MarketItemCategory.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.name = json['name'];
-    this.section = Section.fromJSON(json['section']);
-  }
+  MarketItemCategory(this.id, this.name, this.section);
+  factory MarketItemCategory.fromJson(Map<String, dynamic> json) =>
+      _$MarketItemCategoryFromJson(json);
+  Map<String, dynamic> toJson() => _$MarketItemCategoryToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Section {
   /// To work with MarketItemCategory Class
   /// More info: https://vk.com/dev/objects/market_item
   int id;
   String name;
-  Section.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.name = json['name'];
-  }
+  Section(this.id, this.name);
+  factory Section.fromJson(Map<String, dynamic> json) =>
+      _$SectionFromJson(json);
+  Map<String, dynamic> toJson() => _$SectionToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class MarketAlbum {
   int id, ownerId, title, count, updatedTime;
   Photo photo;
-  MarketAlbum.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.ownerId = json['owner_id'];
-    this.title = json['title'];
-    this.photo = Photo.fromJSON(json['photo']);
-    this.count = json['count'];
-    this.updatedTime = json['updated_time'];
-  }
+  MarketAlbum(this.id, this.ownerId, this.title, this.count, this.updatedTime,
+      this.photo);
+  factory MarketAlbum.fromJson(Map<String, dynamic> json) =>
+      _$MarketAlbumFromJson(json);
+  Map<String, dynamic> toJson() => _$MarketAlbumToJson(this);
 }
 
 class Sticker {
   ///TODO: https://vk.com/dev/objects/sticker
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class PrettyCards {
   List<Card> cards;
-  PrettyCards.fromJSON(Map<String, dynamic> json) {
-    var list = json['cards'] as List;
-    this.cards = list.map((i) => Card.fromJSON(i)).toList();
-  }
+  PrettyCards(this.cards);
+  factory PrettyCards.fromJson(Map<String, dynamic> json) =>
+      _$PrettyCardsFromJson(json);
+  Map<String, dynamic> toJson() => _$PrettyCardsToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Card {
   String cardId, linkUrl, title, price, priceOld;
   List<CardImage> images;
   Button button;
-  Card.fromJSON(Map<String, dynamic> json) {
-    this.cardId = json['card_id'];
-    this.linkUrl = json['link_url'];
-    this.title = json['title'];
-    var list = json['images'] as List;
-    this.images = list.map((i) => CardImage.fromJSON(i)).toList();
-    this.button = Button.fromJSON(json['button']);
-    this.price = json['price'];
-    this.priceOld = json['price_old'];
-  }
+  Card(this.cardId, this.linkUrl, this.title, this.price, this.priceOld,
+      this.images, this.button);
+  factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
+  Map<String, dynamic> toJson() => _$CardToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class CardImage {
   String url;
   int width, height;
-  CardImage.fromJSON(Map<String, dynamic> json) {
-    this.url = json['url'];
-    this.width = json['width'];
-    this.height = json['height'];
-  }
+  CardImage(this.url, this.width, this.height);
+  factory CardImage.fromJson(Map<String, dynamic> json) =>
+      _$CardImageFromJson(json);
+  Map<String, dynamic> toJson() => _$CardImageToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Event {
   /// More info at: https://vk.com/dev/objects/attachments_w
   int id, time, memberStatus;
   bool isFavorite;
   String address, text, buttonText;
   List<int> friends;
-  Event.fromJSON(Map<String, dynamic> json) {
-    this.id = json['id'];
-    this.time = json['time'];
-    this.memberStatus = json['member_status'];
-    this.isFavorite = json['is_favorite'];
-    this.address = json['address'];
-    this.text = json['text'];
-    this.buttonText = json['button_text'];
-    var list = json['friends'] as List;
-    this.friends = list.cast<int>();
-  }
+  Event(this.id, this.time, this.memberStatus, this.isFavorite, this.address,
+      this.text, this.buttonText, this.friends);
+  factory Event.fromJson(Map<String, dynamic> json) => _$EventFromJson(json);
+  Map<String, dynamic> toJson() => _$EventToJson(this);
 }
 
 // END OF ATTACHMENTS
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Geo {
   String type, coordinates;
   Place place;
-  Geo.fromJSON(Map<String, dynamic> json) {
-    if (json.containsKey('type')) {
-      this.type = json['type'];
-    }
-    if (json.containsKey('coordinates')) {
-      this.coordinates = json['coordinates'];
-    }
-    if (json.containsKey('place')) {
-      this.place = Place.fromJSON(json['place']);
-    }
-  }
+  Geo(this.type, this.coordinates, this.place);
+  factory Geo.fromJson(Map<String, dynamic> json) => _$GeoFromJson(json);
+  Map<String, dynamic> toJson() => _$GeoToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
@@ -601,6 +441,6 @@ class Place {
     this.icon,
     this.address,
   );
-  factory Place.fromJSON(Map<String, dynamic> json) => _$PlaceFromJson(json);
+  factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
   Map<String, dynamic> toJson() => _$PlaceToJson(this);
 }
