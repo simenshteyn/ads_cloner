@@ -38,7 +38,7 @@ void main() {
       "ad_platform": "mobile",
       "ad_platform_no_ad_network": 1
     };
-    final ad = Ad.fromJSON(map);
+    final ad = Ad.fromJson(map);
     expect(ad.category1Id, "334");
     expect(ad.campaignId, 1013848719);
   });
@@ -56,7 +56,7 @@ void main() {
       "preview_link": "https://vk.com/ad...=c2d2609bc8e7be8c37",
       "image_src": ""
     };
-    final adLayout = AdLayout.fromJSON(map);
+    final adLayout = AdLayout.fromJson(map);
     expect(adLayout.id, "67578692");
     expect(adLayout.adFormat, 9);
   });
@@ -218,7 +218,7 @@ void main() {
       "edited": 1583397625,
       "is_promoted_post_stealth": true
     };
-    final wallPost = WallPost.fromJSON(map);
+    final wallPost = WallPost.fromJson(map);
     expect(wallPost.isPromotedPostStealth, true);
     expect(wallPost.text,
         "Привет &#128540; а нам снова нужны модели на реснички, в эту пятницу &#129392; нажми на кнопку под видео и запишись прямо сейчас &#128071;&#127995;");
@@ -235,7 +235,7 @@ void main() {
       "retargeting_groups_not": "29569053,32233473,32228458",
       "count": "2100"
     };
-    final adTargting = AdTargeting.fromJSON(map);
+    final adTargting = AdTargeting.fromJson(map);
     expect(adTargting.sex, "1");
     expect(adTargting.cities, "99");
   });
@@ -397,7 +397,7 @@ void main() {
       "edited": 1583397625,
       "is_promoted_post_stealth": true
     };
-    final wallPost = WallPost.fromJSON(wallPostMap);
+    final wallPost = WallPost.fromJson(wallPostMap);
 
     final adLayoutMap = {
       "id": "67578692",
@@ -412,7 +412,7 @@ void main() {
       "preview_link": "https://vk.com/ad...=c2d2609bc8e7be8c37",
       "image_src": ""
     };
-    final adLayout = AdLayout.fromJSON(adLayoutMap);
+    final adLayout = AdLayout.fromJson(adLayoutMap);
 
     final adMap = {
       "id": "63764839",
@@ -442,7 +442,7 @@ void main() {
       "ad_platform": "mobile",
       "ad_platform_no_ad_network": 1
     };
-    final ad = Ad.fromJSON(adMap);
+    final ad = Ad.fromJson(adMap);
 
     final adTargetingMap = {
       "campaign_id": "1014488300",
@@ -455,7 +455,7 @@ void main() {
       "retargeting_groups_not": "29569053,32233473,32228458",
       "count": "2100"
     };
-    final adTargting = AdTargeting.fromJSON(adTargetingMap);
+    final adTargting = AdTargeting.fromJson(adTargetingMap);
 
     final cloneTask = CloneTask(
       type: CloneType.text,

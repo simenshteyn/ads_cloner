@@ -14,7 +14,7 @@ void main() {
       "retargeting_groups_not": "29569053,32233473,32228458",
       "count": "2100"
     };
-    var targeting = AdTargeting.fromJSON(map);
+    var targeting = AdTargeting.fromJson(map);
     print(targeting.toJson());
     expect(targeting.sex, "1");
   });

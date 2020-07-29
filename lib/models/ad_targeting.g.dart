@@ -36,7 +36,9 @@ AdTargeting _$AdTargetingFromJson(Map<String, dynamic> json) {
     json['user_browsers'] as String,
     json['retargeting_groups'] as String,
     json['retargeting_groups_not'] as String,
-    json['events_retargeting_groups'] as String,
+    (json['events_retargeting_groups'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, (e as List)?.map((e) => e as int)?.toList()),
+    ),
     json['paying'] as String,
     json['travellers'] as String,
     json['school_from'] as String,

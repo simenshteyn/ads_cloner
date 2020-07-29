@@ -26,7 +26,7 @@ class Ad {
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
   List weeklyScheduleHours;
   int weeklyScheduleUseHolidays;
-  // TODO: "events_retargeting_groups"
+  Map<String, List<int>> eventsRetargetingGroups;
 
   Ad(
     this.campaignId,
@@ -62,6 +62,7 @@ class Ad {
     this.disclaimerSupplements,
     this.weeklyScheduleHours,
     this.weeklyScheduleUseHolidays,
+    this.eventsRetargetingGroups,
   );
 
   factory Ad.fromJson(Map<String, dynamic> json) => _$AdFromJson(json);

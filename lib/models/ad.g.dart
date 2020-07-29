@@ -41,6 +41,9 @@ Ad _$AdFromJson(Map<String, dynamic> json) {
     json['disclaimer_supplements'] as int,
     json['weekly_schedule_hours'] as List,
     json['weekly_schedule_use_holidays'] as int,
+    (json['events_retargeting_groups'] as Map<String, dynamic>)?.map(
+      (k, e) => MapEntry(k, (e as List)?.map((e) => e as int)?.toList()),
+    ),
   );
 }
 
@@ -87,5 +90,6 @@ Map<String, dynamic> _$AdToJson(Ad instance) {
   writeNotNull('weekly_schedule_hours', instance.weeklyScheduleHours);
   writeNotNull(
       'weekly_schedule_use_holidays', instance.weeklyScheduleUseHolidays);
+  writeNotNull('events_retargeting_groups', instance.eventsRetargetingGroups);
   return val;
 }

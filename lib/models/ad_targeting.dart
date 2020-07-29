@@ -8,7 +8,8 @@ class AdTargeting {
   String apps, appsNot, districts, stations, streets, schools, positions;
   String religions, interestCategories, interests, userDevices, userOs;
   String userBrowsers, retargetingGroups, retargetingGroupsNot;
-  String eventsRetargetingGroups, paying, travellers, schoolFrom;
+  Map<String, List<int>> eventsRetargetingGroups;
+  String paying, travellers, schoolFrom;
   String schoolTo, uniFrom, uniTo;
   String count, campaignId, id; //not targeting, but still exists.
   // More field information here: https://vk.com/dev/ads_targeting
@@ -54,6 +55,7 @@ class AdTargeting {
     this.id,
   );
 
-  factory AdTargeting.fromJson(Map<String, dynamic> json) => _$AdTargetingFromJson(json);
+  factory AdTargeting.fromJson(Map<String, dynamic> json) =>
+      _$AdTargetingFromJson(json);
   Map<String, dynamic> toJson() => _$AdTargetingToJson(this);
 }

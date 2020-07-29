@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:test/test.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'dart:async';
@@ -61,7 +63,8 @@ void main() {
       "ad_platform_no_ad_network": 1
       }]
       }''';
-    final ads = AdsList.fromJSON(stringJson);
+    final map = json.decode(stringJson);
+    final ads = AdsList.fromJson(map);
     expect(ads.ads.length, 2);
     expect(ads.ads[1].name, "@19/12-0013: 05 декабря 2019");
     expect(ads.ads[1].id, "63535251");
@@ -146,7 +149,8 @@ void main() {
       "ad_platform": "mobile"
       }]
       }''';
-    final ads = AdsList.fromJSON(jsonString);
+    final map = json.decode(jsonString);
+    final ads = AdsList.fromJson(map);
     print(ads.ads[2].weeklyScheduleHours);
     expect(ads.ads.length, 3);
   });

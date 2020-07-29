@@ -1,10 +1,11 @@
+import 'dart:convert';
+
 import 'package:test/test.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'dart:async';
 
-void main(){
-  test('CampaignsList Class testing from JSON',
-  () async {
+void main() {
+  test('CampaignsList Class testing from JSON', () async {
     final stringJson = '''{
       "response": [{
       "id": 1013318440,
@@ -154,9 +155,9 @@ void main(){
       "update_time": "1575440519"
       }]
       }''';
-    final camps = CampaignsList.fromJSON(stringJson);
+    final map = json.decode(stringJson);
+    final camps = CampaignsList.fromJson(map);
     expect(camps.campaigns.length, 13);
     expect(camps.campaigns[0].name, "СР-модели-ММ: октябрь");
   });
 }
-
