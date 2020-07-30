@@ -147,6 +147,9 @@ PostAttachment _$PostAttachmentFromJson(Map<String, dynamic> json) {
     json['note'] == null
         ? null
         : Note.fromJson(json['note'] as Map<String, dynamic>),
+    json['poll'] == null
+        ? null
+        : Poll.fromJson(json['poll'] as Map<String, dynamic>),
     json['page'] == null
         ? null
         : Page.fromJson(json['page'] as Map<String, dynamic>),
@@ -188,6 +191,7 @@ Map<String, dynamic> _$PostAttachmentToJson(PostAttachment instance) {
   writeNotNull('graffiti', instance.graffiti);
   writeNotNull('link', instance.link);
   writeNotNull('note', instance.note);
+  writeNotNull('poll', instance.poll);
   writeNotNull('page', instance.page);
   writeNotNull('album', instance.album);
   writeNotNull('market', instance.market);
@@ -680,6 +684,158 @@ Map<String, dynamic> _$NoteToJson(Note instance) {
   writeNotNull('title', instance.title);
   writeNotNull('text', instance.text);
   writeNotNull('view_url', instance.viewUrl);
+  return val;
+}
+
+Poll _$PollFromJson(Map<String, dynamic> json) {
+  return Poll(
+    json['id'] as int,
+    json['owner_id'] as int,
+    json['created'] as int,
+    json['votes'] as int,
+    json['end_date'] as int,
+    json['author_id'] as int,
+    json['question'] as String,
+    (json['answers'] as List)
+        ?.map((e) =>
+            e == null ? null : PollAnswer.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    json['anonymous'] as bool,
+    json['multiple'] as bool,
+    json['closed'] as bool,
+    json['is_board'] as bool,
+    json['can_edit'] as bool,
+    json['can_vote'] as bool,
+    json['can_report'] as bool,
+    json['can_share'] as bool,
+    json['answer_ids'] as List,
+    json['photo'] == null
+        ? null
+        : Photo.fromJson(json['photo'] as Map<String, dynamic>),
+    json['background'] == null
+        ? null
+        : PollBackground.fromJson(json['background'] as Map<String, dynamic>),
+    json['friends'] as List,
+  );
+}
+
+Map<String, dynamic> _$PollToJson(Poll instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('owner_id', instance.ownerId);
+  writeNotNull('created', instance.created);
+  writeNotNull('votes', instance.votes);
+  writeNotNull('end_date', instance.endDate);
+  writeNotNull('author_id', instance.authorId);
+  writeNotNull('question', instance.question);
+  writeNotNull('answers', instance.answers);
+  writeNotNull('anonymous', instance.anonymous);
+  writeNotNull('multiple', instance.multiple);
+  writeNotNull('closed', instance.closed);
+  writeNotNull('is_board', instance.isBoard);
+  writeNotNull('can_edit', instance.canEdit);
+  writeNotNull('can_vote', instance.canVote);
+  writeNotNull('can_report', instance.canReport);
+  writeNotNull('can_share', instance.canShare);
+  writeNotNull('answer_ids', instance.answerIds);
+  writeNotNull('photo', instance.photo);
+  writeNotNull('background', instance.background);
+  writeNotNull('friends', instance.friends);
+  return val;
+}
+
+PollAnswer _$PollAnswerFromJson(Map<String, dynamic> json) {
+  return PollAnswer(
+    json['id'] as int,
+    json['votes'] as int,
+    json['text'] as String,
+    (json['rate'] as num)?.toDouble(),
+  );
+}
+
+Map<String, dynamic> _$PollAnswerToJson(PollAnswer instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('votes', instance.votes);
+  writeNotNull('text', instance.text);
+  writeNotNull('rate', instance.rate);
+  return val;
+}
+
+PollBackground _$PollBackgroundFromJson(Map<String, dynamic> json) {
+  return PollBackground(
+    json['id'] as int,
+    json['type'] as String,
+    json['angle'] as int,
+    json['color'] as String,
+    json['width'] as int,
+    json['height'] as int,
+    (json['images'] as List)
+        ?.map((e) => e == null
+            ? null
+            : PhotoSizesObject.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    (json['points'] as List)
+        ?.map((e) => e == null
+            ? null
+            : PollBackgroundPoints.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$PollBackgroundToJson(PollBackground instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('angle', instance.angle);
+  writeNotNull('width', instance.width);
+  writeNotNull('height', instance.height);
+  writeNotNull('type', instance.type);
+  writeNotNull('color', instance.color);
+  writeNotNull('images', instance.images);
+  writeNotNull('points', instance.points);
+  return val;
+}
+
+PollBackgroundPoints _$PollBackgroundPointsFromJson(Map<String, dynamic> json) {
+  return PollBackgroundPoints(
+    (json['position'] as num)?.toDouble(),
+    json['color'] as String,
+  );
+}
+
+Map<String, dynamic> _$PollBackgroundPointsToJson(
+    PollBackgroundPoints instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('position', instance.position);
+  writeNotNull('color', instance.color);
   return val;
 }
 

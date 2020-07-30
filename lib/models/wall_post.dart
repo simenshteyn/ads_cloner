@@ -88,9 +88,11 @@ class WallPost {
           _result += attachment.note.ownerId.toString();
           _result += '_' + attachment.note.id.toString() + ',';
           break;
-        // case 'poll':
-        //   _result += attachment.poll.ownerId.toString();
-        //   break;
+        case 'poll':
+          _result += attachment.type;
+          _result += attachment.poll.ownerId.toString();
+          _result += '_' + attachment.poll.id.toString() + ',';
+          break;
         // TODO after Poll attachment is made;
         case 'album':
           _result += attachment.type;

@@ -63,7 +63,7 @@ class PostAttachment {
   Graffiti graffiti;
   Link link;
   Note note;
-  //Poll poll; //TODO: make this
+  Poll poll; //TODO: make this
   Page page;
   Album album;
   //PhotosList photosList;
@@ -81,7 +81,7 @@ class PostAttachment {
       this.graffiti,
       this.link,
       this.note,
-      //this.poll,
+      this.poll,
       this.page,
       this.album,
       //this.photosList,
@@ -341,8 +341,83 @@ class Note {
   Map<String, dynamic> toJson() => _$NoteToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Poll {
   /// TODO, https://vk.com/dev/objects/poll
+  int id, ownerId, created, votes, endDate, authorId;
+  String question;
+  List<PollAnswer> answers;
+  bool anonymous,
+      multiple,
+      closed,
+      isBoard,
+      canEdit,
+      canVote,
+      canReport,
+      canShare;
+  List answerIds;
+  Photo photo;
+  PollBackground background;
+  List friends;
+  Poll(
+    this.id,
+    this.ownerId,
+    this.created,
+    this.votes,
+    this.endDate,
+    this.authorId,
+    this.question,
+    this.answers,
+    this.anonymous,
+    this.multiple,
+    this.closed,
+    this.isBoard,
+    this.canEdit,
+    this.canVote,
+    this.canReport,
+    this.canShare,
+    this.answerIds,
+    this.photo,
+    this.background,
+    this.friends,
+  );
+  factory Poll.fromJson(Map<String, dynamic> json) => _$PollFromJson(json);
+  Map<String, dynamic> toJson() => _$PollToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class PollAnswer {
+  int id, votes;
+  String text;
+  double rate; // (number) id api docs?
+
+  PollAnswer(this.id, this.votes, this.text, this.rate);
+  factory PollAnswer.fromJson(Map<String, dynamic> json) =>
+      _$PollAnswerFromJson(json);
+  Map<String, dynamic> toJson() => _$PollAnswerToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class PollBackground {
+  int id, angle, width, height;
+  String type, color;
+  List<PhotoSizesObject> images;
+  List<PollBackgroundPoints> points;
+  PollBackground(this.id, this.type, this.angle, this.color, this.width,
+      this.height, this.images, this.points);
+  factory PollBackground.fromJson(Map<String, dynamic> json) =>
+      _$PollBackgroundFromJson(json);
+  Map<String, dynamic> toJson() => _$PollBackgroundToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class PollBackgroundPoints {
+  double position;
+  String color;
+  PollBackgroundPoints(this.position, this.color);
+  factory PollBackgroundPoints.fromJson(Map<String, dynamic> json) =>
+      _$PollBackgroundPointsFromJson(json);
+  Map<String, dynamic> toJson() => _$PollBackgroundPointsToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
