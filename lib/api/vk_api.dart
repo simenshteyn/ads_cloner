@@ -206,7 +206,7 @@ class VkApi {
       'method/prettyCards.create',
       <String, String>{
         'owner_id': ownerId,
-        //'photo': do it later
+        'photo': card.photo,
         'title': card.title,
         'link': card.linkUrl,
         'price': card.price, //не передавать чтобы не указывать, 0 - бесплатно

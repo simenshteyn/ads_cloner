@@ -568,8 +568,9 @@ class Card {
   String cardId, linkUrl, title, price, priceOld;
   List<CardImage> images;
   Button button;
+  String buttonText, photo;
   Card(this.cardId, this.linkUrl, this.title, this.price, this.priceOld,
-      this.images, this.button);
+      this.images, this.button, this.buttonText, this.photo);
   factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
   Map<String, dynamic> toJson() => _$CardToJson(this);
 }

@@ -1136,6 +1136,8 @@ Card _$CardFromJson(Map<String, dynamic> json) {
     json['button'] == null
         ? null
         : Button.fromJson(json['button'] as Map<String, dynamic>),
+    json['button_text'] as String,
+    json['photo'] as String,
   );
 }
 
@@ -1155,6 +1157,8 @@ Map<String, dynamic> _$CardToJson(Card instance) {
   writeNotNull('price_old', instance.priceOld);
   writeNotNull('images', instance.images);
   writeNotNull('button', instance.button);
+  writeNotNull('button_text', instance.buttonText);
+  writeNotNull('photo', instance.photo);
   return val;
 }
 
