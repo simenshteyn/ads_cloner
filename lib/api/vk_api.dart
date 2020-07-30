@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
@@ -10,6 +11,7 @@ import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/pretty_card_create_result.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
@@ -195,6 +197,32 @@ class VkApi {
     WallPostAdsStealthResult adsStealthResult =
         WallPostAdsStealthResult.fromJson(_map);
     return adsStealthResult;
+  }
+
+    Future<PrettyCardCreateResult> prettyCardsCreate(String ownerId, Card card) async {
+      /// https://vk.com/dev/prettyCards.create more info
+    var uri = Uri.https(
+      baseUrl,
+      'method/prettyCards.create',
+      <String, String>{
+        'owner_id': ownerId,
+        //'photo': do it later
+        'title': card.title,
+        'link': card.linkUrl,
+        'price': card.price, //не передавать чтобы не указывать, 0 - бесплатно
+        'price_old': card.priceOld,
+        'button': card.button.title, //не передавать если без кнопки
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    PrettyCardCreateResult prettyCardCreateResult =
+        PrettyCardCreateResult.fromJson(_map);
+    return prettyCardCreateResult;
   }
 
   Future<String> _getRequest(Uri uri) async {

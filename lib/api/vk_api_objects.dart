@@ -66,7 +66,7 @@ class PostAttachment {
   Poll poll; //TODO: make this
   Page page;
   Album album;
-  //PhotosList photosList;
+  List<String> photosList;
   MarketItem market;
   MarketAlbum marketAlbum;
   Sticker sticker;
@@ -84,7 +84,7 @@ class PostAttachment {
       this.poll,
       this.page,
       this.album,
-      //this.photosList,
+      this.photosList,
       this.market,
       this.marketAlbum,
       this.sticker,
@@ -542,8 +542,6 @@ class Sticker {
   factory Sticker.fromJson(Map<String, dynamic> json) =>
       _$StickerFromJson(json);
   Map<String, dynamic> toJson() => _$StickerToJson(this);
-
-  ///TODO: https://vk.com/dev/objects/sticker
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)

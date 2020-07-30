@@ -111,7 +111,9 @@ class WallPost {
           break;
         case 'pretty_cards':
           for (var card in attachment.prettyCards.cards) {
-            _result += 'pretty_card' + card.cardId.toString() + ',';
+            _result += 'pretty_card';
+            _result += ownerId.toString();
+            _result += '_' + card.cardId.toString() + ',';
           }
           break;
         default:

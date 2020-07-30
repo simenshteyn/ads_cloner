@@ -156,6 +156,7 @@ PostAttachment _$PostAttachmentFromJson(Map<String, dynamic> json) {
     json['album'] == null
         ? null
         : Album.fromJson(json['album'] as Map<String, dynamic>),
+    (json['photos_list'] as List)?.map((e) => e as String)?.toList(),
     json['market'] == null
         ? null
         : MarketItem.fromJson(json['market'] as Map<String, dynamic>),
@@ -194,6 +195,7 @@ Map<String, dynamic> _$PostAttachmentToJson(PostAttachment instance) {
   writeNotNull('poll', instance.poll);
   writeNotNull('page', instance.page);
   writeNotNull('album', instance.album);
+  writeNotNull('photos_list', instance.photosList);
   writeNotNull('market', instance.market);
   writeNotNull('market_album', instance.marketAlbum);
   writeNotNull('sticker', instance.sticker);
