@@ -33,6 +33,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneFactory(vk);
     createAdsList = CreateAdsList();
+    appBloc.currentWallPost.hasPrettyCards; //remove later
   }
 
   @override

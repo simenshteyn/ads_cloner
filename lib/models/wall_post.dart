@@ -186,6 +186,17 @@ class WallPost {
     return _result;
   }
 
+  bool get hasPrettyCards {
+    for (var attach in attachments) {
+      if (attach.prettyCards != null) {
+        print("HAS PRETTY CARDS");
+        return true;
+      }
+    }
+    print('NO PRETTY CARDS');
+    return false;
+  }
+
   factory WallPost.fromJson(Map<String, dynamic> json) =>
       _$WallPostFromJson(json);
   Map<String, dynamic> toJson() => _$WallPostToJson(this);
