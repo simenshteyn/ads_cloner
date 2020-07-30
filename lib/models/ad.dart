@@ -19,8 +19,8 @@ class Ad {
       startTime,
       stopTime,
       category1Id;
-  String category2Id, ageRestriction, name, adPlatform, cpc, cpm;
-  int ocpm;
+  String category2Id, ageRestriction, name, adPlatform, cpc, cpm, ocpm;
+  //int ocpm;
   int impressionsLimited, adPlatformNoWall, autobidding;
   String autobiddingMaxCost;
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
@@ -65,6 +65,12 @@ class Ad {
     this.eventsRetargetingGroups,
   );
 
-  factory Ad.fromJson(Map<String, dynamic> json) => _$AdFromJson(json);
+  factory Ad.fromJson(Map<String, dynamic> json) {
+    if (json['events_retargeting_groups'] is List<dynamic>) {
+      //json['events_retargeting_groups'] = Map<String, dynamic>();
+      json.remove('events_retargeting_groups');
+    }
+    return _$AdFromJson(json);
+  }
   Map<String, dynamic> toJson() => _$AdToJson(this);
 }

@@ -71,13 +71,17 @@ class WallPost {
           //_result += attachment.type;
           _result += attachment.link.url + ',';
           break;
-        // case 'doc':
-        //   _result += attachment.doc.ownerId.toString();
-        //   break;
+        case 'doc':
+          _result += attachment.type;
+          _result += attachment.doc.ownerId.toString();
+          _result += '_' + attachment.doc.id.toString() + ',';
+          break;
         // TODO: after Doc attachment is made!
-        // case 'page':
-        //   _result += attachment.page.ownerId.toString();
-        //   break;
+        case 'page':
+          _result += attachment.type;
+          _result += attachment.page.creatorId.toString();
+          _result += '_' + attachment.doc.id.toString() + ',';
+          break;
         // TODO: after WikiPage attachment is made!
         case 'note':
           _result += attachment.type;

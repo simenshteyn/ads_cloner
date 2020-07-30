@@ -59,17 +59,17 @@ class PostAttachment {
   Photo photo;
   Video video;
   Audio audio;
-  //Doc doc;
-  //Graffiti graffiti;
+  Doc doc;
+  Graffiti graffiti;
   Link link;
   Note note;
   //Poll poll; //TODO: make this
-  //Page page;
+  Page page;
   Album album;
   //PhotosList photosList;
   MarketItem market;
   MarketAlbum marketAlbum;
-  //Sticker sticker;
+  Sticker sticker;
   PrettyCards prettyCards;
   Event event;
   PostAttachment(
@@ -77,11 +77,17 @@ class PostAttachment {
       this.photo,
       this.video,
       this.audio,
+      this.doc,
+      this.graffiti,
       this.link,
       this.note,
+      //this.poll,
+      this.page,
       this.album,
+      //this.photosList,
       this.market,
       this.marketAlbum,
+      this.sticker,
       this.prettyCards,
       this.event);
   factory PostAttachment.fromJson(Map<String, dynamic> json) =>
@@ -207,6 +213,53 @@ class Audio {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class Doc {
+  int id, ownerId, size, date, type;
+  String title, ext, url;
+  DocPreview preview;
+  Doc(this.id, this.ownerId, this.title, this.size, this.ext, this.url,
+      this.date, this.type, this.preview);
+  factory Doc.fromJson(Map<String, dynamic> json) => _$DocFromJson(json);
+  Map<String, dynamic> toJson() => _$DocToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class DocPreview {
+  Photo photo;
+  Graffiti graffiti;
+  AudioMessage audioMessage;
+  DocPreview(this.photo, this.graffiti, this.audioMessage);
+  factory DocPreview.fromJson(Map<String, dynamic> json) =>
+      _$DocPreviewFromJson(json);
+  Map<String, dynamic> toJson() => _$DocPreviewToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class AudioMessage {
+  int duration;
+  List<int> waveform;
+  String linkOgg;
+  String linkMp3;
+  AudioMessage(this.duration, this.waveform, this.linkOgg, this.linkMp3);
+  factory AudioMessage.fromJson(Map<String, dynamic> json) =>
+      _$AudioMessageFromJson(json);
+  Map<String, dynamic> toJson() => _$AudioMessageToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class Graffiti {
+  int id, ownerId;
+  @JsonKey(name: 'photo_130')
+  String photo130;
+  @JsonKey(name: 'photo_604')
+  String photo604;
+  Graffiti(this.id, this.ownerId, this.photo130, this.photo604);
+  factory Graffiti.fromJson(Map<String, dynamic> json) =>
+      _$GraffitiFromJson(json);
+  Map<String, dynamic> toJson() => _$GraffitiToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Link {
   /// More info at: https://vk.com/dev/objects/link
   String url, title, caption, description, previewPage, previewUrl;
@@ -293,6 +346,44 @@ class Poll {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class Page {
+  /// More info at https://vk.com/dev/objects/page
+  int id,
+      groupId,
+      creatorId,
+      currentUserCanEdit,
+      currentUserCanEditAccess,
+      whoCanView,
+      whoCanEdit,
+      edited,
+      created,
+      editorId,
+      views;
+  String title, parent, parent2, source, html, viewUrl;
+  Page(
+    this.id,
+    this.groupId,
+    this.creatorId,
+    this.currentUserCanEdit,
+    this.currentUserCanEditAccess,
+    this.whoCanView,
+    this.whoCanEdit,
+    this.edited,
+    this.created,
+    this.editorId,
+    this.views,
+    this.title,
+    this.parent,
+    this.parent2,
+    this.source,
+    this.html,
+    this.viewUrl,
+  );
+  factory Page.fromJson(Map<String, dynamic> json) => _$PageFromJson(json);
+  Map<String, dynamic> toJson() => _$PageToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Album {
   /// More info at https://vk.com/dev/objects/attachments_w
   int id, ownerId, created, updated, size;
@@ -365,8 +456,29 @@ class MarketAlbum {
   Map<String, dynamic> toJson() => _$MarketAlbumToJson(this);
 }
 
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class Sticker {
+  int productId;
+  int stickerId;
+  List<StickerImage> images;
+  List<StickerImage> imagesWithBackground;
+  Sticker(
+      this.productId, this.stickerId, this.images, this.imagesWithBackground);
+  factory Sticker.fromJson(Map<String, dynamic> json) =>
+      _$StickerFromJson(json);
+  Map<String, dynamic> toJson() => _$StickerToJson(this);
+
   ///TODO: https://vk.com/dev/objects/sticker
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class StickerImage {
+  String url;
+  int width, height;
+  StickerImage(this.url, this.width, this.height);
+  factory StickerImage.fromJson(Map<String, dynamic> json) =>
+      _$StickerImageFromJson(json);
+  Map<String, dynamic> toJson() => _$StickerImageToJson(this);
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)

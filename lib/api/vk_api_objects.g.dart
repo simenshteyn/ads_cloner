@@ -135,12 +135,21 @@ PostAttachment _$PostAttachmentFromJson(Map<String, dynamic> json) {
     json['audio'] == null
         ? null
         : Audio.fromJson(json['audio'] as Map<String, dynamic>),
+    json['doc'] == null
+        ? null
+        : Doc.fromJson(json['doc'] as Map<String, dynamic>),
+    json['graffiti'] == null
+        ? null
+        : Graffiti.fromJson(json['graffiti'] as Map<String, dynamic>),
     json['link'] == null
         ? null
         : Link.fromJson(json['link'] as Map<String, dynamic>),
     json['note'] == null
         ? null
         : Note.fromJson(json['note'] as Map<String, dynamic>),
+    json['page'] == null
+        ? null
+        : Page.fromJson(json['page'] as Map<String, dynamic>),
     json['album'] == null
         ? null
         : Album.fromJson(json['album'] as Map<String, dynamic>),
@@ -150,6 +159,9 @@ PostAttachment _$PostAttachmentFromJson(Map<String, dynamic> json) {
     json['market_album'] == null
         ? null
         : MarketAlbum.fromJson(json['market_album'] as Map<String, dynamic>),
+    json['sticker'] == null
+        ? null
+        : Sticker.fromJson(json['sticker'] as Map<String, dynamic>),
     json['pretty_cards'] == null
         ? null
         : PrettyCards.fromJson(json['pretty_cards'] as Map<String, dynamic>),
@@ -172,11 +184,15 @@ Map<String, dynamic> _$PostAttachmentToJson(PostAttachment instance) {
   writeNotNull('photo', instance.photo);
   writeNotNull('video', instance.video);
   writeNotNull('audio', instance.audio);
+  writeNotNull('doc', instance.doc);
+  writeNotNull('graffiti', instance.graffiti);
   writeNotNull('link', instance.link);
   writeNotNull('note', instance.note);
+  writeNotNull('page', instance.page);
   writeNotNull('album', instance.album);
   writeNotNull('market', instance.market);
   writeNotNull('market_album', instance.marketAlbum);
+  writeNotNull('sticker', instance.sticker);
   writeNotNull('pretty_cards', instance.prettyCards);
   writeNotNull('event', instance.event);
   return val;
@@ -359,6 +375,122 @@ Map<String, dynamic> _$AudioToJson(Audio instance) {
   writeNotNull('artist', instance.artist);
   writeNotNull('title', instance.title);
   writeNotNull('url', instance.url);
+  return val;
+}
+
+Doc _$DocFromJson(Map<String, dynamic> json) {
+  return Doc(
+    json['id'] as int,
+    json['owner_id'] as int,
+    json['title'] as String,
+    json['size'] as int,
+    json['ext'] as String,
+    json['url'] as String,
+    json['date'] as int,
+    json['type'] as int,
+    json['preview'] == null
+        ? null
+        : DocPreview.fromJson(json['preview'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$DocToJson(Doc instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('owner_id', instance.ownerId);
+  writeNotNull('size', instance.size);
+  writeNotNull('date', instance.date);
+  writeNotNull('type', instance.type);
+  writeNotNull('title', instance.title);
+  writeNotNull('ext', instance.ext);
+  writeNotNull('url', instance.url);
+  writeNotNull('preview', instance.preview);
+  return val;
+}
+
+DocPreview _$DocPreviewFromJson(Map<String, dynamic> json) {
+  return DocPreview(
+    json['photo'] == null
+        ? null
+        : Photo.fromJson(json['photo'] as Map<String, dynamic>),
+    json['graffiti'] == null
+        ? null
+        : Graffiti.fromJson(json['graffiti'] as Map<String, dynamic>),
+    json['audio_message'] == null
+        ? null
+        : AudioMessage.fromJson(json['audio_message'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$DocPreviewToJson(DocPreview instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('photo', instance.photo);
+  writeNotNull('graffiti', instance.graffiti);
+  writeNotNull('audio_message', instance.audioMessage);
+  return val;
+}
+
+AudioMessage _$AudioMessageFromJson(Map<String, dynamic> json) {
+  return AudioMessage(
+    json['duration'] as int,
+    (json['waveform'] as List)?.map((e) => e as int)?.toList(),
+    json['link_ogg'] as String,
+    json['link_mp3'] as String,
+  );
+}
+
+Map<String, dynamic> _$AudioMessageToJson(AudioMessage instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('duration', instance.duration);
+  writeNotNull('waveform', instance.waveform);
+  writeNotNull('link_ogg', instance.linkOgg);
+  writeNotNull('link_mp3', instance.linkMp3);
+  return val;
+}
+
+Graffiti _$GraffitiFromJson(Map<String, dynamic> json) {
+  return Graffiti(
+    json['id'] as int,
+    json['owner_id'] as int,
+    json['photo_130'] as String,
+    json['photo_604'] as String,
+  );
+}
+
+Map<String, dynamic> _$GraffitiToJson(Graffiti instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('owner_id', instance.ownerId);
+  writeNotNull('photo_130', instance.photo130);
+  writeNotNull('photo_604', instance.photo604);
   return val;
 }
 
@@ -551,6 +683,58 @@ Map<String, dynamic> _$NoteToJson(Note instance) {
   return val;
 }
 
+Page _$PageFromJson(Map<String, dynamic> json) {
+  return Page(
+    json['id'] as int,
+    json['group_id'] as int,
+    json['creator_id'] as int,
+    json['current_user_can_edit'] as int,
+    json['current_user_can_edit_access'] as int,
+    json['who_can_view'] as int,
+    json['who_can_edit'] as int,
+    json['edited'] as int,
+    json['created'] as int,
+    json['editor_id'] as int,
+    json['views'] as int,
+    json['title'] as String,
+    json['parent'] as String,
+    json['parent2'] as String,
+    json['source'] as String,
+    json['html'] as String,
+    json['view_url'] as String,
+  );
+}
+
+Map<String, dynamic> _$PageToJson(Page instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('group_id', instance.groupId);
+  writeNotNull('creator_id', instance.creatorId);
+  writeNotNull('current_user_can_edit', instance.currentUserCanEdit);
+  writeNotNull(
+      'current_user_can_edit_access', instance.currentUserCanEditAccess);
+  writeNotNull('who_can_view', instance.whoCanView);
+  writeNotNull('who_can_edit', instance.whoCanEdit);
+  writeNotNull('edited', instance.edited);
+  writeNotNull('created', instance.created);
+  writeNotNull('editor_id', instance.editorId);
+  writeNotNull('views', instance.views);
+  writeNotNull('title', instance.title);
+  writeNotNull('parent', instance.parent);
+  writeNotNull('parent2', instance.parent2);
+  writeNotNull('source', instance.source);
+  writeNotNull('html', instance.html);
+  writeNotNull('view_url', instance.viewUrl);
+  return val;
+}
+
 Album _$AlbumFromJson(Map<String, dynamic> json) {
   return Album(
     json['id'] as int,
@@ -701,6 +885,60 @@ Map<String, dynamic> _$MarketAlbumToJson(MarketAlbum instance) {
   writeNotNull('count', instance.count);
   writeNotNull('updated_time', instance.updatedTime);
   writeNotNull('photo', instance.photo);
+  return val;
+}
+
+Sticker _$StickerFromJson(Map<String, dynamic> json) {
+  return Sticker(
+    json['product_id'] as int,
+    json['sticker_id'] as int,
+    (json['images'] as List)
+        ?.map((e) =>
+            e == null ? null : StickerImage.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+    (json['images_with_background'] as List)
+        ?.map((e) =>
+            e == null ? null : StickerImage.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$StickerToJson(Sticker instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('product_id', instance.productId);
+  writeNotNull('sticker_id', instance.stickerId);
+  writeNotNull('images', instance.images);
+  writeNotNull('images_with_background', instance.imagesWithBackground);
+  return val;
+}
+
+StickerImage _$StickerImageFromJson(Map<String, dynamic> json) {
+  return StickerImage(
+    json['url'] as String,
+    json['width'] as int,
+    json['height'] as int,
+  );
+}
+
+Map<String, dynamic> _$StickerImageToJson(StickerImage instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('url', instance.url);
+  writeNotNull('width', instance.width);
+  writeNotNull('height', instance.height);
   return val;
 }
 

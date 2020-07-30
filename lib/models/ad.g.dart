@@ -29,7 +29,7 @@ Ad _$AdFromJson(Map<String, dynamic> json) {
     json['name'] as String,
     json['ad_platform'] as String,
     json['cpc'] as String,
-    json['ocpm'] as int,
+    json['ocpm'] as String,
     json['cpm'] as String,
     json['impressions_limited'] as int,
     json['ad_platform_no_wall'] as int,
