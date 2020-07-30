@@ -8,9 +8,6 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
-import 'package:ads_cloner/models/wall_post.dart';
-import 'package:ads_cloner/models/wall_post_list.dart';
-import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +52,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
               stream: bloc.outAdsTargetingList,
               builder: (context, snapshot) {
                 if ((snapshot.hasData) &&
-                    (snapshot.data.adsTargeting.length > 0)) {
+                    (snapshot.data.adsTargeting?.length > 0)) {
                   _currentTargeting = snapshot.data.adsTargeting[0];
                   var show = snapshot.data.adsTargeting[0].toJson().toString();
                   return Text(show);
