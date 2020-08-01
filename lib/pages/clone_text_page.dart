@@ -13,6 +13,8 @@ class CloneTextPage extends StatefulWidget {
 }
 
 class _CloneTextPageState extends State<CloneTextPage> {
+  bool _isLoading = false;
+  bool _isClickable = true;
   String _textField;
   final _textController = TextEditingController();
   List<String> _cloneTextList;
@@ -104,21 +106,32 @@ class _CloneTextPageState extends State<CloneTextPage> {
                       style: TextStyle(color: Colors.white)),
                   position: BadgePosition.topRight(top: -3, right: -3),
                   child: FloatingActionButton(
-                    child: Icon(Icons.send),
+                    child: _isLoading
+                        ? Center(
+                            child: CircularProgressIndicator(
+                                valueColor: AlwaysStoppedAnimation<Color>(
+                                    Colors.white)))
+                        : Icon(Icons.send),
                     onPressed: () async {
-                      for (var text in snapshot.data) {
-                        var cloneTask =
-                            CloneTask(type: CloneType.text, value: text);
-                        var createdAd = await adsFactory.buildAd(
-                            appBloc.currentAd,
-                            appBloc.currentAdTargeting,
-                            appBloc.currentAdLayout,
-                            appBloc.currentWallPost,
-                            cloneTask);
-                        createAdsList.appendAd(createdAd);
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      if (_isClickable) {
+                        _isClickable = false;
+                        for (var text in snapshot.data) {
+                          var cloneTask =
+                              CloneTask(type: CloneType.text, value: text);
+                          var createdAd = await adsFactory.buildAd(
+                              appBloc.currentAd,
+                              appBloc.currentAdTargeting,
+                              appBloc.currentAdLayout,
+                              appBloc.currentWallPost,
+                              cloneTask);
+                          createAdsList.appendAd(createdAd);
+                        }
+                        appBloc.inCurrentCreateAdsList.add(createAdsList);
+                        Navigator.pop(context);
                       }
-                      appBloc.inCurrentCreateAdsList.add(createAdsList);
-                      Navigator.pop(context);
                     },
                   ),
                 );
