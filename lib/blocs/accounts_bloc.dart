@@ -26,7 +26,6 @@ class AccountsBloc implements BlocBase {
         _accounts = list;
         _accountsController.sink.add(_accounts);
       });
-      //_accountsController.sink.add(_accounts);
     });
   }
   void dispose() {

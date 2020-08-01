@@ -735,3 +735,22 @@ class Place {
   factory Place.fromJson(Map<String, dynamic> json) => _$PlaceFromJson(json);
   Map<String, dynamic> toJson() => _$PlaceToJson(this);
 }
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class ErrorResponse {
+  @JsonKey(name: 'error')
+  ErrorObject errorResponse;
+  ErrorResponse(this.errorResponse);
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class ErrorObject {
+  int errorCode;
+  String errorMsg;
+  ErrorObject(this.errorCode, this.errorMsg);
+  factory ErrorObject.fromJson(Map<String, dynamic> json) =>
+      _$ErrorObjectFromJson(json);
+  Map<String, dynamic> toJson() => _$ErrorObjectToJson(this);
+}

@@ -12,6 +12,9 @@ PrettyCardList _$PrettyCardListFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : PrettyCard.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -25,6 +28,7 @@ Map<String, dynamic> _$PrettyCardListToJson(PrettyCardList instance) {
   }
 
   writeNotNull('response', instance.result);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }
 

@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'pretty_card_create_result.g.dart';
@@ -16,7 +17,9 @@ class PrettyCardCreateResultObject {
 class PrettyCardCreateResult {
   @JsonKey(name: 'response')
   PrettyCardCreateResultObject result;
-  PrettyCardCreateResult(this.result);
+  @JsonKey(name: 'error')
+  ErrorObject errorResponse;
+  PrettyCardCreateResult(this.result, this.errorResponse);
   factory PrettyCardCreateResult.fromJson(Map<String, dynamic> json) =>
       _$PrettyCardCreateResultFromJson(json);
   Map<String, dynamic> toJson() => _$PrettyCardCreateResultToJson(this);

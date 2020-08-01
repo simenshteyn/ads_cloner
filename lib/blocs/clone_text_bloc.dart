@@ -31,6 +31,5 @@ class CloneTextBloc implements BlocBase {
   void _handleLogicAddText(text) {
     _textList.add(text);
     _textListController.sink.add(_textList);
-    print('handle add logic!');
   }
 }

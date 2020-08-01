@@ -12,7 +12,6 @@ import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'dart:async';
 
 class AdPreviewPage extends StatefulWidget {
   @override
@@ -65,7 +64,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         StreamBuilder<AdsLayoutList>(
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
-              if (snapshot.hasData) {
+              if ((snapshot.hasData) && (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
                 _currentWallPostId =
                     _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl);

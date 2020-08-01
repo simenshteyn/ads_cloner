@@ -12,6 +12,9 @@ CampaignsList _$CampaignsListFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Campaign.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -25,5 +28,6 @@ Map<String, dynamic> _$CampaignsListToJson(CampaignsList instance) {
   }
 
   writeNotNull('response', instance.campaigns);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }

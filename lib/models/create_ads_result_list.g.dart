@@ -13,6 +13,9 @@ CreateAdsResultList _$CreateAdsResultListFromJson(Map<String, dynamic> json) {
             ? null
             : CreateAdResult.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -26,5 +29,6 @@ Map<String, dynamic> _$CreateAdsResultListToJson(CreateAdsResultList instance) {
   }
 
   writeNotNull('response', instance.createAdsResultList);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }

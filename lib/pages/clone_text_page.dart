@@ -35,7 +35,6 @@ class _CloneTextPageState extends State<CloneTextPage> {
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneFactory(vk);
     createAdsList = CreateAdsList();
-    appBloc.currentWallPost.hasPrettyCards; //remove later
   }
 
   @override
@@ -64,7 +63,6 @@ class _CloneTextPageState extends State<CloneTextPage> {
                       if (_textField != "") {
                         bloc.addTextToList.add(_textField);
                         _textController.clear();
-                        //FocusScope.of(context).unfocus();
                       }
                     },
                   ),
@@ -136,13 +134,11 @@ class _CloneTextPageState extends State<CloneTextPage> {
                   ),
                 );
               }
-              print('NO DATA');
               return Container();
             }));
   }
 
   void _saveLastValue() {
-    print("Text field now is ${_textController.text}");
     _textField = _textController.text;
   }
 }

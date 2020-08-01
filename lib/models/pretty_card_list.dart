@@ -6,7 +6,9 @@ part 'pretty_card_list.g.dart';
 class PrettyCardList {
   @JsonKey(name: 'response')
   List<PrettyCard> result;
-  PrettyCardList(this.result);
+  @JsonKey(name: 'error')
+  ErrorObject errorResponse;
+  PrettyCardList(this.result, this.errorResponse);
   factory PrettyCardList.fromJson(Map<String, dynamic> json) =>
       _$PrettyCardListFromJson(json);
   Map<String, dynamic> toJson() => _$PrettyCardListToJson(this);

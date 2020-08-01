@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'wall_post_adsstealth_result.g.dart';
@@ -16,7 +17,9 @@ class WallPostAdsStealthResultObject {
 class WallPostAdsStealthResult {
   @JsonKey(name: 'response')
   WallPostAdsStealthResultObject result;
-  WallPostAdsStealthResult(this.result);
+    @JsonKey(name: 'error')
+  ErrorObject errorResponse;
+  WallPostAdsStealthResult(this.result, this.errorResponse);
   factory WallPostAdsStealthResult.fromJson(Map<String, dynamic> json) =>
       _$WallPostAdsStealthResultFromJson(json);
   Map<String, dynamic> toJson() => _$WallPostAdsStealthResultToJson(this);

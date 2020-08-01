@@ -6,8 +6,6 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
-import 'package:ads_cloner/models/wall_post_list.dart';
-import 'package:ads_cloner/models/wall_post_request.dart';
 
 class AdPreviewBloc implements BlocBase {
   AdsLayoutList _adsLayout;

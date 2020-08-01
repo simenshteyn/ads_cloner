@@ -12,6 +12,9 @@ AccountsList _$AccountsListFromJson(Map<String, dynamic> json) {
         ?.map((e) =>
             e == null ? null : Account.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -25,5 +28,6 @@ Map<String, dynamic> _$AccountsListToJson(AccountsList instance) {
   }
 
   writeNotNull('response', instance.accounts);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }

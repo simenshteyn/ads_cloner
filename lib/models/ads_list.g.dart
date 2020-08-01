@@ -11,6 +11,9 @@ AdsList _$AdsListFromJson(Map<String, dynamic> json) {
     (json['response'] as List)
         ?.map((e) => e == null ? null : Ad.fromJson(e as Map<String, dynamic>))
         ?.toList(),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -24,5 +27,6 @@ Map<String, dynamic> _$AdsListToJson(AdsList instance) {
   }
 
   writeNotNull('response', instance.ads);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }

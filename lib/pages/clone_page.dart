@@ -1,16 +1,9 @@
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_bloc.dart';
-import 'package:ads_cloner/models/ads_targeting_list.dart';
-import 'package:ads_cloner/models/ads_targeting_request.dart';
-import 'package:ads_cloner/models/create_ad_result.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_request.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
-import 'package:ads_cloner/models/wall_post.dart';
-import 'package:ads_cloner/models/wall_post_adsstealth.dart';
-import 'package:ads_cloner/models/wall_post_adsstealth_request.dart';
-import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
@@ -38,7 +31,7 @@ class _ClonePageState extends State<ClonePage> {
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Клонировать объявление'),
+        title: Text('Что клонируем?'),
       ),
       body: Column(
         children: <Widget>[
@@ -57,7 +50,13 @@ class _ClonePageState extends State<ClonePage> {
               stream: bloc.outCreateAdsResultList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  return Text('${snapshot.data.toString()}');
+                  if (snapshot.data.errorResponse != null) {
+                    return Text(
+                        'ERROR ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg} ');
+                  } else {
+                    return Text(
+                        'CLONED: ${snapshot.data.createAdsResultList.length} ads.');
+                  }
                 }
                 return Text('No ads still cloned');
               }),
@@ -91,7 +90,6 @@ class _ClonePageState extends State<ClonePage> {
   }
 
   void _doneButtonPressed(BuildContext cntx) {
-    print('Done button pressed');
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CloneBloc bloc = BlocProvider.of<CloneBloc>(context);
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,

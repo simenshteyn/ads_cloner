@@ -70,7 +70,6 @@ class WallPost {
           _result += '_' + attachment.audio.id.toString() + ',';
           break;
         case 'link':
-          //_result += attachment.type;
           _result += attachment.link.url + ',';
           break;
         case 'doc':
@@ -78,13 +77,11 @@ class WallPost {
           _result += attachment.doc.ownerId.toString();
           _result += '_' + attachment.doc.id.toString() + ',';
           break;
-        // TODO: after Doc attachment is made!
         case 'page':
           _result += attachment.type;
           _result += attachment.page.creatorId.toString();
           _result += '_' + attachment.doc.id.toString() + ',';
           break;
-        // TODO: after WikiPage attachment is made!
         case 'note':
           _result += attachment.type;
           _result += attachment.note.ownerId.toString();
@@ -95,7 +92,6 @@ class WallPost {
           _result += attachment.poll.ownerId.toString();
           _result += '_' + attachment.poll.id.toString() + ',';
           break;
-        // TODO after Poll attachment is made;
         case 'album':
           _result += attachment.type;
           _result += attachment.album.ownerId.toString();
@@ -116,14 +112,12 @@ class WallPost {
             _result += 'pretty_card';
             _result += ownerId.toString();
             _result += '_' + card.cardId.toString() + ',';
-            //_result += card.cardId.toString() + ',';
           }
           break;
         default:
           break;
       }
     }
-    print(_result);
     if (_result != '') {
       return _result.substring(0, _result.length - 1);
     } else
@@ -192,11 +186,9 @@ class WallPost {
   bool get hasPrettyCards {
     for (var attach in attachments) {
       if (attach.prettyCards != null) {
-        print("HAS PRETTY CARDS");
         return true;
       }
     }
-    print('NO PRETTY CARDS');
     return false;
   }
 

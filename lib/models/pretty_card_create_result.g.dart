@@ -36,6 +36,9 @@ PrettyCardCreateResult _$PrettyCardCreateResultFromJson(
         ? null
         : PrettyCardCreateResultObject.fromJson(
             json['response'] as Map<String, dynamic>),
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
   );
 }
 
@@ -50,5 +53,6 @@ Map<String, dynamic> _$PrettyCardCreateResultToJson(
   }
 
   writeNotNull('response', instance.result);
+  writeNotNull('error', instance.errorResponse);
   return val;
 }

@@ -1283,3 +1283,45 @@ Map<String, dynamic> _$PlaceToJson(Place instance) {
   writeNotNull('address', instance.address);
   return val;
 }
+
+ErrorResponse _$ErrorResponseFromJson(Map<String, dynamic> json) {
+  return ErrorResponse(
+    json['error'] == null
+        ? null
+        : ErrorObject.fromJson(json['error'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$ErrorResponseToJson(ErrorResponse instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('error', instance.errorResponse);
+  return val;
+}
+
+ErrorObject _$ErrorObjectFromJson(Map<String, dynamic> json) {
+  return ErrorObject(
+    json['error_code'] as int,
+    json['error_msg'] as String,
+  );
+}
+
+Map<String, dynamic> _$ErrorObjectToJson(ErrorObject instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('error_code', instance.errorCode);
+  writeNotNull('error_msg', instance.errorMsg);
+  return val;
+}

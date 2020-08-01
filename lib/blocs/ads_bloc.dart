@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
-import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
 import 'bloc_provider.dart';

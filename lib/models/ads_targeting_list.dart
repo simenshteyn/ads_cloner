@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ads_targeting_list.g.dart';
@@ -6,7 +7,9 @@ part 'ads_targeting_list.g.dart';
 class AdsTargetingList {
   @JsonKey(name: 'response')
   List<AdTargeting> adsTargeting;
-  AdsTargetingList(this.adsTargeting);
+  @JsonKey(name: 'error')
+  ErrorObject errorResponse;
+  AdsTargetingList(this.adsTargeting, this.errorResponse);
 
   factory AdsTargetingList.fromJson(Map<String, dynamic> json) =>
       _$AdsTargetingListFromJson(json);
