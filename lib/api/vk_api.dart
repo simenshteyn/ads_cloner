@@ -12,6 +12,7 @@ import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/pretty_card_create_result.dart';
+import 'package:ads_cloner/models/pretty_card_list.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
@@ -24,6 +25,10 @@ class VkApi {
   final _httpClient = HttpClient();
 
   VkApi({this.userToken});
+
+  Future _delayBetweenApiRequests() {
+    return Future.delayed(const Duration(milliseconds: 250));
+  }
 
   Future<AccountsList> adsGetAccounts() async {
     var uri = Uri.https(
@@ -99,7 +104,8 @@ class VkApi {
     return listOfAdsLayout;
   }
 
-  Future<AdsLayoutList> adsGetCampaignLayout(String accountId, Campaign campaign) async {
+  Future<AdsLayoutList> adsGetCampaignLayout(
+      String accountId, Campaign campaign) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -159,6 +165,7 @@ class VkApi {
 
   Future<CreateAdsResultList> adsCreateAds(
       String accountId, CreateAdsList createAdsList) async {
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.createAds',
@@ -180,6 +187,7 @@ class VkApi {
 
   Future<WallPostAdsStealthResult> wallPostAdsStealth(
       WallPostAdsStealth wallPostAdsStealth) async {
+    await _delayBetweenApiRequests();
     var baseMap = <String, String>{
       'access_token': userToken,
       'v': apiVersion,
@@ -199,8 +207,10 @@ class VkApi {
     return adsStealthResult;
   }
 
-    Future<PrettyCardCreateResult> prettyCardsCreate(String ownerId, Card card) async {
-      /// https://vk.com/dev/prettyCards.create more info
+  Future<PrettyCardCreateResult> prettyCardsCreate(
+      String ownerId, Card card) async {
+    /// https://vk.com/dev/prettyCards.create more info
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/prettyCards.create',
@@ -209,9 +219,10 @@ class VkApi {
         'photo': card.photo,
         'title': card.title,
         'link': card.linkUrl,
-        'price': card.price, //не передавать чтобы не указывать, 0 - бесплатно
-        'price_old': card.priceOld,
-        'button': card.button.title, //не передавать если без кнопки
+        'price':
+            card.clearPrice, //не передавать чтобы не указывать, 0 - бесплатно
+        'price_old': card.clearPriceOld,
+        'button': card.prettyCardButton, //не передавать если без кнопки
         'access_token': userToken,
         'v': apiVersion,
       }..removeWhere((key, value) => key == null || value == null),
@@ -223,6 +234,28 @@ class VkApi {
     PrettyCardCreateResult prettyCardCreateResult =
         PrettyCardCreateResult.fromJson(_map);
     return prettyCardCreateResult;
+  }
+
+  Future<PrettyCardList> prettyCardsGetById(
+      PrettyCardCreateResult cardCreateResult) async {
+    /// https://vk.com/dev/prettyCards.getById more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/prettyCards.getById',
+      <String, String>{
+        'owner_id': cardCreateResult.result.ownerId.toString(),
+        'card_ids': cardCreateResult.result.cardId.toString(),
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    PrettyCardList cardList = PrettyCardList.fromJson(_map);
+    return cardList;
   }
 
   Future<String> _getRequest(Uri uri) async {

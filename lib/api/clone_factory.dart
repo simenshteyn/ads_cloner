@@ -27,7 +27,31 @@ class CloneFactory {
     switch (cloneTask.type) {
       case CloneType.text:
         {
-          var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(adWallPost);
+          var clonedWallPost = adWallPost.clone();
+          print("CLONED WALL POST: ${clonedWallPost.toJson().toString()}");
+          if (clonedWallPost.hasPrettyCards) {
+            print("Cloned wall post has pretty cards");
+            for (var attachment in clonedWallPost.attachments) {
+              print("ATTACHMENT: ${attachment.type}");
+              if (attachment.type == 'pretty_cards') {
+                print("PRETTY: ${attachment.prettyCards.toString()}");
+                for (int i = 0; i < attachment.prettyCards.cards.length; i++) {
+                  var newCardResult = await vkApi.prettyCardsCreate(
+                      adWallPost.ownerId.toString(),
+                      attachment.prettyCards.cards[i]);
+                  print('CARD CREATED ID: ${newCardResult.result.cardId}');
+                  var newPrettyCard = await vkApi.prettyCardsGetById(newCardResult);
+                  print('newCard is ${newPrettyCard.result[0].cardId}');
+                  print('newCard title is ${newPrettyCard.result[0].title}');
+                  attachment.prettyCards.cards[i].updateFromPrettyCard(newPrettyCard.result[0]);
+                  print('card ATTACHED');
+                }
+              }
+            }
+          }
+          print(clonedWallPost.attachmentsToString);
+          var wallPostAdsStealth =
+              WallPostAdsStealth.fromWallPost(clonedWallPost);
           wallPostAdsStealth.message = cloneTask.value;
           var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
           var link = newStealth.wallLink(wallPostAdsStealth);

@@ -1,3 +1,4 @@
+import 'package:ads_cloner/models/pretty_card_list.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'vk_api_objects.g.dart';
 
@@ -571,6 +572,110 @@ class Card {
   String buttonText, photo;
   Card(this.cardId, this.linkUrl, this.title, this.price, this.priceOld,
       this.images, this.button, this.buttonText, this.photo);
+
+  String get prettyCardButton {
+    //returns string value for button in PrettyCard class
+    // more info at: https://vk.com/dev/prettyCards.create
+    switch (button.title) {
+      case 'Запустить':
+        return 'app_join';
+        break;
+      case 'Играть':
+        return 'app_game_join';
+        break;
+      case 'Перейти':
+        return 'open_url';
+        break;
+      case 'Открыть':
+        return 'open';
+        break;
+      case 'Подробнее':
+        return 'more';
+        break;
+      case 'Позвонить':
+        return 'call';
+        break;
+      case 'Забронировать':
+        return 'book';
+        break;
+      case 'Записаться':
+        return 'enroll';
+        break;
+      case 'Зарегистрироваться':
+        return 'register';
+        break;
+      case 'Купить':
+        return 'buy';
+        break;
+      case 'Купить билет':
+        return 'buy_ticket';
+        break;
+      case 'В магазин':
+        return 'to_shop';
+        break;
+      case 'Заказать':
+        return 'order';
+        break;
+      case 'Создать':
+        return 'create';
+        break;
+      case 'Установить':
+        return 'install';
+        break;
+      case 'Связаться':
+        return 'contact';
+        break;
+      case 'Заполнить':
+        return 'fill';
+        break;
+      case 'Выбрать':
+        return 'choose';
+        break;
+      case 'Попробовать':
+        return 'try';
+        break;
+      case 'Подписаться':
+        return 'join_public';
+        break;
+      case 'Я пойду':
+        return 'join_event';
+        break;
+      case 'Вступить':
+        return 'join_group';
+        break;
+      case 'Связаться':
+        return 'im_group';
+        break;
+      case 'Написать':
+        return 'im_group2';
+        break;
+      case 'Начать':
+        return 'begin';
+        break;
+      case 'Получить':
+        return 'get';
+        break;
+      default:
+        return null;
+    }
+  }
+
+  String get clearPrice {
+    //Should remove any letters to create via API
+    RegExp digitsOnly = RegExp(r"([+-]?[0-9]+(?:\.[0-9]*)?)");
+    return digitsOnly.firstMatch(price).group(0);
+  }
+
+  String get clearPriceOld {
+    //Should remove any letters to create via API
+    RegExp digitsOnly = RegExp(r"([+-]?[0-9]+(?:\.[0-9]*)?)");
+    return digitsOnly.firstMatch(priceOld).group(0);
+  }
+
+  void updateFromPrettyCard(PrettyCard prettyCard) {
+    cardId = prettyCard.cardId;
+  }
+
   factory Card.fromJson(Map<String, dynamic> json) => _$CardFromJson(json);
   Map<String, dynamic> toJson() => _$CardToJson(this);
 }

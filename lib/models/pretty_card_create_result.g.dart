@@ -6,11 +6,36 @@ part of 'pretty_card_create_result.dart';
 // JsonSerializableGenerator
 // **************************************************************************
 
+PrettyCardCreateResultObject _$PrettyCardCreateResultObjectFromJson(
+    Map<String, dynamic> json) {
+  return PrettyCardCreateResultObject(
+    json['owner_id'] as int,
+    json['card_id'] as String,
+  );
+}
+
+Map<String, dynamic> _$PrettyCardCreateResultObjectToJson(
+    PrettyCardCreateResultObject instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('owner_id', instance.ownerId);
+  writeNotNull('card_id', instance.cardId);
+  return val;
+}
+
 PrettyCardCreateResult _$PrettyCardCreateResultFromJson(
     Map<String, dynamic> json) {
   return PrettyCardCreateResult(
-    json['owner_id'] as int,
-    json['card_id'] as int,
+    json['response'] == null
+        ? null
+        : PrettyCardCreateResultObject.fromJson(
+            json['response'] as Map<String, dynamic>),
   );
 }
 
@@ -24,7 +49,6 @@ Map<String, dynamic> _$PrettyCardCreateResultToJson(
     }
   }
 
-  writeNotNull('owner_id', instance.ownerId);
-  writeNotNull('card_id', instance.cardId);
+  writeNotNull('response', instance.result);
   return val;
 }

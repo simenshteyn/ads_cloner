@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'wall_post.g.dart';
@@ -114,6 +116,7 @@ class WallPost {
             _result += 'pretty_card';
             _result += ownerId.toString();
             _result += '_' + card.cardId.toString() + ',';
+            //_result += card.cardId.toString() + ',';
           }
           break;
         default:
@@ -195,6 +198,12 @@ class WallPost {
     }
     print('NO PRETTY CARDS');
     return false;
+  }
+
+  WallPost clone() {
+    final String jsonString = json.encode(this);
+    final jsonResponse = json.decode(jsonString);
+    return WallPost.fromJson(jsonResponse as Map<String, dynamic>);
   }
 
   factory WallPost.fromJson(Map<String, dynamic> json) =>
