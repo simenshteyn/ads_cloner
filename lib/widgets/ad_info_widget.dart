@@ -107,7 +107,7 @@ class AdInfoWidget extends StatelessWidget {
                     subtitle: Text(
                         appBloc.currentAd?.startTime == '0'
                             ? "Не задана"
-                            : '${appBloc.currentAd.startTime}',
+                            : _timestampToDate(appBloc.currentAd.startTime),
                         style: _textStyleDown),
                   ),
                   ListTile(
@@ -127,7 +127,7 @@ class AdInfoWidget extends StatelessWidget {
                     subtitle: Text(
                         appBloc.currentAd?.stopTime == '0'
                             ? "Не задана"
-                            : '${appBloc.currentAd.stopTime}',
+                            : _timestampToDate(appBloc.currentAd.stopTime),
                         style: _textStyleDown),
                   ),
                   ListTile(
