@@ -11,6 +11,7 @@ import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
 import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
+import 'package:ads_cloner/widgets/ad_target_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -48,6 +49,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         Column(
           children: [
             AdInfoWidget(),
+            Divider(),
             StreamBuilder<AdsTargetingList>(
               stream: bloc.outAdsTargetingList,
               builder: (context, snapshot) {
@@ -56,8 +58,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                 else if ((snapshot.hasData) &&
                     (snapshot.data.adsTargeting?.length > 0)) {
                   _currentTargeting = snapshot.data.adsTargeting[0];
-                  var show = snapshot.data.adsTargeting[0].toJson().toString();
-                  return Text(show);
+                  //var show = snapshot.data.adsTargeting[0].toJson().toString();
+                  return AdTargetWidget(_currentTargeting);
                 }
                 return Text('No data');
               },

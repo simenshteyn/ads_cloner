@@ -1,6 +1,5 @@
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/models/ad.dart';
 import 'package:flutter/material.dart';
 
 class AdInfoWidget extends StatelessWidget {
