@@ -17,6 +17,7 @@ import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -108,7 +109,7 @@ class VkApi {
 
   Future<AdsLayoutList> adsGetCampaignLayout(
       String accountId, Campaign campaign) async {
-        await _delayBetweenApiRequests();
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -264,8 +265,7 @@ class VkApi {
     return cardList;
   }
 
-    Future<CityList> databaseGetCitiesById(
-      String idString) async {
+  Future<CityList> databaseGetCitiesById(String idString) async {
     /// https://vk.com/dev/database.getCitiesById more info
     await _delayBetweenApiRequests();
     var uri = Uri.https(
@@ -283,6 +283,62 @@ class VkApi {
     final _map = jsonDecode(response);
     CityList cityList = CityList.fromJson(_map);
     return cityList;
+  }
+
+  Future<UploadUrl> adsGetUploadUrl(int adFormat, [int icon]) async {
+    /// https://vk.com/dev/ads.getUploadURL more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getUploadURL',
+      <String, String>{
+        'ad_format': '${adFormat}',
+        'icon': icon != null ? '{$icon}' : null,
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    UploadUrl uploadUrl = UploadUrl.fromJson(_map);
+    return uploadUrl;
+  }
+
+  Future<String> getBytesFromImageUrl(String url) async {
+    http.Response response = await http.get(
+      url,
+    );
+    return base64.encode(response.bodyBytes);
+  }
+
+  Future<UploadedPhoto> uploadFile(String url, String file) async {
+    /// https://vk.com/dev/upload_photo_ads more info
+    await _delayBetweenApiRequests();
+    var req = http.MultipartRequest('POST', Uri.parse(url));
+    http.Response response = await http.post(
+      'https://flutter.io/images/flutter-mark-square-100.png',
+    );
+
+    // var uri = Uri.https(url);
+    // var request = await _httpClient.postUrl(url)
+    // var uri = Uri.https(
+    //   baseUrl,
+    //   'method/ads.getUploadURL',
+    //   <String, String>{
+    //     'ad_format': '${adFormat}',
+    //     'icon': icon != null ? '{$icon}' : null,
+    //     'access_token': userToken,
+    //     'v': apiVersion,
+    //   }..removeWhere((key, value) => key == null || value == null),
+    // );
+    // var response = await _getRequest(uri);
+    // print(uri);
+    // print(response);
+    // final _map = jsonDecode(response);
+    // UploadUrl uploadUrl = UploadUrl.fromJson(_map);
+    // return uploadUrl;
   }
 
   Future<String> _getRequest(Uri uri) async {

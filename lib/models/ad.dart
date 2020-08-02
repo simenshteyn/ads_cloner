@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ad.g.dart';
@@ -73,6 +75,12 @@ class Ad {
   }
   Map<String, dynamic> toJson() => _$AdToJson(this);
 
+  Ad clone() {
+    final String jsonString = json.encode(this);
+    final jsonResponse = json.decode(jsonString);
+    return Ad.fromJson(jsonResponse as Map<String, dynamic>);
+  }
+
   Widget get getClickInfoWidget {
     final TextStyle _textStyleUp = TextStyle(
         color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 12.0);
@@ -111,8 +119,7 @@ class Ad {
           return ListTile(
             dense: true,
             title: Text('Цена объявления', style: _textStyleUp),
-            subtitle: Text('Не определена',
-                style: _textStyleDown),
+            subtitle: Text('Не определена', style: _textStyleDown),
           );
         }
     }

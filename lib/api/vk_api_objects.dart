@@ -774,3 +774,22 @@ class City {
   factory City.fromJson(Map<String, dynamic> json) => _$CityFromJson(json);
   Map<String, dynamic> toJson() => _$CityToJson(this);
 }
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class UploadUrl {
+  @JsonKey(name: 'response')
+  String uploadUrl;
+  UploadUrl(this.uploadUrl);
+  factory UploadUrl.fromJson(Map<String, dynamic> json) =>
+      _$UploadUrlFromJson(json);
+  Map<String, dynamic> toJson() => _$UploadUrlToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class UploadedPhoto {
+  String photo;
+  UploadedPhoto(this.photo);
+  factory UploadedPhoto.fromJson(Map<String, dynamic> json) =>
+      _$UploadedPhotoFromJson(json);
+  Map<String, dynamic> toJson() => _$UploadedPhotoToJson(this);
+}

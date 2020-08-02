@@ -70,7 +70,7 @@ class _ClonePageState extends State<ClonePage> {
                       itemBuilder: (BuildContext context, int index) {
                         return ListTile(
                             title: Text(
-                                '${snapshot.data.createAdsList[index].linkUrl}'));
+                                '${snapshot.data.createAdsList[index]?.linkUrl}'));
                       }),
                 );
               }

@@ -1368,3 +1368,41 @@ Map<String, dynamic> _$CityToJson(City instance) {
   writeNotNull('title', instance.title);
   return val;
 }
+
+UploadUrl _$UploadUrlFromJson(Map<String, dynamic> json) {
+  return UploadUrl(
+    json['response'] as String,
+  );
+}
+
+Map<String, dynamic> _$UploadUrlToJson(UploadUrl instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('response', instance.uploadUrl);
+  return val;
+}
+
+UploadedPhoto _$UploadedPhotoFromJson(Map<String, dynamic> json) {
+  return UploadedPhoto(
+    json['photo'] as String,
+  );
+}
+
+Map<String, dynamic> _$UploadedPhotoToJson(UploadedPhoto instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('photo', instance.photo);
+  return val;
+}
