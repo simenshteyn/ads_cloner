@@ -12,4 +12,12 @@ void main() {
     expect(ad.id, '67313143');
     print(ad.eventsRetargetingGroups);
   });
+
+  test('Test ad JSON', () async {
+    final jsonString =
+        '''{"id":"75220322","campaign_id":1016016441,"status":0,"approved":"0","create_time":"1596353230","update_time":"1596353232","goal_type":3,"cost_type":3,"day_limit":"200","all_limit":"0","start_time":"0","stop_time":"0","category1_id":"339","category2_id":"0","age_restriction":"0","name":"Студия ресниц Ирины Дель","events_retargeting_groups":[],"ad_format":9,"ocpm":"9999","ad_platform":"desktop"}''';
+    Map<String, dynamic> map = json.decode(jsonString);
+    final ad = Ad.fromJson(map);
+    expect(ad.ocpm, '9999');
+  });
 }

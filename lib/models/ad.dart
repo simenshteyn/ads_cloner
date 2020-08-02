@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'ad.g.dart';
 
@@ -71,4 +72,49 @@ class Ad {
     return _$AdFromJson(json);
   }
   Map<String, dynamic> toJson() => _$AdToJson(this);
+
+  Widget get getClickInfoWidget {
+    final TextStyle _textStyleUp = TextStyle(
+        color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 12.0);
+    final TextStyle _textStyleDown = TextStyle(
+        color: Colors.black, fontWeight: FontWeight.normal, fontSize: 14.0);
+    switch (this.costType) {
+      case 0:
+        {
+          return ListTile(
+            dense: true,
+            title: Text('Цена за клик', style: _textStyleUp),
+            subtitle: Text('${int.tryParse(this.cpc) / 100} ₽',
+                style: _textStyleDown),
+          );
+        }
+      case 1:
+        {
+          return ListTile(
+            dense: true,
+            title: Text('Цена за 1000 показов', style: _textStyleUp),
+            subtitle: Text('${int.tryParse(this.cpm) / 100} ₽',
+                style: _textStyleDown),
+          );
+        }
+      case 3:
+        {
+          return ListTile(
+            dense: true,
+            title: Text('Желаемая цена заявки', style: _textStyleUp),
+            subtitle: Text('${int.tryParse(this.ocpm) / 100} ₽',
+                style: _textStyleDown),
+          );
+        }
+      default:
+        {
+          return ListTile(
+            dense: true,
+            title: Text('Цена объявления', style: _textStyleUp),
+            subtitle: Text('Не определена',
+                style: _textStyleDown),
+          );
+        }
+    }
+  }
 }

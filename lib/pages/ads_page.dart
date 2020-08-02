@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
 import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
@@ -23,7 +24,7 @@ class _AdsPageState extends State<AdsPage> {
     final req = AdsRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
     bloc.getAdsList.add(req);
-    bloc.getAdsLayoutList.add(req);
+    //bloc.getAdsLayoutList.add(req);
   }
 
   @override
@@ -31,57 +32,52 @@ class _AdsPageState extends State<AdsPage> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
     return Scaffold(
-        appBar: AppBar(
-          title: Text(appBloc.currentCampaign.name),
-        ),
-        body: SizedBox(
-          height: MediaQuery.of(context).size.height,
-          child: MultiProvider(providers: [
-            StreamProvider<AdsList>.value(value: bloc.outAdsList),
-            StreamProvider<AdsLayoutList>.value(value: bloc.outLayoutList),
-          ], child: ListWidget()),
-        ));
+      appBar: AppBar(
+        title: Text(appBloc.currentCampaign.name),
+      ),
+      body: SizedBox(
+        height: MediaQuery.of(context).size.height,
+        child: StreamBuilder<AdsList>(
+            stream: bloc.outAdsList,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return apiResponseHasError(snapshot)
+                    ? showError(snapshot)
+                    : ListView.builder(
+                        itemCount: snapshot.data.ads.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Icon(Icons.photo),
+                            title: Text(snapshot.data.ads[index].name),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              appBloc.inCurrentAd.add(snapshot.data.ads[index]);
+                              _openAdPreviewPage(context);
+                            },
+                          );
+                        });
+              }
+              return Center(child: CircularProgressIndicator());
+            }),
+      ),
+    );
   }
 }
 
-class ListWidget extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    AdsList ads = Provider.of<AdsList>(context);
-    AdsLayoutList layout = Provider.of<AdsLayoutList>(context);
+void _openAdPreviewPage(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(builder: (BuildContext context) {
+      return BlocProvider<AdPreviewBloc>(
+        bloc: AdPreviewBloc(),
+        child: AdPreviewPage(),
+      );
+    }),
+  ).whenComplete(() {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    return (ads != null)
-        ? ListView.builder(
-            itemCount: ads.ads.length,
-            itemBuilder: (BuildContext context, int index) {
-              return ListTile(
-                leading: Icon(Icons.photo),
-                title: Text(ads.ads[index].name),
-                trailing: Icon(Icons.keyboard_arrow_right),
-                onTap: () {
-                  appBloc.inCurrentAd.add(ads.ads[index]);
-                  _openAdPreviewPage(context);
-                },
-              );
-            })
-        : Center(child: CircularProgressIndicator());
-  }
-
-  void _openAdPreviewPage(BuildContext context) {
-    Navigator.of(context).push(
-      MaterialPageRoute(builder: (BuildContext context) {
-        return BlocProvider<AdPreviewBloc>(
-          bloc: AdPreviewBloc(),
-          child: AdPreviewPage(),
-        );
-      }),
-    ).whenComplete(() {
-      ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-      AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
-      final req = AdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
-          appBloc.currentCampaign);
-      bloc.getAdsList.add(req);
-      bloc.getAdsLayoutList.add(req);
-    });
-  }
+    AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+    final req = AdsRequest(
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
+    bloc.getAdsList.add(req);
+    //bloc.getAdsLayoutList.add(req);
+  });
 }

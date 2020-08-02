@@ -51,7 +51,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
             StreamBuilder<AdsTargetingList>(
               stream: bloc.outAdsTargetingList,
               builder: (context, snapshot) {
-                if (apiResponseHasError(snapshot)) return showError(snapshot);
+                if (apiResponseHasError(snapshot))
+                  return showError(snapshot);
                 else if ((snapshot.hasData) &&
                     (snapshot.data.adsTargeting?.length > 0)) {
                   _currentTargeting = snapshot.data.adsTargeting[0];
@@ -66,8 +67,10 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         StreamBuilder<AdsLayoutList>(
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
-              if (apiResponseHasError(snapshot)) return showError(snapshot);
-              else if ((snapshot.hasData) && (snapshot.data.adsLayout?.length > 0)) {
+              if (apiResponseHasError(snapshot))
+                return showError(snapshot);
+              else if ((snapshot.hasData) &&
+                  (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
                 _currentWallPostId =
                     _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl);
@@ -143,7 +146,11 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
   }
 
   String _postUrlConvertor(String linkUrl) {
-    //Convert linkUrl to postId
-    return linkUrl.substring(18);
+    //Convert linkUrl to postId, check if external or internal,
+    //if external -- returns string '-1'
+    print('URL SUB ${linkUrl.substring(0, 20)}');
+    return (linkUrl.substring(0, 19) == 'http://vk.com/wall-')
+        ? linkUrl.substring(18)
+        : '-1';
   }
 }
