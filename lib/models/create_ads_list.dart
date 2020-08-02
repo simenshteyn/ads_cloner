@@ -7,33 +7,9 @@ class CreateAdsList {
     this.createAdsList.add(ad);
   }
 
-  CreateAdsList(this.createAdsList);
-
-  // CreateAdsList get getLastFiveAds {
-  //   if (this.createAdsList.length > 5) {
-  //     var list = CreateAdsList();
-  //     for (var ad
-  //         in this.createAdsList.sublist(this.createAdsList.length - 6)) {
-  //       list.appendAd(ad);
-  //       return list;
-  //     }
-  //   } else
-  //     return this;
-  // }
-
-  // void get removeLastFiveAds {
-  //   if (this.createAdsList.length > 5) {
-  //     this.createAdsList.removeRange(
-  //         this.createAdsList.length - 5, this.createAdsList.length);
-  //   } else
-  //     this.createAdsList.clear();
-  // }
-
-  // CreateAdsList get popLastFiveAds {
-  //   var result = this.getLastFiveAds;
-  //   this.removeLastFiveAds;
-  //   return result;
-  // }
+  CreateAdsList(this.createAdsList) {
+    this.createAdsList = createAdsList ?? [];
+  }
 
   List<CreateAdsList> get getCreateAdsListInChunks {
     var len = this.createAdsList.length;
