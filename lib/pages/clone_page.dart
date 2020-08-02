@@ -8,6 +8,7 @@ import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
 import 'package:ads_cloner/widgets/clone_options_widget.dart';
+import 'package:ads_cloner/api/error_check.dart';
 
 class ClonePage extends StatefulWidget {
   @override
@@ -50,13 +51,10 @@ class _ClonePageState extends State<ClonePage> {
               stream: bloc.outCreateAdsResultList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.errorResponse != null) {
-                    return Text(
-                        'ERROR ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg} ');
-                  } else {
-                    return Text(
-                        'CLONED: ${snapshot.data.createAdsResultList.length} ads.');
-                  }
+                  return apiResponseHasError(snapshot)
+                      ? showError(snapshot)
+                      : Text(
+                          'CLONED: ${snapshot.data.createAdsResultList.length} ads.');
                 }
                 return Text('No ads still cloned');
               }),
@@ -81,10 +79,17 @@ class _ClonePageState extends State<ClonePage> {
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.done),
-          onPressed: () {
-            _doneButtonPressed(context);
+      floatingActionButton: StreamBuilder<CreateAdsList>(
+          stream: appBloc.outCurrentCreateAdsList,
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              return FloatingActionButton(
+                  child: Icon(Icons.done),
+                  onPressed: () {
+                    _doneButtonPressed(context);
+                  });
+            }
+            return Container();
           }),
     );
   }
@@ -95,6 +100,6 @@ class _ClonePageState extends State<ClonePage> {
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCreateAdsList);
     bloc.getCreateAdsResultList.add(req);
-    appBloc.inCurrentCreateAdsList.add(CreateAdsList());
+    appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
   }
 }

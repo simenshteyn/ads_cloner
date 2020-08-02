@@ -34,7 +34,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneFactory(vk);
-    createAdsList = CreateAdsList();
+    createAdsList = CreateAdsList([]);
   }
 
   @override

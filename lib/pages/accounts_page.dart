@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/campaigns_bloc.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/pages/campaigns_page.dart';
@@ -34,21 +35,24 @@ class _AccountsPageState extends State<AccountsPage> {
             stream: bloc.outAccountsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data.accounts.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      leading: Icon(Icons.account_circle),
-                      title: Text(snapshot.data.accounts[index].accountName),
-                      trailing: Icon(Icons.keyboard_arrow_right),
-                      onTap: () {
-                        appBloc.inCurrentAccount
-                            .add(snapshot.data.accounts[index]);
-                        _openCampaignsPage(context);
-                      },
-                    );
-                  },
-                );
+                return apiResponseHasError(snapshot)
+                    ? showError(snapshot)
+                    : ListView.builder(
+                        itemCount: snapshot.data.accounts.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Icon(Icons.account_circle),
+                            title:
+                                Text(snapshot.data.accounts[index].accountName),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              appBloc.inCurrentAccount
+                                  .add(snapshot.data.accounts[index]);
+                              _openCampaignsPage(context);
+                            },
+                          );
+                        },
+                      );
               }
               return Center(child: CircularProgressIndicator());
             }),

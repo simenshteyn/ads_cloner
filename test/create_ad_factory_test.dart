@@ -471,7 +471,7 @@ void main() {
     print(clone.linkUrl);
     expect(clone.adFormat, 9);
     expect(clone.cpm, 154.83);
-    var cloneList = CreateAdsList();
+    var cloneList = CreateAdsList([]);
     cloneList.appendAd(clone);
     print(cloneList.toJson());
   });

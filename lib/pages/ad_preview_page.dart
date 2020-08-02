@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
@@ -50,7 +51,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
             StreamBuilder<AdsTargetingList>(
               stream: bloc.outAdsTargetingList,
               builder: (context, snapshot) {
-                if ((snapshot.hasData) &&
+                if (apiResponseHasError(snapshot)) return showError(snapshot);
+                else if ((snapshot.hasData) &&
                     (snapshot.data.adsTargeting?.length > 0)) {
                   _currentTargeting = snapshot.data.adsTargeting[0];
                   var show = snapshot.data.adsTargeting[0].toJson().toString();
@@ -64,7 +66,8 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         StreamBuilder<AdsLayoutList>(
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
-              if ((snapshot.hasData) && (snapshot.data.adsLayout?.length > 0)) {
+              if (apiResponseHasError(snapshot)) return showError(snapshot);
+              else if ((snapshot.hasData) && (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
                 _currentWallPostId =
                     _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl);
@@ -112,14 +115,16 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
           stream: bloc.outAdsLayoutList,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              return FloatingActionButton(
-                  child: Icon(Icons.content_copy),
-                  onPressed: () {
-                    appBloc.inCurrentAdLayout.add(_currentLayout);
-                    appBloc.inCurrentAdTargeting.add(_currentTargeting);
-                    appBloc.inCurrentPostId.add(_currentWallPostId);
-                    _openClonePage(context);
-                  });
+              return apiResponseHasError(snapshot)
+                  ? showError(snapshot)
+                  : FloatingActionButton(
+                      child: Icon(Icons.content_copy),
+                      onPressed: () {
+                        appBloc.inCurrentAdLayout.add(_currentLayout);
+                        appBloc.inCurrentAdTargeting.add(_currentTargeting);
+                        appBloc.inCurrentPostId.add(_currentWallPostId);
+                        _openClonePage(context);
+                      });
             }
             return Container();
           }),

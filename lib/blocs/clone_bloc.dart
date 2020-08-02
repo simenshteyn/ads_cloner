@@ -49,12 +49,22 @@ class CloneBloc implements BlocBase {
 
     _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk
-          .adsCreateAds(req.account.accountId.toString(), req.createAdsList)
-          .then((list) {
-        _createAdsResultList = list;
-        _createAdsResultController.sink.add(_createAdsResultList);
-      });
+      //var list = req.createAdsList;
+      //var createAdsResultList = CreateAdsResultList(null,null);
+      //var resultList = CreateAdsResultList();
+      for (var chunk in req.createAdsList.getCreateAdsListInChunks) {
+        vk.adsCreateAds(req.account.accountId.toString(), chunk).then((list) {
+          _createAdsResultList = list;
+          _createAdsResultController.sink.add(_createAdsResultList);
+        });
+      }
+
+      // vk
+      //     .adsCreateAds(req.account.accountId.toString(), req.createAdsList)
+      //     .then((list) {
+      //   _createAdsResultList = list;
+      //   _createAdsResultController.sink.add(_createAdsResultList);
+      // });
     });
 
     _cmdWallPostAdsStealthController.stream

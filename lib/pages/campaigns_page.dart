@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/blocs/campaigns_bloc.dart';
 import 'package:ads_cloner/models/campaigns_request.dart';
@@ -36,21 +37,23 @@ class _CampaignsPageState extends State<CampaignsPage> {
             stream: bloc.outCampaignsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return ListView.builder(
-                  itemCount: snapshot.data.campaigns.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      leading: Icon(Icons.photo_library),
-                      title: Text(snapshot.data.campaigns[index].name),
-                      trailing: Icon(Icons.keyboard_arrow_right),
-                      onTap: () {
-                        appBloc.inCurrentCampaign
-                            .add(snapshot.data.campaigns[index]);
-                        _openAdsPage(context);
-                      },
-                    );
-                  },
-                );
+                return apiResponseHasError(snapshot)
+                    ? showError(snapshot)
+                    : ListView.builder(
+                        itemCount: snapshot.data.campaigns.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Icon(Icons.photo_library),
+                            title: Text(snapshot.data.campaigns[index].name),
+                            trailing: Icon(Icons.keyboard_arrow_right),
+                            onTap: () {
+                              appBloc.inCurrentCampaign
+                                  .add(snapshot.data.campaigns[index]);
+                              _openAdsPage(context);
+                            },
+                          );
+                        },
+                      );
               }
               return Center(child: CircularProgressIndicator());
             }),

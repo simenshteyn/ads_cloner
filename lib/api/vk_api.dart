@@ -66,6 +66,7 @@ class VkApi {
   }
 
   Future<AdsList> adsGetAds(String accountId, int campaignId) async {
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAds',
@@ -85,6 +86,7 @@ class VkApi {
   }
 
   Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad) async {
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -106,6 +108,7 @@ class VkApi {
 
   Future<AdsLayoutList> adsGetCampaignLayout(
       String accountId, Campaign campaign) async {
+        await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -125,6 +128,7 @@ class VkApi {
   }
 
   Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad) async {
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsTargeting',
@@ -145,6 +149,7 @@ class VkApi {
   }
 
   Future<WallPostList> wallGetById(String postId) async {
+    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/wall.getById',
@@ -166,6 +171,7 @@ class VkApi {
   Future<CreateAdsResultList> adsCreateAds(
       String accountId, CreateAdsList createAdsList) async {
     await _delayBetweenApiRequests();
+
     var uri = Uri.https(
       baseUrl,
       'method/ads.createAds',
@@ -261,6 +267,8 @@ class VkApi {
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
     var response = await request.close();
-    return await response.transform(utf8.decoder).join();
+    return (response.statusCode == 200)
+        ? await response.transform(utf8.decoder).join()
+        : '{"error": {"error_code": ${response.statusCode}, "error_msg": "HTTP request problem: ${response.reasonPhrase}"}}';
   }
 }
