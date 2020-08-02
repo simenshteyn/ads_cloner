@@ -264,6 +264,27 @@ class VkApi {
     return cardList;
   }
 
+    Future<CityList> databaseGetCitiesById(
+      String idString) async {
+    /// https://vk.com/dev/database.getCitiesById more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/database.getCitiesById',
+      <String, String>{
+        'city_ids': idString,
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    CityList cityList = CityList.fromJson(_map);
+    return cityList;
+  }
+
   Future<String> _getRequest(Uri uri) async {
     var request = await _httpClient.getUrl(uri);
     var response = await request.close();

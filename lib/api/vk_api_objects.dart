@@ -741,7 +741,8 @@ class ErrorResponse {
   @JsonKey(name: 'error')
   ErrorObject errorResponse;
   ErrorResponse(this.errorResponse);
-  factory ErrorResponse.fromJson(Map<String, dynamic> json) => _$ErrorResponseFromJson(json);
+  factory ErrorResponse.fromJson(Map<String, dynamic> json) =>
+      _$ErrorResponseFromJson(json);
   Map<String, dynamic> toJson() => _$ErrorResponseToJson(this);
 }
 
@@ -753,4 +754,23 @@ class ErrorObject {
   factory ErrorObject.fromJson(Map<String, dynamic> json) =>
       _$ErrorObjectFromJson(json);
   Map<String, dynamic> toJson() => _$ErrorObjectToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class CityList {
+  @JsonKey(name: 'response')
+  List<City> cities;
+  CityList(this.cities);
+  factory CityList.fromJson(Map<String, dynamic> json) =>
+      _$CityListFromJson(json);
+  Map<String, dynamic> toJson() => _$CityListToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class City {
+  int id;
+  String title;
+  City(this.id, this.title);
+  factory City.fromJson(Map<String, dynamic> json) => _$CityFromJson(json);
+  Map<String, dynamic> toJson() => _$CityToJson(this);
 }

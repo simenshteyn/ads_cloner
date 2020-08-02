@@ -1,4 +1,5 @@
 import 'package:ads_cloner/api/error_check.dart';
+import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
@@ -46,25 +47,27 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         title: Text('Объявление'),
       ),
       body: Stack(children: <Widget>[
-        Column(
-          children: [
-            AdInfoWidget(),
-            Divider(),
-            StreamBuilder<AdsTargetingList>(
-              stream: bloc.outAdsTargetingList,
-              builder: (context, snapshot) {
-                if (apiResponseHasError(snapshot))
-                  return showError(snapshot);
-                else if ((snapshot.hasData) &&
-                    (snapshot.data.adsTargeting?.length > 0)) {
-                  _currentTargeting = snapshot.data.adsTargeting[0];
-                  //var show = snapshot.data.adsTargeting[0].toJson().toString();
-                  return AdTargetWidget(_currentTargeting);
-                }
-                return Text('No data');
-              },
-            ),
-          ],
+        SingleChildScrollView(
+          child: Column(
+            children: [
+              AdInfoWidget(),
+              //Divider(),
+              StreamBuilder<AdsTargetingList>(
+                stream: bloc.outAdsTargetingList,
+                builder: (context, snapshot) {
+                  if (apiResponseHasError(snapshot))
+                    return showError(snapshot);
+                  else if ((snapshot.hasData) &&
+                      (snapshot.data.adsTargeting?.length > 0)) {
+                    _currentTargeting = snapshot.data.adsTargeting[0];
+                    var vk = VkApi(userToken: appBloc.vkAccessToken.token);
+                    return AdTargetWidget(_currentTargeting, vk);
+                  }
+                  return Text('No data');
+                },
+              ),
+            ],
+          ),
         ),
         StreamBuilder<AdsLayoutList>(
             stream: bloc.outAdsLayoutList,

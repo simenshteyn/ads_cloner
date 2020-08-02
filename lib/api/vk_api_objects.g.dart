@@ -1325,3 +1325,46 @@ Map<String, dynamic> _$ErrorObjectToJson(ErrorObject instance) {
   writeNotNull('error_msg', instance.errorMsg);
   return val;
 }
+
+CityList _$CityListFromJson(Map<String, dynamic> json) {
+  return CityList(
+    (json['response'] as List)
+        ?.map(
+            (e) => e == null ? null : City.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$CityListToJson(CityList instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('response', instance.cities);
+  return val;
+}
+
+City _$CityFromJson(Map<String, dynamic> json) {
+  return City(
+    json['id'] as int,
+    json['title'] as String,
+  );
+}
+
+Map<String, dynamic> _$CityToJson(City instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('id', instance.id);
+  writeNotNull('title', instance.title);
+  return val;
+}
