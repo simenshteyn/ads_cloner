@@ -18,6 +18,7 @@ import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 class VkApi {
   final baseUrl = 'api.vk.com';
@@ -313,13 +314,19 @@ class VkApi {
     return base64.encode(response.bodyBytes);
   }
 
-  Future<UploadedPhoto> uploadFile(String url, String file) async {
+  Future<UploadedPhoto> uploadFileFromUrl(String url) async {
     /// https://vk.com/dev/upload_photo_ads more info
     await _delayBetweenApiRequests();
-    var req = http.MultipartRequest('POST', Uri.parse(url));
-    http.Response response = await http.post(
-      'https://flutter.io/images/flutter-mark-square-100.png',
-    );
+    var imgUrl = Uri.parse(url);
+    var req = http.MultipartRequest('POST', imgUrl)
+      ..files.add(http.MultipartFile.fromBytes(
+          'file', await File.fromUri(imgUrl).readAsBytes(),
+          contentType: MediaType('image', 'jpeg')));
+    var streamedResponse = await req.send().then((response) {
+      if (response.statusCode == 200) print("Uploaded!");
+    });
+    var result = await http.Response.fromStream(streamedResponse);
+    print(result.body);
 
     // var uri = Uri.https(url);
     // var request = await _httpClient.postUrl(url)
