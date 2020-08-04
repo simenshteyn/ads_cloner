@@ -325,27 +325,11 @@ class VkApi {
     var streamedResponse = await req.send().then((response) {
       if (response.statusCode == 200) print("Uploaded!");
     });
+    streamedResponse.stream.transform(utf8.decoder).listen((value) {
+      print(value);
+    });
     var result = await http.Response.fromStream(streamedResponse);
     print(result.body);
-
-    // var uri = Uri.https(url);
-    // var request = await _httpClient.postUrl(url)
-    // var uri = Uri.https(
-    //   baseUrl,
-    //   'method/ads.getUploadURL',
-    //   <String, String>{
-    //     'ad_format': '${adFormat}',
-    //     'icon': icon != null ? '{$icon}' : null,
-    //     'access_token': userToken,
-    //     'v': apiVersion,
-    //   }..removeWhere((key, value) => key == null || value == null),
-    // );
-    // var response = await _getRequest(uri);
-    // print(uri);
-    // print(response);
-    // final _map = jsonDecode(response);
-    // UploadUrl uploadUrl = UploadUrl.fromJson(_map);
-    // return uploadUrl;
   }
 
   Future<String> _getRequest(Uri uri) async {
