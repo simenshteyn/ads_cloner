@@ -27,6 +27,10 @@ AdLayout _$AdLayoutFromJson(Map<String, dynamic> json) {
     json['image_src_2x'] as String,
     json['icon_src'] as String,
     json['icon_src_2x'] as String,
+    json['video_src_240'] as String,
+    json['video_src_360'] as String,
+    json['video_src_480'] as String,
+    json['video_src_720'] as String,
   );
 }
 
@@ -58,5 +62,9 @@ Map<String, dynamic> _$AdLayoutToJson(AdLayout instance) {
   writeNotNull('image_src_2x', instance.imageSrc2x);
   writeNotNull('icon_src', instance.iconSrc);
   writeNotNull('icon_src_2x', instance.iconSrc2x);
+  writeNotNull('video_src_240', instance.videoSrc240);
+  writeNotNull('video_src_360', instance.videoSrc360);
+  writeNotNull('video_src_480', instance.videoSrc480);
+  writeNotNull('video_src_720', instance.videoSrc720);
   return val;
 }

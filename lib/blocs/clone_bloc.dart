@@ -49,39 +49,44 @@ class CloneBloc implements BlocBase {
 
     _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      switch (req.createAdsList.createAdsList[0].adFormat) { //TODO: more deep check in later
+      var createAdsList = CreateAdsResultList([]);
+      switch (req.createAdsList.createAdsList[0].adFormat) {
+        //TODO: more deep check in later
         case 11:
           {
             for (var chunk in req.createAdsList.getCreateAdsListInChunks(1)) {
-              vk
+              await vk.delayBetweenApiRequests(2000);
+              await vk
                   .adsCreateAds(req.account.accountId.toString(), chunk)
                   .then((list) {
-                _createAdsResultList = list;
-                _createAdsResultController.sink.add(_createAdsResultList);
+                createAdsList.appendList(list);
+                print(
+                    'CREATE RESULT LIST IS NOW ${createAdsList.createAdsResultList.length} LONG');
               });
-              await vk.delayBetweenApiRequests(2000);
             }
+            print('result list is now ${createAdsList.createAdsResultList}');
+            _createAdsResultController.sink.add(createAdsList);
             break;
           }
         default:
           {
             for (var chunk in req.createAdsList.getCreateAdsListInChunks(5)) {
-              vk
+              await vk.delayBetweenApiRequests(2000);
+              await vk
                   .adsCreateAds(req.account.accountId.toString(), chunk)
                   .then((list) {
-                _createAdsResultList = list;
-                _createAdsResultController.sink.add(_createAdsResultList);
+                createAdsList.appendList(list);
               });
-              await vk.delayBetweenApiRequests(2000);
             }
+            _createAdsResultController.sink.add(createAdsList);
           }
       }
     });
 
     _cmdWallPostAdsStealthController.stream
-        .listen((WallPostAdsStealthRequest req) {
+        .listen((WallPostAdsStealthRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.wallPostAdsStealth(req.wallPostAdsStealth).then((list) {
+      await vk.wallPostAdsStealth(req.wallPostAdsStealth).then((list) {
         _wallPostAdsStealthResult = list;
         _wallPostAdsStealthResultController.sink.add(_wallPostAdsStealthResult);
       });
@@ -89,9 +94,9 @@ class CloneBloc implements BlocBase {
 
     _wallPostController.stream.listen(_handleLogic);
 
-    _cmdWallPostController.stream.listen((WallPostRequest req) {
+    _cmdWallPostController.stream.listen((WallPostRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.wallGetById(req.postId).then((list) {
+      await vk.wallGetById(req.postId).then((list) {
         _wallPostList = list;
         _wallPostController.sink.add(_wallPostList);
       });

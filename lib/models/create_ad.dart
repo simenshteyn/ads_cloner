@@ -135,7 +135,7 @@ class CreateAd {
     this.linkButton = adLayout.linkButton; 
     this.photo = adLayout.imageSrc; 
     this.photoIcon = adLayout.iconSrc; 
-    this.video; //result of video uploading to server
+    this.video = adLayout.videoSrc720; 
     this.statsUrl; //pixel of external stats
     this.statsUrl2; //pixe of external stats
     this.cpc = (ad.cpc != null) ? (int.tryParse(ad.cpc) / 100) : null;

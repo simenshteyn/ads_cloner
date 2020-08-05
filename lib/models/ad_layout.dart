@@ -21,6 +21,14 @@ class AdLayout {
   String iconSrc;
   @JsonKey(name: 'icon_src_2x')
   String iconSrc2x;
+  @JsonKey(name: 'video_src_240')
+  String videoSrc240;
+  @JsonKey(name: 'video_src_360')
+  String videoSrc360;
+  @JsonKey(name: 'video_src_480')
+  String videoSrc480;
+  @JsonKey(name: 'video_src_720')
+  String videoSrc720;
 
   AdLayout(
     this.campaignId,
@@ -42,6 +50,10 @@ class AdLayout {
     this.imageSrc2x,
     this.iconSrc,
     this.iconSrc2x,
+    this.videoSrc240,
+    this.videoSrc360,
+    this.videoSrc480,
+    this.videoSrc720,
   );
   AdLayout clone() {
     final String jsonString = json.encode(this);

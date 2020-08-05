@@ -1,3 +1,4 @@
+import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
@@ -17,6 +18,9 @@ class CloneTask {
 
 class CloneFactory {
   VkApi vkApi;
+  UploadedPhoto photoData;
+  UploadedPhoto iconData;
+  UploadedVideo videoData;
 
   CloneFactory(this.vkApi);
 
@@ -58,12 +62,30 @@ class CloneFactory {
           if (originalAd.adFormat == 11) {
             var clonedAdLayout = adLayout.clone();
             clonedAdLayout.description = cloneTask.value;
-            var photoData =
-                await vkApi.uploadFileFromUrl(clonedAdLayout.imageSrc2x, 11);
-            var iconData =
-                await vkApi.uploadFileFromUrl(clonedAdLayout.iconSrc2x, 11, 1);
-            clonedAdLayout.imageSrc = photoData.photo;
+
+            if (iconData == null) {
+              iconData = await vkApi.uploadPhotoFromUrl(
+                  clonedAdLayout.iconSrc2x, 11, 1);
+            }
             clonedAdLayout.iconSrc = iconData.photo;
+
+            if (clonedAdLayout.imageSrc2x == null) {
+              //this is video ad
+              if (videoData == null) {
+                videoData =
+                    await vkApi.uploadVideoFromUrl(clonedAdLayout.videoSrc720);
+              }
+              clonedAdLayout.videoSrc720 =
+                  videoData.videoData; //use720 this time TODO
+            } else {
+              //this id image ad
+              if (photoData == null) {
+                photoData = await vkApi.uploadPhotoFromUrl(
+                    clonedAdLayout.imageSrc2x, 11);
+              }
+              clonedAdLayout.imageSrc = photoData.photo;
+            }
+
             var createAd = CreateAd.bulderFromAdaptive(
                 originalAd, clonedAdLayout, adTargeting);
             result = createAd;

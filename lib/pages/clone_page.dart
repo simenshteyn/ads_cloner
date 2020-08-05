@@ -10,12 +10,23 @@ import 'package:flutter/material.dart';
 import 'package:ads_cloner/widgets/clone_options_widget.dart';
 import 'package:ads_cloner/api/error_check.dart';
 
-class ClonePage extends StatefulWidget {
+class ClonePage extends StatelessWidget {
   @override
-  _ClonePageState createState() => _ClonePageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: ClonePageSnackbar(),
+    );
+  }
 }
 
-class _ClonePageState extends State<ClonePage> {
+class ClonePageSnackbar extends StatefulWidget {
+  @override
+  _ClonePageSnackbarState createState() => _ClonePageSnackbarState();
+}
+
+class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
+  bool _isLoading = false;
+
   @override
   void initState() {
     super.initState();
@@ -24,6 +35,31 @@ class _ClonePageState extends State<ClonePage> {
     bloc.getWallPostList
         .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     appBloc.getCurrentCreateAdsList.add('give me');
+
+    bloc.outCreateAdsResultList
+        .forEach((e) => Scaffold.of(context).showSnackBar(SnackBar(
+              backgroundColor: Colors.green,
+              content:
+                  Text('Создано объявлений: ${e.createAdsResultList.length}'),
+              action: SnackBarAction(
+                textColor: Colors.white,
+                label: 'Открыть',
+                onPressed: () {
+                  var nav = Navigator.of(context);
+                  nav.pop();
+                  nav.pop();
+                },
+              ),
+            )));
+
+    bloc.outWallPostList.forEach((e) {
+      if ((appBloc.currentAd.adFormat == 9) && (e.wallPosts.length == 0)) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.red,
+          content: Text('Нельзя клонировать удаленный пост'),
+        ));
+      }
+    });
   }
 
   @override
@@ -36,61 +72,88 @@ class _ClonePageState extends State<ClonePage> {
       ),
       body: Column(
         children: <Widget>[
-          CloneOptionsWidget(),
+          Padding(
+            padding: const EdgeInsets.only(top: 20.0, bottom: 20.0),
+            child: CloneOptionsWidget(),
+          ),
           StreamBuilder<WallPostList>(
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
-                if (snapshot.hasData && (snapshot.data.wallPosts.length > 0)) {
-                  var _currentWallPost = snapshot.data.wallPosts[0];
-                  appBloc.inCurrentWallPost.add(_currentWallPost);
-                  return Text('${_currentWallPost.id}');
+                if (snapshot.hasData) {
+                  if (snapshot.data.wallPosts?.length > 0) {
+                    var _currentWallPost = snapshot.data.wallPosts[0];
+                    appBloc.inCurrentWallPost.add(_currentWallPost);
+                    return Container(); //Text('${_currentWallPost.id}');
+                  }
                 }
-                return Text('No WP data');
+                return Container();
               }),
           StreamBuilder<CreateAdsResultList>(
               stream: bloc.outCreateAdsResultList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
+                  appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+                  _isLoading = false;
                   return apiResponseHasError(snapshot)
                       ? showError(snapshot)
-                      : Text(
-                          'CLONED: ${snapshot.data.createAdsResultList.length} ads.');
+                      : Container();
                 }
-                return Text('No ads still cloned');
+                return Container();
               }),
           StreamBuilder<CreateAdsList>(
             stream: appBloc.outCurrentCreateAdsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                return Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (BuildContext context, int index) =>
-                          Divider(),
-                      itemCount: snapshot.data.createAdsList.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                            title: Text(
-                                '${snapshot.data.createAdsList[index]?.linkUrl}'));
-                      }),
-                );
+                if (snapshot.data.createAdsList.length > 0) {
+                  return Expanded(
+                    child: ListView.separated(
+                        separatorBuilder: (BuildContext context, int index) =>
+                            Divider(),
+                        itemCount: snapshot.data.createAdsList.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            leading: Icon(Icons.content_copy),
+                            title: Text('Объявление #${index + 1}'),
+                            subtitle: Text(
+                                '${snapshot.data.createAdsList[index]?.linkUrl}'),
+                          );
+                        }),
+                  );
+                }
               }
-              return Text('Clone ads first');
+              return Flexible(
+                  child: Center(child: Text('Создайте несколько вариантов…')));
             },
           ),
+          StreamBuilder<CreateAdsList>(
+              stream: appBloc.outCurrentCreateAdsList,
+              builder: (context, snapshot) {
+                if ((snapshot.hasData) &&
+                    snapshot.data.createAdsList?.length > 0) {
+                  return Padding(
+                    padding: const EdgeInsets.only(bottom: 20.0),
+                    child: FloatingActionButton.extended(
+                      splashColor: Colors.blueAccent,
+                      label: _isLoading
+                          ? Center(
+                              child: CircularProgressIndicator(
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      Colors.white)))
+                          : Text('Клонировать',
+                              style: TextStyle(fontSize: 18.0)),
+                      onPressed: () async {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        _doneButtonPressed(context);
+                      },
+                    ),
+                  );
+                }
+                return Container();
+              }),
         ],
       ),
-      floatingActionButton: StreamBuilder<CreateAdsList>(
-          stream: appBloc.outCurrentCreateAdsList,
-          builder: (context, snapshot) {
-            if (snapshot.hasData) {
-              return FloatingActionButton(
-                  child: Icon(Icons.done),
-                  onPressed: () {
-                    _doneButtonPressed(context);
-                  });
-            }
-            return Container();
-          }),
     );
   }
 
@@ -100,6 +163,6 @@ class _ClonePageState extends State<ClonePage> {
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCreateAdsList);
     bloc.getCreateAdsResultList.add(req);
-    appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+    //appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
   }
 }

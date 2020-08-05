@@ -63,7 +63,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                     var vk = VkApi(userToken: appBloc.vkAccessToken.token);
                     return AdTargetWidget(_currentTargeting, vk);
                   }
-                  return Text('No data');
+                  return Center(child: CircularProgressIndicator());
                 },
               ),
             ],
@@ -153,7 +153,9 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
   String _postUrlConvertor(String linkUrl) {
     //Convert linkUrl to postId, check if external or internal,
     //if external -- returns string '-1'
-    print('URL SUB ${linkUrl.substring(0, 20)}');
+    if (linkUrl.length < 20) {
+      return '-1';
+    }
     return (linkUrl.substring(0, 19) == 'http://vk.com/wall-')
         ? linkUrl.substring(18)
         : '-1';

@@ -1406,3 +1406,22 @@ Map<String, dynamic> _$UploadedPhotoToJson(UploadedPhoto instance) {
   writeNotNull('photo', instance.photo);
   return val;
 }
+
+UploadedVideo _$UploadedVideoFromJson(Map<String, dynamic> json) {
+  return UploadedVideo(
+    json['video_data'] as String,
+  );
+}
+
+Map<String, dynamic> _$UploadedVideoToJson(UploadedVideo instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('video_data', instance.videoData);
+  return val;
+}

@@ -62,6 +62,8 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
         bloc: CloneTextBloc(),
         child: CloneTextPage(),
       );
-    }));
+    })).whenComplete(() {
+      // do some shit
+    });
   }
 }

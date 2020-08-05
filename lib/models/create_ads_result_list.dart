@@ -9,8 +9,16 @@ class CreateAdsResultList {
   List<CreateAdResult> createAdsResultList;
   @JsonKey(name: 'error')
   ErrorObject errorResponse;
-  CreateAdsResultList(this.createAdsResultList, this.errorResponse);
+  CreateAdsResultList([this.createAdsResultList, this.errorResponse]);
+
   factory CreateAdsResultList.fromJson(Map<String, dynamic> json) =>
       _$CreateAdsResultListFromJson(json);
   Map<String, dynamic> toJson() => _$CreateAdsResultListToJson(this);
+  void appendList(CreateAdsResultList list) {
+    if (this.createAdsResultList == null) {
+      print('this createadsresultlist is null');
+      createAdsResultList = [];
+    }
+    this.createAdsResultList.addAll(list.createAdsResultList);
+  }
 }

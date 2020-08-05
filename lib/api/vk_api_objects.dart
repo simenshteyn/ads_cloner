@@ -793,3 +793,12 @@ class UploadedPhoto {
       _$UploadedPhotoFromJson(json);
   Map<String, dynamic> toJson() => _$UploadedPhotoToJson(this);
 }
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class UploadedVideo {
+  String videoData;
+  UploadedVideo(this.videoData);
+  factory UploadedVideo.fromJson(Map<String, dynamic> json) =>
+      _$UploadedVideoFromJson(json);
+  Map<String, dynamic> toJson() => _$UploadedVideoToJson(this);
+}

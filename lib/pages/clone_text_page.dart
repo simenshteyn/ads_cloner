@@ -15,6 +15,7 @@ class CloneTextPage extends StatefulWidget {
 class _CloneTextPageState extends State<CloneTextPage> {
   bool _isLoading = false;
   bool _isClickable = true;
+  bool _validateInput = false;
   String _textField;
   final _textController = TextEditingController();
   List<String> _cloneTextList;
@@ -56,13 +57,36 @@ class _CloneTextPageState extends State<CloneTextPage> {
                 controller: _textController,
                 autofocus: true,
                 decoration: InputDecoration(
+                  errorText: _validateInput ? "Некорректный ввод" : null,
                   hintText: 'Введите текст',
                   suffix: IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
-                      if (_textField != "") {
-                        bloc.addTextToList.add(_textField);
-                        _textController.clear();
+                      switch (appBloc.currentAd.adFormat) {
+                        case 11:
+                          {
+                            if ((_textField != "") &&
+                                (_textField.length > 2) &&
+                                (_textField.length <= 90)) {
+                              setState(() {
+                                _validateInput = false;
+                              });
+                              bloc.addTextToList.add(_textField);
+                              _textController.clear();
+                            } else {
+                              setState(() {
+                                _validateInput = true;
+                              });
+                            }
+                            break;
+                          }
+                        default:
+                          {
+                            if (_textField != "") {
+                              bloc.addTextToList.add(_textField);
+                              _textController.clear();
+                            }
+                          }
                       }
                     },
                   ),

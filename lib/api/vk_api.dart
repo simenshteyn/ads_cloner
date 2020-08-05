@@ -30,11 +30,11 @@ class VkApi {
 
   VkApi({this.userToken});
 
-  Future _delayBetweenApiRequests([int time=250]) {
+  Future _delayBetweenApiRequests([int time = 250]) {
     return Future.delayed(Duration(milliseconds: time));
   }
 
-    Future delayBetweenApiRequests([int time=250]) {
+  Future delayBetweenApiRequests([int time = 250]) {
     return Future.delayed(Duration(milliseconds: time));
   }
 
@@ -315,6 +315,25 @@ class VkApi {
     return uploadUrl;
   }
 
+  Future<UploadUrl> adsGetVideoUploadUrl() async {
+    /// https://vk.com/dev/ads.getVideoUploadURL more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getVideoUploadURL',
+      <String, String>{
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    UploadUrl uploadUrl = UploadUrl.fromJson(_map);
+    return uploadUrl;
+  }
+
   Future<Uint8List> _getBytesFromImageUrl(String url) async {
     http.Response response = await http.get(
       url,
@@ -322,16 +341,30 @@ class VkApi {
     return response.bodyBytes;
   }
 
-  Future<UploadedPhoto> uploadFileFromUrl(String url, int adFormat, [int icon]) async {
+  Future<UploadedPhoto> uploadPhotoFromUrl(String url, int adFormat,
+      [int icon]) async {
     /// https://vk.com/dev/upload_photo_ads more info
     await _delayBetweenApiRequests();
     var imageBytes = await _getBytesFromImageUrl(url);
     var uploadUrl = await adsGetUploadUrl(adFormat, icon);
-    var response = await _postRequest(uploadUrl.uploadUrl, imageBytes);
+    var response = await _postImageRequest(uploadUrl.uploadUrl, imageBytes);
     print(response);
     final map = jsonDecode(response);
     UploadedPhoto result = UploadedPhoto.fromJson(map);
     print(result.photo);
+    return result;
+  }
+
+  Future<UploadedVideo> uploadVideoFromUrl(String url) async {
+    /// https://vk.com/dev/upload_photo_ads more info
+    await _delayBetweenApiRequests();
+    var videoBytes = await _getBytesFromImageUrl(url);
+    var uploadUrl = await adsGetVideoUploadUrl();
+    var response = await _postVideoRequest(uploadUrl.uploadUrl, videoBytes);
+    print(response);
+    final map = jsonDecode(response);
+    UploadedVideo result = UploadedVideo.fromJson(map);
+    print(result.videoData);
     return result;
   }
 
@@ -343,11 +376,25 @@ class VkApi {
         : '{"error": {"error_code": ${response.statusCode}, "error_msg": "HTTP request problem: ${response.reasonPhrase}"}}';
   }
 
-  Future<String> _postRequest(String uri, Uint8List bytes) async {
+  Future<String> _postImageRequest(String uri, Uint8List bytes) async {
     var uploadUrl = Uri.parse(uri);
     var request = http.MultipartRequest('POST', uploadUrl);
     var multipartFile = http.MultipartFile.fromBytes('file', bytes as List<int>,
         contentType: MediaType('image', 'jpeg'), filename: 'file.jpg');
+    request.files.add(multipartFile);
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    return (response.statusCode == 200)
+        ? response.body
+        : '{"error": {"error_code": ${response.statusCode}, "error_msg": "POST request problem: ${response.reasonPhrase}"}}';
+  }
+
+  Future<String> _postVideoRequest(String uri, Uint8List bytes) async {
+    var uploadUrl = Uri.parse(uri);
+    var request = http.MultipartRequest('POST', uploadUrl);
+    var multipartFile = http.MultipartFile.fromBytes(
+        'video_file', bytes as List<int>,
+        contentType: MediaType('video', 'mp4'), filename: 'file.mp4');
     request.files.add(multipartFile);
     var streamedResponse = await request.send();
     var response = await http.Response.fromStream(streamedResponse);
