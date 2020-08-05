@@ -58,6 +58,12 @@ class CloneFactory {
           if (originalAd.adFormat == 11) {
             var clonedAdLayout = adLayout.clone();
             clonedAdLayout.description = cloneTask.value;
+            var photoData =
+                await vkApi.uploadFileFromUrl(clonedAdLayout.imageSrc2x, 11);
+            var iconData =
+                await vkApi.uploadFileFromUrl(clonedAdLayout.iconSrc2x, 11, 1);
+            clonedAdLayout.imageSrc = photoData.photo;
+            clonedAdLayout.iconSrc = iconData.photo;
             var createAd = CreateAd.bulderFromAdaptive(
                 originalAd, clonedAdLayout, adTargeting);
             result = createAd;

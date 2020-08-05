@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 import 'dart:convert';
+import 'dart:typed_data';
 import 'package:ads_cloner/api/vk_api_objects.dart';
 import 'package:ads_cloner/models/accounts_list.dart';
 import 'package:ads_cloner/models/ad.dart';
@@ -16,6 +17,7 @@ import 'package:ads_cloner/models/pretty_card_list.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
@@ -28,8 +30,12 @@ class VkApi {
 
   VkApi({this.userToken});
 
-  Future _delayBetweenApiRequests() {
-    return Future.delayed(const Duration(milliseconds: 250));
+  Future _delayBetweenApiRequests([int time=250]) {
+    return Future.delayed(Duration(milliseconds: time));
+  }
+
+    Future delayBetweenApiRequests([int time=250]) {
+    return Future.delayed(Duration(milliseconds: time));
   }
 
   Future<AccountsList> adsGetAccounts() async {
@@ -184,8 +190,10 @@ class VkApi {
         'v': apiVersion,
       },
     );
+    print('CREATE: ${createAdsList.toJson()}');
     var response = await _getRequest(uri);
-    print(uri);
+    //print(uri);
+    debugPrint(uri.toString(), wrapWidth: 1024);
     print(response);
     final _map = jsonDecode(response);
     CreateAdsResultList listOfCreateAdsResult =
@@ -294,7 +302,7 @@ class VkApi {
       'method/ads.getUploadURL',
       <String, String>{
         'ad_format': '${adFormat}',
-        'icon': icon != null ? '{$icon}' : null,
+        'icon': icon != null ? '${icon}' : null,
         'access_token': userToken,
         'v': apiVersion,
       }..removeWhere((key, value) => key == null || value == null),
@@ -307,29 +315,24 @@ class VkApi {
     return uploadUrl;
   }
 
-  Future<String> getBytesFromImageUrl(String url) async {
+  Future<Uint8List> _getBytesFromImageUrl(String url) async {
     http.Response response = await http.get(
       url,
     );
-    return base64.encode(response.bodyBytes);
+    return response.bodyBytes;
   }
 
-  Future<UploadedPhoto> uploadFileFromUrl(String url) async {
+  Future<UploadedPhoto> uploadFileFromUrl(String url, int adFormat, [int icon]) async {
     /// https://vk.com/dev/upload_photo_ads more info
     await _delayBetweenApiRequests();
-    var imgUrl = Uri.parse(url);
-    var req = http.MultipartRequest('POST', imgUrl)
-      ..files.add(http.MultipartFile.fromBytes(
-          'file', await File.fromUri(imgUrl).readAsBytes(),
-          contentType: MediaType('image', 'jpeg')));
-    var streamedResponse = await req.send().then((response) {
-      if (response.statusCode == 200) print("Uploaded!");
-    });
-    streamedResponse.stream.transform(utf8.decoder).listen((value) {
-      print(value);
-    });
-    var result = await http.Response.fromStream(streamedResponse);
-    print(result.body);
+    var imageBytes = await _getBytesFromImageUrl(url);
+    var uploadUrl = await adsGetUploadUrl(adFormat, icon);
+    var response = await _postRequest(uploadUrl.uploadUrl, imageBytes);
+    print(response);
+    final map = jsonDecode(response);
+    UploadedPhoto result = UploadedPhoto.fromJson(map);
+    print(result.photo);
+    return result;
   }
 
   Future<String> _getRequest(Uri uri) async {
@@ -338,5 +341,18 @@ class VkApi {
     return (response.statusCode == 200)
         ? await response.transform(utf8.decoder).join()
         : '{"error": {"error_code": ${response.statusCode}, "error_msg": "HTTP request problem: ${response.reasonPhrase}"}}';
+  }
+
+  Future<String> _postRequest(String uri, Uint8List bytes) async {
+    var uploadUrl = Uri.parse(uri);
+    var request = http.MultipartRequest('POST', uploadUrl);
+    var multipartFile = http.MultipartFile.fromBytes('file', bytes as List<int>,
+        contentType: MediaType('image', 'jpeg'), filename: 'file.jpg');
+    request.files.add(multipartFile);
+    var streamedResponse = await request.send();
+    var response = await http.Response.fromStream(streamedResponse);
+    return (response.statusCode == 200)
+        ? response.body
+        : '{"error": {"error_code": ${response.statusCode}, "error_msg": "POST request problem: ${response.reasonPhrase}"}}';
   }
 }

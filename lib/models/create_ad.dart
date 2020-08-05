@@ -120,7 +120,7 @@ class CreateAd {
     this.category2Id = int.tryParse(ad.category2Id);
     this.ageRestriction = int.tryParse(ad.ageRestriction);
     this.status = ad.status;
-    this.repeatVideo = adLayout.repeatVideo; //can't find this in other objects
+    this.repeatVideo = adLayout.repeatVideo; 
     this.disclaimerMedical = ad.disclaimerMedical;
     this.disclaimerSpecialist = ad.disclaimerSpecialist;
     this.disclaimerSupplements = ad.disclaimerSupplements;
@@ -128,13 +128,13 @@ class CreateAd {
     this.adPlatform = ad.adPlatform;
     this.name = ad.name;
     this.title = adLayout.title;
-    this.description = adLayout.description; //can't find this in other objects
+    this.description = adLayout.description; 
     this.linkUrl = adLayout.linkUrl;
     this.linkDomain = adLayout.linkDomain;
-    this.linkTitle = adLayout.linkTitle; // = wallPostAdsStealth.linkTitle;
-    this.linkButton = adLayout.linkButton; // = wallPostAdsStealth.linkButton;
-    this.photo = adLayout.imageSrc; //can't find
-    this.photoIcon = adLayout.iconSrc; //can't find
+    this.linkTitle = adLayout.linkTitle; 
+    this.linkButton = adLayout.linkButton; 
+    this.photo = adLayout.imageSrc; 
+    this.photoIcon = adLayout.iconSrc; 
     this.video; //result of video uploading to server
     this.statsUrl; //pixel of external stats
     this.statsUrl2; //pixe of external stats

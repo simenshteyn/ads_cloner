@@ -47,24 +47,35 @@ class CloneBloc implements BlocBase {
     _wallPostAdsStealthResultController.stream
         .listen(_handleWallPostAdsStealthResultLogic);
 
-    _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) {
+    _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      //var list = req.createAdsList;
-      //var createAdsResultList = CreateAdsResultList(null,null);
-      //var resultList = CreateAdsResultList();
-      for (var chunk in req.createAdsList.getCreateAdsListInChunks) {
-        vk.adsCreateAds(req.account.accountId.toString(), chunk).then((list) {
-          _createAdsResultList = list;
-          _createAdsResultController.sink.add(_createAdsResultList);
-        });
+      switch (req.createAdsList.createAdsList[0].adFormat) { //TODO: more deep check in later
+        case 11:
+          {
+            for (var chunk in req.createAdsList.getCreateAdsListInChunks(1)) {
+              vk
+                  .adsCreateAds(req.account.accountId.toString(), chunk)
+                  .then((list) {
+                _createAdsResultList = list;
+                _createAdsResultController.sink.add(_createAdsResultList);
+              });
+              await vk.delayBetweenApiRequests(2000);
+            }
+            break;
+          }
+        default:
+          {
+            for (var chunk in req.createAdsList.getCreateAdsListInChunks(5)) {
+              vk
+                  .adsCreateAds(req.account.accountId.toString(), chunk)
+                  .then((list) {
+                _createAdsResultList = list;
+                _createAdsResultController.sink.add(_createAdsResultList);
+              });
+              await vk.delayBetweenApiRequests(2000);
+            }
+          }
       }
-
-      // vk
-      //     .adsCreateAds(req.account.accountId.toString(), req.createAdsList)
-      //     .then((list) {
-      //   _createAdsResultList = list;
-      //   _createAdsResultController.sink.add(_createAdsResultList);
-      // });
     });
 
     _cmdWallPostAdsStealthController.stream

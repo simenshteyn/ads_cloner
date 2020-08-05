@@ -11,9 +11,9 @@ class CreateAdsList {
     this.createAdsList = createAdsList ?? [];
   }
 
-  List<CreateAdsList> get getCreateAdsListInChunks {
+  List<CreateAdsList> getCreateAdsListInChunks([int chunkSize=5]) {
     var len = this.createAdsList.length;
-    var size = 5;
+    var size = chunkSize; // 5 sometimes cause 414 error
     List<List<CreateAd>> chunks = [];
 
     for (var i = 0; i < len; i += size) {
