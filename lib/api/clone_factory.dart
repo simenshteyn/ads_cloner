@@ -41,8 +41,8 @@ class CloneTextFactory implements CloneFactory {
 
       var changedWallPostAdsStealth =
           await _replaceWallPostAdsStealthMessage(clonedWallPost, cloneTask);
-      var createAd = CreateAd.bulder(
-          originalAd, adLayout, adTargeting); //removed changedWallPostAdsStealth argument
+      var createAd = CreateAd.bulder(originalAd, adLayout,
+          adTargeting); 
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
       return createAd;
@@ -57,8 +57,8 @@ class CloneTextFactory implements CloneFactory {
         await _createAndUploadPhoto(clonedAdLayout);
       }
 
-      var createAd =
-          CreateAd.bulder(originalAd, clonedAdLayout, adTargeting); //replacedbulder
+      var createAd = CreateAd.bulder(
+          originalAd, clonedAdLayout, adTargeting); //replacedbulder
       return createAd;
     } else {
       return CreateAd();
@@ -91,7 +91,13 @@ class CloneTextFactory implements CloneFactory {
   Future<String> _createAndGetLinkForWallPostAdsStealth(
       WallPostAdsStealth wallPostAdsStealth) async {
     var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
+    // Add some error check to show user
+    if (newStealth.errorResponse != null) {
+      print(newStealth.errorResponse.errorMsg);
+      throw Exception(newStealth.errorResponse.errorMsg);
+    }
     var link = newStealth.wallLink(wallPostAdsStealth);
+    // or you can check link for null
     return link;
   }
 

@@ -170,13 +170,17 @@ class _CloneTextPageState extends State<CloneTextPage> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     for (var text in textList) {
       var cloneTask = CloneTask(type: CloneType.text, value: text);
-      var createdAd = await adsFactory.buildAd(
-          appBloc.currentAd,
-          appBloc.currentAdTargeting,
-          appBloc.currentAdLayout,
-          appBloc.currentWallPost,
-          cloneTask);
-      createAdsList.appendAd(createdAd);
+      try {
+        var createdAd = await adsFactory.buildAd(
+            appBloc.currentAd,
+            appBloc.currentAdTargeting,
+            appBloc.currentAdLayout,
+            appBloc.currentWallPost,
+            cloneTask);
+        createAdsList.appendAd(createdAd);
+      } on Exception catch (e) {
+        print('ERROR ${e}');
+      }
     }
   }
 
