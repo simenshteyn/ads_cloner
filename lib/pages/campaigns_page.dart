@@ -8,12 +8,21 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 
-class CampaignsPage extends StatefulWidget {
+class CampaignsPage extends StatelessWidget {
   @override
-  _CampaignsPageState createState() => _CampaignsPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CampaignsPageSnackbar(),
+    );
+  }
 }
 
-class _CampaignsPageState extends State<CampaignsPage> {
+class CampaignsPageSnackbar extends StatefulWidget {
+  @override
+  _CampaignsPageSnackbarState createState() => _CampaignsPageSnackbarState();
+}
+
+class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
   @override
   void initState() {
     super.initState();
@@ -21,6 +30,12 @@ class _CampaignsPageState extends State<CampaignsPage> {
     CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
     bloc.getCampaignsList
         .add(CampaignsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -38,7 +53,7 @@ class _CampaignsPageState extends State<CampaignsPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(snapshot)
+                    ? showError(snapshot, context)
                     : ListView.builder(
                         itemCount: snapshot.data.campaigns.length,
                         itemBuilder: (BuildContext context, int index) {

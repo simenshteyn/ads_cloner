@@ -16,12 +16,21 @@ import 'package:ads_cloner/widgets/ad_target_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class AdPreviewPage extends StatefulWidget {
+class AdPreviewPage extends StatelessWidget {
   @override
-  _AdPreviewPageState createState() => _AdPreviewPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AdPreviewPageSnackbar(),
+    );
+  }
 }
 
-class _AdPreviewPageState extends State<AdPreviewPage> {
+class AdPreviewPageSnackbar extends StatefulWidget {
+  @override
+  _AdPreviewPageSnackbarState createState() => _AdPreviewPageSnackbarState();
+}
+
+class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
   AdLayout _currentLayout;
   AdTargeting _currentTargeting;
   String _currentWallPostId;
@@ -35,6 +44,12 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -56,7 +71,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
                 stream: bloc.outAdsTargetingList,
                 builder: (context, snapshot) {
                   if (apiResponseHasError(snapshot))
-                    return showError(snapshot);
+                    return showError(snapshot, context);
                   else if ((snapshot.hasData) &&
                       (snapshot.data.adsTargeting?.length > 0)) {
                     _currentTargeting = snapshot.data.adsTargeting[0];
@@ -73,7 +88,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
               if (apiResponseHasError(snapshot))
-                return showError(snapshot);
+                return showError(snapshot, context);
               else if ((snapshot.hasData) &&
                   (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
@@ -124,7 +139,7 @@ class _AdPreviewPageState extends State<AdPreviewPage> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return apiResponseHasError(snapshot)
-                  ? showError(snapshot)
+                  ? showError(snapshot, context)
                   : FloatingActionButton(
                       child: Icon(Icons.content_copy),
                       onPressed: () {

@@ -8,12 +8,21 @@ import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
 
-class CloneTextPage extends StatefulWidget {
+class CloneTextPage extends StatelessWidget {
   @override
-  _CloneTextPageState createState() => _CloneTextPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: CloneTextPageSnackbar(),
+    );
+  }
 }
 
-class _CloneTextPageState extends State<CloneTextPage> {
+class CloneTextPageSnackbar extends StatefulWidget {
+  @override
+  _CloneTextPageSnackbarState createState() => _CloneTextPageSnackbarState();
+}
+
+class _CloneTextPageSnackbarState extends State<CloneTextPageSnackbar> {
   bool _isLoading = false;
   bool _isClickable = true;
   bool _validateInput = true;
@@ -37,6 +46,13 @@ class _CloneTextPageState extends State<CloneTextPage> {
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneTextFactory(vk);
     createAdsList = CreateAdsList([]);
+
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -230,7 +246,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
             cloneTask);
         createAdsList.appendAd(createdAd);
       } on Exception catch (e) {
-        print('ERROR ${e}');
+        appBloc.inWarningMessage.add('${e}');
       }
     }
   }

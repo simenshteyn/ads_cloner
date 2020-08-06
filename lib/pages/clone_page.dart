@@ -69,6 +69,13 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
         ));
       }
     });
+
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -95,6 +102,9 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                     return Container(); //Text('${_currentWallPost.id}');
                   }
                 }
+                if (snapshot.hasError) {
+                  appBloc.inWarningMessage.add(snapshot.error.toString());
+                }
                 return Container();
               }),
           StreamBuilder<CreateAdsResultList>(
@@ -104,7 +114,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                   appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
                   _isLoading = false;
                   return apiResponseHasError(snapshot)
-                      ? showError(snapshot)
+                      ? showError(snapshot, context)
                       : Container();
                 }
                 return Container();

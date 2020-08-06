@@ -10,12 +10,21 @@ import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:provider/provider.dart';
 
-class AdsPage extends StatefulWidget {
+class AdsPage extends StatelessWidget {
   @override
-  _AdsPageState createState() => _AdsPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AdsPageSnackbar(),
+    );
+  }
 }
 
-class _AdsPageState extends State<AdsPage> {
+class AdsPageSnackbar extends StatefulWidget {
+  @override
+  _AdsPageSnackbarState createState() => _AdsPageSnackbarState();
+}
+
+class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
   @override
   void initState() {
     super.initState();
@@ -24,7 +33,12 @@ class _AdsPageState extends State<AdsPage> {
     final req = AdsRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
     bloc.getAdsList.add(req);
-    //bloc.getAdsLayoutList.add(req);
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -42,7 +56,7 @@ class _AdsPageState extends State<AdsPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(snapshot)
+                    ? showError(snapshot, context)
                     : ListView.builder(
                         itemCount: snapshot.data.ads.length,
                         itemBuilder: (BuildContext context, int index) {
@@ -78,6 +92,5 @@ void _openAdPreviewPage(BuildContext context) {
     final req = AdsRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
     bloc.getAdsList.add(req);
-    //bloc.getAdsLayoutList.add(req);
   });
 }

@@ -7,18 +7,33 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/accounts_bloc.dart';
 
-class AccountsPage extends StatefulWidget {
+class AccountsPage extends StatelessWidget {
   @override
-  _AccountsPageState createState() => _AccountsPageState();
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: AccountsPageSnackbar(),
+    );
+  }
 }
 
-class _AccountsPageState extends State<AccountsPage> {
+class AccountsPageSnackbar extends StatefulWidget {
+  @override
+  _AccountsPageSnackbarState createState() => _AccountsPageSnackbarState();
+}
+
+class _AccountsPageSnackbarState extends State<AccountsPageSnackbar> {
   @override
   void initState() {
     super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
     bloc.getAccountsList.add(appBloc.vkAccessToken);
+    appBloc.outWarningMessage.forEach((e) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('${e}'),
+        backgroundColor: Colors.red,
+      ));
+    });
   }
 
   @override
@@ -36,7 +51,7 @@ class _AccountsPageState extends State<AccountsPage> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(snapshot)
+                    ? showError(snapshot, context)
                     : ListView.builder(
                         itemCount: snapshot.data.accounts.length,
                         itemBuilder: (BuildContext context, int index) {

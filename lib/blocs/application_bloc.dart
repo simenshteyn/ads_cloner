@@ -23,6 +23,7 @@ class ApplicationBloc implements BlocBase {
   String currentPostId;
   CreateAdsList currentCreateAdsList;
   WallPost currentWallPost;
+  String warningMessage;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();
@@ -105,6 +106,12 @@ class ApplicationBloc implements BlocBase {
   StreamController _cmdCurrentWallPostController = StreamController();
   StreamSink get getCurrentWallPost => _cmdCurrentWallPostController.sink;
 
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
+  // desided not to add cmd controller
+
   ApplicationBloc() {
     print("APP BLOC CREATED");
 
@@ -165,6 +172,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentWallPostController.stream.listen((wallPost) {
       _currentWallPostController.sink.add(wallPost);
     });
+
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
@@ -192,6 +201,7 @@ class ApplicationBloc implements BlocBase {
     _cmdCurrentCreateAdsListController.close();
     _currentWallPostController.close();
     _cmdCurrentWallPostController.close();
+    _warningMessageController.close();
   }
 
   void _handleLogicTokenController(data) {
@@ -236,5 +246,9 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentWallPostController(data) {
     currentWallPost = data;
+  }
+
+  void _handleWarningMessage(data) {
+    warningMessage = data;
   }
 }
