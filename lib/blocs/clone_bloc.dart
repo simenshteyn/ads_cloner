@@ -50,7 +50,7 @@ class CloneBloc implements BlocBase {
     _cmdCreateAdsResultController.stream.listen((CreateAdsRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
       var createAdsList = CreateAdsResultList([]);
-      _addIndexPrefixToAddName(req);
+      _addIndexPrefixToAdsNames(req);
       switch (req.createAdsList.createAdsList[0].adFormat) {
         //TODO: more deep check in later
         case 11:
@@ -123,7 +123,7 @@ class CloneBloc implements BlocBase {
     _wallPostAdsStealthResult = data;
   }
 
-  void _addIndexPrefixToAddName(CreateAdsRequest req) {
+  void _addIndexPrefixToAdsNames(CreateAdsRequest req) {
     var i = 0;
     for (var ad in req.createAdsList.createAdsList) {
       ad.name = '${i}: ${ad.name}';

@@ -3,6 +3,7 @@ import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
 import 'package:ads_cloner/models/option_card.dart';
 import 'package:ads_cloner/pages/clone_text_page.dart';
+import 'package:ads_cloner/widgets/crop_widget.dart';
 import 'package:flutter/material.dart';
 
 class CloneOptionsWidget extends StatefulWidget {
@@ -14,7 +15,7 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
   int _index = 0;
   List<OptionCard> cards = [
     OptionCard(title: "Text", type: CloneType.text),
-    OptionCard(title: "Pure", type: CloneType.pure),
+    OptionCard(title: "Image", type: CloneType.pure),
   ];
 
   @override
@@ -38,7 +39,19 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                   splashColor: Colors.blue.withAlpha(30),
                   onTap: () {
                     print('Card ${cards[i].title} tapped');
-                    _openCloneTextPage(context);
+                    switch (i) {
+                      case 0:
+                        {
+                          _openCloneTextPage(context);
+                          break;
+                        }
+                      case 1:
+                        {
+                          _openCropImagePage(context);
+                          break;
+                        }
+                    }
+                    //_openCloneTextPage(context);
                   },
                   child: Center(
                     child: Text(
@@ -62,6 +75,15 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
         bloc: CloneTextBloc(),
         child: CloneTextPage(),
       );
+    })).whenComplete(() {
+      // do some shit
+    });
+  }
+
+  void _openCropImagePage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return CropPage();
     })).whenComplete(() {
       // do some shit
     });
