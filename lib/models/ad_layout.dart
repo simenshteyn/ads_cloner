@@ -61,6 +61,8 @@ class AdLayout {
     return AdLayout.fromJson(jsonResponse as Map<String, dynamic>);
   }
 
+  bool get isAdaptiveVideoAdFormat => this.imageSrc2x == null ? true : false;
+
   factory AdLayout.fromJson(Map<String, dynamic> json) =>
       _$AdLayoutFromJson(json);
   Map<String, dynamic> toJson() => _$AdLayoutToJson(this);

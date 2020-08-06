@@ -53,10 +53,19 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
             )));
 
     bloc.outWallPostList.forEach((e) {
-      if ((appBloc.currentAd.adFormat == 9) && (e.wallPosts.length == 0)) {
+      if ((appBloc.currentAd.isWallPostFormat) && (e.wallPosts.length == 0)) {
         Scaffold.of(context).showSnackBar(SnackBar(
           backgroundColor: Colors.red,
           content: Text('Нельзя клонировать удаленный пост'),
+          action: SnackBarAction(
+            textColor: Colors.white,
+            label: 'Назад',
+            onPressed: () {
+              var nav = Navigator.of(context);
+              nav.pop();
+              nav.pop();
+            },
+          ),
         ));
       }
     });
@@ -80,7 +89,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
               stream: bloc.outWallPostList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  if (snapshot.data.wallPosts?.length > 0) {
+                  if (snapshot.data.isNotEmpty) {
                     var _currentWallPost = snapshot.data.wallPosts[0];
                     appBloc.inCurrentWallPost.add(_currentWallPost);
                     return Container(); //Text('${_currentWallPost.id}');
@@ -104,7 +113,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
             stream: appBloc.outCurrentCreateAdsList,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                if (snapshot.data.createAdsList.length > 0) {
+                if (snapshot.data.isNotEmpty) {
                   return Expanded(
                     child: ListView.separated(
                         separatorBuilder: (BuildContext context, int index) =>
@@ -128,8 +137,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
           StreamBuilder<CreateAdsList>(
               stream: appBloc.outCurrentCreateAdsList,
               builder: (context, snapshot) {
-                if ((snapshot.hasData) &&
-                    snapshot.data.createAdsList?.length > 0) {
+                if ((snapshot.hasData) && snapshot.data.isNotEmpty) {
                   return Padding(
                     padding: const EdgeInsets.only(bottom: 20.0),
                     child: FloatingActionButton.extended(

@@ -11,7 +11,7 @@ class CreateAdsList {
     this.createAdsList = createAdsList ?? [];
   }
 
-  List<CreateAdsList> getCreateAdsListInChunks([int chunkSize=5]) {
+  List<CreateAdsList> getCreateAdsListInChunks([int chunkSize = 5]) {
     var len = this.createAdsList.length;
     var size = chunkSize; // 5 sometimes cause 414 error
     List<List<CreateAd>> chunks = [];
@@ -26,6 +26,16 @@ class CreateAdsList {
       result.add(createAdsList);
     }
     return result;
+  }
+
+  bool get isNotEmpty {
+    if (this.createAdsList != null) {
+      if (this.createAdsList.length > 0) {
+        return true;
+      }
+      return false;
+    }
+    return false;
   }
 
   List<Map<String, dynamic>> toJson() {

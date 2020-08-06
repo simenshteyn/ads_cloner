@@ -81,6 +81,10 @@ class Ad {
     return Ad.fromJson(jsonResponse as Map<String, dynamic>);
   }
 
+  bool get isWallPostFormat => this.adFormat == 9 ? true : false;
+
+  bool get isAdaptiveFormat => this.adFormat == 11 ? true : false;
+
   Widget get getClickInfoWidget {
     final TextStyle _textStyleUp = TextStyle(
         color: Colors.grey, fontWeight: FontWeight.w300, fontSize: 12.0);

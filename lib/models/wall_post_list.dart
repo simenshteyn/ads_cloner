@@ -14,4 +14,14 @@ class WallPostList {
   factory WallPostList.fromJson(Map<String, dynamic> json) =>
       _$WallPostListFromJson(json);
   Map<String, dynamic> toJson() => _$WallPostListToJson(this);
+
+  bool get isNotEmpty {
+    if (this.wallPosts != null) {
+      if (this.wallPosts.length > 0) {
+        return true;
+      }
+      return false;
+    }
+    return false;
+  }
 }

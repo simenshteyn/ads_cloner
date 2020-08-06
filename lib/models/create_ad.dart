@@ -59,50 +59,50 @@ class CreateAd {
     this.targeting,
   });
 
-  CreateAd.bulder(Ad ad, AdLayout adLayout, AdTargeting adTargeting,
-      WallPostAdsStealth wallPostAdsStealth) {
-    this.campaignId = ad.campaignId;
-    this.adFormat = ad.adFormat;
-    this.autobidding = ad.autobidding;
-    this.costType = ad.costType;
-    this.goalType = ad.goalType;
-    this.impressionsLimit = ad.impressionsLimit;
-    this.impressionsLimited = ad.impressionsLimited;
-    this.adPlatformNoWall = ad.adPlatformNoWall;
-    this.adPlatformNoAdNetwork = ad.adPlatformNoAdNetwork;
-    this.dayLimit = int.tryParse(ad.dayLimit);
-    this.allLimit = int.tryParse(ad.allLimit);
-    this.category1Id = int.tryParse(ad.category1Id);
-    this.category2Id = int.tryParse(ad.category2Id);
-    this.ageRestriction = int.tryParse(ad.ageRestriction);
-    this.status = ad.status;
-    this.repeatVideo = 1; //can't find this in other objects
-    this.disclaimerMedical = ad.disclaimerMedical;
-    this.disclaimerSpecialist = ad.disclaimerSpecialist;
-    this.disclaimerSupplements = ad.disclaimerSupplements;
-    this.weeklyScheduleUseHolidays = ad.weeklyScheduleUseHolidays;
-    this.adPlatform = ad.adPlatform;
-    this.name = ad.name;
-    this.title = adLayout.title;
-    this.description; //can't find this in other objects
-    this.linkUrl = adLayout.linkUrl;
-    this.linkDomain = adLayout.linkDomain;
-    this.linkTitle; // = wallPostAdsStealth.linkTitle;
-    this.linkButton; // = wallPostAdsStealth.linkButton;
-    this.photo; //can't find
-    this.photoIcon; //can't find
-    this.video; //result of video uploading to server
-    this.statsUrl; //pixel of external stats
-    this.statsUrl2; //pixe of external stats
-    this.cpc = (ad.cpc != null) ? (int.tryParse(ad.cpm) / 100) : null;
-    this.cpm = (ad.cpm != null) ? (int.tryParse(ad.cpm) / 100) : null;
-    this.ocpm = (ad.ocpm != null) ? (int.tryParse(ad.ocpm) / 100) : null;
-    this.weeklyScheduleHours = ad.weeklyScheduleHours;
-    this.eventsRetargetingGroups = ad.eventsRetargetingGroups;
-    this.targeting = adTargeting;
-  }
+  // CreateAd.bulder(Ad ad, AdLayout adLayout, AdTargeting adTargeting,
+  //     WallPostAdsStealth wallPostAdsStealth) {
+  //   this.campaignId = ad.campaignId;
+  //   this.adFormat = ad.adFormat;
+  //   this.autobidding = ad.autobidding;
+  //   this.costType = ad.costType;
+  //   this.goalType = ad.goalType;
+  //   this.impressionsLimit = ad.impressionsLimit;
+  //   this.impressionsLimited = ad.impressionsLimited;
+  //   this.adPlatformNoWall = ad.adPlatformNoWall;
+  //   this.adPlatformNoAdNetwork = ad.adPlatformNoAdNetwork;
+  //   this.dayLimit = int.tryParse(ad.dayLimit);
+  //   this.allLimit = int.tryParse(ad.allLimit);
+  //   this.category1Id = int.tryParse(ad.category1Id);
+  //   this.category2Id = int.tryParse(ad.category2Id);
+  //   this.ageRestriction = int.tryParse(ad.ageRestriction);
+  //   this.status = ad.status;
+  //   this.repeatVideo = 1; //can't find this in other objects
+  //   this.disclaimerMedical = ad.disclaimerMedical;
+  //   this.disclaimerSpecialist = ad.disclaimerSpecialist;
+  //   this.disclaimerSupplements = ad.disclaimerSupplements;
+  //   this.weeklyScheduleUseHolidays = ad.weeklyScheduleUseHolidays;
+  //   this.adPlatform = ad.adPlatform;
+  //   this.name = ad.name;
+  //   this.title = adLayout.title;
+  //   this.description; //can't find this in other objects
+  //   this.linkUrl = adLayout.linkUrl;
+  //   this.linkDomain = adLayout.linkDomain;
+  //   this.linkTitle; // = wallPostAdsStealth.linkTitle;
+  //   this.linkButton; // = wallPostAdsStealth.linkButton;
+  //   this.photo; //can't find
+  //   this.photoIcon; //can't find
+  //   this.video; //result of video uploading to server
+  //   this.statsUrl; //pixel of external stats
+  //   this.statsUrl2; //pixe of external stats
+  //   this.cpc = (ad.cpc != null) ? (int.tryParse(ad.cpm) / 100) : null;
+  //   this.cpm = (ad.cpm != null) ? (int.tryParse(ad.cpm) / 100) : null;
+  //   this.ocpm = (ad.ocpm != null) ? (int.tryParse(ad.ocpm) / 100) : null;
+  //   this.weeklyScheduleHours = ad.weeklyScheduleHours;
+  //   this.eventsRetargetingGroups = ad.eventsRetargetingGroups;
+  //   this.targeting = adTargeting;
+  // }
 
-  CreateAd.bulderFromAdaptive(
+  CreateAd.bulder(
       Ad ad, AdLayout adLayout, AdTargeting adTargeting) {
     //Contstructor to use with adaptive format (11)
     this.campaignId = ad.campaignId;
