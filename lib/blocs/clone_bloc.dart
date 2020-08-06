@@ -54,17 +54,14 @@ class CloneBloc implements BlocBase {
         //TODO: more deep check in later
         case 11:
           {
-            for (var chunk in req.createAdsList.getCreateAdsListInChunks(1)) {
+            for (var chunk in req.createAdsList.getCreateAdsListInChunks(5)) {
               await vk.delayBetweenApiRequests(2000);
               await vk
                   .adsCreateAds(req.account.accountId.toString(), chunk)
                   .then((list) {
                 createAdsList.appendList(list);
-                print(
-                    'CREATE RESULT LIST IS NOW ${createAdsList.createAdsResultList.length} LONG');
               });
             }
-            print('result list is now ${createAdsList.createAdsResultList}');
             _createAdsResultController.sink.add(createAdsList);
             break;
           }

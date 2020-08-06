@@ -27,7 +27,7 @@ Ad _$AdFromJson(Map<String, dynamic> json) {
     json['category2_id'] as String,
     json['age_restriction'] as String,
     json['name'] as String,
-    json['ad_platform'] as String,
+    json['ad_platform'],
     json['cpc'] as String,
     json['ocpm'] as String,
     json['cpm'] as String,
@@ -75,10 +75,10 @@ Map<String, dynamic> _$AdToJson(Ad instance) {
   writeNotNull('category2_id', instance.category2Id);
   writeNotNull('age_restriction', instance.ageRestriction);
   writeNotNull('name', instance.name);
-  writeNotNull('ad_platform', instance.adPlatform);
   writeNotNull('cpc', instance.cpc);
   writeNotNull('cpm', instance.cpm);
   writeNotNull('ocpm', instance.ocpm);
+  writeNotNull('ad_platform', instance.adPlatform);
   writeNotNull('impressions_limited', instance.impressionsLimited);
   writeNotNull('ad_platform_no_wall', instance.adPlatformNoWall);
   writeNotNull('autobidding', instance.autobidding);

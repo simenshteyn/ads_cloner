@@ -60,12 +60,14 @@ class VkApi {
       baseUrl,
       'method/ads.getCampaigns',
       <String, String>{
-        'account_id': accountId,
         'access_token': userToken,
         'v': apiVersion,
       },
     );
-    var response = await _getRequest(uri);
+    var map = {
+      'account_id': accountId,
+    };
+    var response = await _postRequest(uri, map);
     print(uri);
     print(response);
     final _map = jsonDecode(response);
@@ -184,16 +186,14 @@ class VkApi {
       baseUrl,
       'method/ads.createAds',
       <String, String>{
-        'account_id': accountId,
-        'data': json.encode(createAdsList.toJson()),
         'access_token': userToken,
         'v': apiVersion,
       },
     );
+    var map = {'account_id': accountId, 'data': json.encode(createAdsList.toJson())};
     print('CREATE: ${createAdsList.toJson()}');
-    var response = await _getRequest(uri);
-    //print(uri);
-    debugPrint(uri.toString(), wrapWidth: 1024);
+    var response = await _postRequest(uri, map);
+    print(uri);
     print(response);
     final _map = jsonDecode(response);
     CreateAdsResultList listOfCreateAdsResult =
@@ -369,10 +369,22 @@ class VkApi {
   }
 
   Future<String> _getRequest(Uri uri) async {
-    var request = await _httpClient.getUrl(uri);
+    var request =
+        await _httpClient.getUrl(uri); //i use POST for 44 error prevention
     var response = await request.close();
     return (response.statusCode == 200)
         ? await response.transform(utf8.decoder).join()
+        : '{"error": {"error_code": ${response.statusCode}, "error_msg": "HTTP request problem: ${response.reasonPhrase}"}}';
+  }
+
+  Future<String> _postRequest(Uri uri, Map<String, dynamic> jsonMap) async {
+    /// For big requests to avoid 414 error
+    var postURL = uri;
+    var request = http.MultipartRequest('POST', postURL);
+    request.fields.addAll(jsonMap);
+    var response = await request.send();
+    return (response.statusCode == 200)
+        ? await response.stream.bytesToString()
         : '{"error": {"error_code": ${response.statusCode}, "error_msg": "HTTP request problem: ${response.reasonPhrase}"}}';
   }
 

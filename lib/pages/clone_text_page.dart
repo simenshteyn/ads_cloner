@@ -3,6 +3,7 @@ import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
+import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';
@@ -62,31 +63,7 @@ class _CloneTextPageState extends State<CloneTextPage> {
                 suffix: IconButton(
                     icon: Icon(Icons.add),
                     onPressed: () {
-                      if (appBloc.currentAd.isAdaptiveFormat) {
-                        if (_isTextFieldIsValidForAdaptiveFormat(_textField)) {
-                          setState(() {
-                            _validateInput = true;
-                          });
-                          bloc.addTextToList.add(_textField);
-                          _textController.clear();
-                        } else {
-                          setState(() {
-                            _validateInput = false;
-                          });
-                        }
-                      } else {
-                        if (_isTextFieldIsValidForOtherFormats(_textField)) {
-                          setState(() {
-                            _validateInput = true;
-                          });
-                          bloc.addTextToList.add(_textField);
-                          _textController.clear();
-                        } else {
-                          setState(() {
-                            _validateInput = false;
-                          });
-                        }
-                      }
+                      _textFieldValidationAndSending(context);
                     }),
               ),
             ),
@@ -151,10 +128,84 @@ class _CloneTextPageState extends State<CloneTextPage> {
     );
   }
 
+  void _textFieldValidationAndSending(BuildContext context) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
+    if (appBloc.currentAd.isAdaptiveFormat) {
+      if (_isTextFieldIsValidForAdaptiveFormat(_textField)) {
+        setState(() {
+          _validateInput = true;
+        });
+        bloc.addTextToList.add(_textField);
+        _textController.clear();
+      } else {
+        setState(() {
+          _validateInput = false;
+        });
+      }
+    } else if (appBloc.currentAd.isImageTextFormat) {
+      if (_isTextFieldIsValidForImageAndTextFormat(_textField)) {
+        setState(() {
+          _validateInput = true;
+        });
+        bloc.addTextToList.add(_textField);
+        _textController.clear();
+      } else {
+        setState(() {
+          _validateInput = false;
+        });
+      }
+    } else if (appBloc.currentAd.isBigImageFormat) {
+      if (_isTextFieldIsValidForBigImageFormat(_textField)) {
+        setState(() {
+          _validateInput = true;
+        });
+        bloc.addTextToList.add(_textField);
+        _textController.clear();
+      } else {
+        setState(() {
+          _validateInput = false;
+        });
+      }
+    } else {
+      if (_isTextFieldIsValidForOtherFormats(_textField)) {
+        setState(() {
+          _validateInput = true;
+        });
+        bloc.addTextToList.add(_textField);
+        _textController.clear();
+      } else {
+        setState(() {
+          _validateInput = false;
+        });
+      }
+    }
+  }
+
   bool _isTextFieldIsValidForAdaptiveFormat(String textField) {
     if ((textField != "") &&
         (textField.length > 2) &&
         (textField.length <= 90)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool _isTextFieldIsValidForImageAndTextFormat(String textField) {
+    if ((textField != "") &&
+        (textField.length > 2) &&
+        (textField.length <= 70)) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  bool _isTextFieldIsValidForBigImageFormat(String textField) {
+    if ((textField != "") &&
+        (textField.length > 2) &&
+        (textField.length <= 33)) {
       return true;
     } else {
       return false;

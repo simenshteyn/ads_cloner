@@ -22,7 +22,8 @@ class Ad {
       startTime,
       stopTime,
       category1Id;
-  String category2Id, ageRestriction, name, adPlatform, cpc, cpm, ocpm;
+  String category2Id, ageRestriction, name, cpc, cpm, ocpm;
+  dynamic adPlatform;
   int impressionsLimited, adPlatformNoWall, autobidding;
   String autobiddingMaxCost;
   int video, disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
@@ -84,6 +85,10 @@ class Ad {
   bool get isWallPostFormat => this.adFormat == 9 ? true : false;
 
   bool get isAdaptiveFormat => this.adFormat == 11 ? true : false;
+
+  bool get isImageTextFormat => this.adFormat == 1 ? true : false;
+
+  bool get isBigImageFormat => this.adFormat == 2 ? true : false;
 
   Widget get getClickInfoWidget {
     final TextStyle _textStyleUp = TextStyle(

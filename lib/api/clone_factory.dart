@@ -41,8 +41,7 @@ class CloneTextFactory implements CloneFactory {
 
       var changedWallPostAdsStealth =
           await _replaceWallPostAdsStealthMessage(clonedWallPost, cloneTask);
-      var createAd = CreateAd.bulder(originalAd, adLayout,
-          adTargeting); 
+      var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
       return createAd;
@@ -54,11 +53,23 @@ class CloneTextFactory implements CloneFactory {
       if (clonedAdLayout.isAdaptiveVideoAdFormat) {
         await _createAndUploadVideo(clonedAdLayout);
       } else {
-        await _createAndUploadPhoto(clonedAdLayout);
+        await _createAndUploadPhoto(clonedAdLayout, 11);
       }
 
       var createAd = CreateAd.bulder(
           originalAd, clonedAdLayout, adTargeting); //replacedbulder
+      return createAd;
+    } else if (originalAd.isImageTextFormat) {
+      var clonedAdLayout = adLayout.clone();
+      clonedAdLayout.description = cloneTask.value;
+      await _createAndUploadPhoto(clonedAdLayout, 1);
+      var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
+      return createAd;
+    } else if (originalAd.isBigImageFormat) {
+      var clonedAdLayout = adLayout.clone();
+      clonedAdLayout.title = cloneTask.value;
+      await _createAndUploadPhoto(clonedAdLayout, 2);
+      var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
       return createAd;
     } else {
       return CreateAd();
@@ -91,13 +102,11 @@ class CloneTextFactory implements CloneFactory {
   Future<String> _createAndGetLinkForWallPostAdsStealth(
       WallPostAdsStealth wallPostAdsStealth) async {
     var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
-    // Add some error check to show user
     if (newStealth.errorResponse != null) {
       print(newStealth.errorResponse.errorMsg);
       throw Exception(newStealth.errorResponse.errorMsg);
     }
     var link = newStealth.wallLink(wallPostAdsStealth);
-    // or you can check link for null
     return link;
   }
 
@@ -115,9 +124,14 @@ class CloneTextFactory implements CloneFactory {
     adLayout.videoSrc720 = videoData.videoData; //use720 this time TODO
   }
 
-  Future<void> _createAndUploadPhoto(AdLayout adLayout) async {
+  Future<void> _createAndUploadPhoto(AdLayout adLayout, int adFormat) async {
     if (photoData == null) {
-      photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, 11);
+      if (adFormat == 2) {
+        photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc, adFormat);
+      } else {
+        photoData =
+            await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, adFormat);
+      }
     }
     adLayout.imageSrc = photoData.photo;
   }

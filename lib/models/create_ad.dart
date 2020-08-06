@@ -12,7 +12,8 @@ class CreateAd {
   int allLimit, category1Id, category2Id, ageRestriction, status, repeatVideo;
   int disclaimerMedical, disclaimerSpecialist, disclaimerSupplements;
   int weeklyScheduleUseHolidays;
-  String adPlatform, name, title, description, linkUrl, linkDomain;
+  dynamic adPlatform;
+  String name, title, description, linkUrl, linkDomain;
   String linkTitle, linkButton, photo, photoIcon, video, statsUrl, statsUrl2;
   double cpc, cpm, ocpm;
   List weeklyScheduleHours;
