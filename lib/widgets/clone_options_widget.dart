@@ -1,9 +1,10 @@
 import 'package:ads_cloner/api/clone_factory.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:ads_cloner/blocs/clone_image_bloc.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
 import 'package:ads_cloner/models/option_card.dart';
+import 'package:ads_cloner/pages/clone_image_page.dart';
 import 'package:ads_cloner/pages/clone_text_page.dart';
-import 'package:ads_cloner/widgets/crop_widget.dart';
 import 'package:flutter/material.dart';
 
 class CloneOptionsWidget extends StatefulWidget {
@@ -47,7 +48,7 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                         }
                       case 1:
                         {
-                          _openCropImagePage(context);
+                          _openCloneImagePage(context);
                           break;
                         }
                     }
@@ -80,10 +81,11 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
     });
   }
 
-  void _openCropImagePage(BuildContext context) {
+  void _openCloneImagePage(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
-      return CropPage();
+      return BlocProvider<CloneImageBloc>(
+          bloc: CloneImageBloc(), child: CloneImagePage());
     })).whenComplete(() {
       // do some shit
     });
