@@ -67,7 +67,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
               return Center(child: _showInformation(snapshot));
             }
             if (state == AppState.free) {
-              return Center(child: Text('Выберите несколько картинок'));
+              return Center(child: Text('Выберите несколько картинок…'));
             } else {
               return Image.file(currentImageFile);
             }
