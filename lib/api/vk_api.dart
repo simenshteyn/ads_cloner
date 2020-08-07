@@ -190,7 +190,10 @@ class VkApi {
         'v': apiVersion,
       },
     );
-    var map = {'account_id': accountId, 'data': json.encode(createAdsList.toJson())};
+    var map = {
+      'account_id': accountId,
+      'data': json.encode(createAdsList.toJson())
+    };
     print('CREATE: ${createAdsList.toJson()}');
     var response = await _postRequest(uri, map);
     print(uri);
@@ -346,6 +349,21 @@ class VkApi {
     /// https://vk.com/dev/upload_photo_ads more info
     await _delayBetweenApiRequests();
     var imageBytes = await _getBytesFromImageUrl(url);
+    var uploadUrl = await adsGetUploadUrl(adFormat, icon);
+    var response = await _postImageRequest(uploadUrl.uploadUrl, imageBytes);
+    print(response);
+    final map = jsonDecode(response);
+    UploadedPhoto result = UploadedPhoto.fromJson(map);
+    print(result.photo);
+    return result;
+  }
+
+  Future<UploadedPhoto> uploadPhotoFromFile(File file, int adFormat,
+      [int icon]) async {
+    /// https://vk.com/dev/upload_photo_ads more info
+    await _delayBetweenApiRequests();
+    //var imageBytes = await _getBytesFromImageUrl(url);
+    var imageBytes = await file.readAsBytesSync();
     var uploadUrl = await adsGetUploadUrl(adFormat, icon);
     var response = await _postImageRequest(uploadUrl.uploadUrl, imageBytes);
     print(response);

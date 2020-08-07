@@ -1,9 +1,12 @@
+import 'package:ads_cloner/api/clone_factory.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_image_bloc.dart';
+import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/widgets/image_grid_widget.dart';
 import 'package:badges/badges.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_native_image/flutter_native_image.dart';
 import 'dart:async';
 import 'dart:io';
 
@@ -38,13 +41,14 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   File currentImageFile;
   List<File> imageFileList = [];
   final picker = ImagePicker();
+  CloneFactory adsFactory;
+  CreateAdsList createAdsList;
 
   @override
   void initState() {
     super.initState();
     state = AppState.free;
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
     appBloc.outWarningMessage.forEach((e) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('${e}'),
@@ -95,7 +99,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
             stream: bloc.outFileList,
             builder: (context, snapshot) {
               if ((snapshot.hasData) && (state == AppState.free)) {
-                return _buildSendButton(snapshot);
+                return _buildSendButton(context, snapshot);
               }
               return Container();
             },
@@ -147,41 +151,61 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
 
   Future<Null> _cropImage(BuildContext context) async {
     CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
-    File croppedFile = await ImageCropper.cropImage(
-        sourcePath: currentImageFile.path,
-        aspectRatioPresets: Platform.isAndroid
-            ? [
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio16x9
-              ]
-            : [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-                CropAspectRatioPreset.ratio3x2,
-                CropAspectRatioPreset.ratio4x3,
-                CropAspectRatioPreset.ratio5x3,
-                CropAspectRatioPreset.ratio5x4,
-                CropAspectRatioPreset.ratio7x5,
-                CropAspectRatioPreset.ratio16x9
-              ],
-        androidUiSettings: AndroidUiSettings(
-            toolbarTitle: 'Обрезка',
-            toolbarColor: Colors.deepOrange,
-            toolbarWidgetColor: Colors.white,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
-        iosUiSettings: IOSUiSettings(
-          title: 'Обрезка',
-        ));
-    if (croppedFile != null) {
-      bloc.addFileToList.add(croppedFile);
-      currentImageFile = croppedFile;
-      setState(() {
-        state = AppState.cropped;
-      });
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    try {
+      File croppedFile = await ImageCropper.cropImage(
+          sourcePath: currentImageFile.path,
+          maxWidth: 1080,
+          maxHeight: 608,
+          // aspectRatio: CropAspectRatio(ratioX: 16, ratioY: 9),
+          aspectRatioPresets: Platform.isAndroid
+              ? [
+                  // CropAspectRatioPreset.square,
+                  // CropAspectRatioPreset.ratio3x2,
+                  //CropAspectRatioPreset.original,
+                  // CropAspectRatioPreset.ratio4x3,
+                  CropAspectRatioPreset.ratio16x9
+                ]
+              : [
+                  //CropAspectRatioPreset.original,
+                  // CropAspectRatioPreset.square,
+                  // CropAspectRatioPreset.ratio3x2,
+                  // CropAspectRatioPreset.ratio4x3,
+                  // CropAspectRatioPreset.ratio5x3,
+                  // CropAspectRatioPreset.ratio5x4,
+                  // CropAspectRatioPreset.ratio7x5,
+                  CropAspectRatioPreset.ratio16x9
+                ],
+          androidUiSettings: AndroidUiSettings(
+              toolbarTitle: 'Обрезка',
+              toolbarColor: Colors.deepOrange,
+              toolbarWidgetColor: Colors.white,
+              //initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: true), //changed
+          iosUiSettings: IOSUiSettings(
+            title: 'Обрезка',
+          ));
+      if (croppedFile != null) {
+        // ImageProperties properties =
+        //     await FlutterNativeImage.getImageProperties(croppedFile.path);
+        File compressedFile = await FlutterNativeImage.compressImage(
+            croppedFile.path,
+            quality: 100,
+            targetWidth: 1080,
+            targetHeight: 607);
+        var decodedImage =
+            await decodeImageFromList(compressedFile.readAsBytesSync());
+        print(decodedImage.width);
+        print(decodedImage.height);
+        //Image resizedImeage = copyResize(image, width: 120);
+        bloc.addFileToList.add(compressedFile);
+        currentImageFile = compressedFile;
+        setState(() {
+          state = AppState.cropped;
+        });
+      }
+    } catch (e) {
+      appBloc.inWarningMessage.add(e.toString());
     }
   }
 
@@ -192,8 +216,10 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
     });
   }
 
-  Widget _buildSendButton(snapshot) {
+  Widget _buildSendButton(BuildContext context, snapshot) {
     int badgeText = snapshot.data.length;
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+
     return Badge(
       animationType: BadgeAnimationType.scale,
       badgeContent:
@@ -211,12 +237,31 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
           });
           if (_isClickable) {
             _isClickable = false;
-            //await _sendTextListToAdsFactory(snapshot.data, context);
-            //appBloc.inCurrentCreateAdsList.add(createAdsList);
+            await _sendFileListToAdsFactory(snapshot.data, context);
+            appBloc.inCurrentCreateAdsList.add(createAdsList);
             Navigator.pop(context);
           }
         },
       ),
     );
+  }
+
+  Future<void> _sendFileListToAdsFactory(
+      List<File> fileList, BuildContext context) async {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    for (var file in fileList) {
+      var cloneTask = CloneTask(type: CloneType.image, value: file);
+      try {
+        var createdAd = await adsFactory.buildAd(
+            appBloc.currentAd,
+            appBloc.currentAdTargeting,
+            appBloc.currentAdLayout,
+            appBloc.currentWallPost,
+            cloneTask);
+        createAdsList.appendAd(createdAd);
+      } on Exception catch (e) {
+        appBloc.inWarningMessage.add('${e}');
+      }
+    }
   }
 }
