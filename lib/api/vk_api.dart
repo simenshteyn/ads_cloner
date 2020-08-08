@@ -337,38 +337,42 @@ class VkApi {
     return uploadUrl;
   }
 
-  Future<WallUploadServerUrlResponse> photosGetWallUploadServer(
-      int groupId, File file) async {
+  Future<WallUploadedPhoto> photosGetWallUploadServer(File file) async {
     /// https://vk.com/dev/photos.getWallUploadServer more info
+    /// Maybe i should split this in two functions
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/photos.getWallUploadServer',
       <String, String>{
-        'group_id': '${-groupId}', //should be positive
         'access_token': userToken,
         'v': apiVersion,
       },
     );
-    var responseString = await _postImageRequest(uri.toString(), file.readAsBytesSync());
-    // var response = await _getRequest(uri);
-    print(uri);
+    var response = await _getRequest(uri);
+    final map = jsonDecode(response);
+     WallUploadServerUrlResponse uploadUrl =
+        WallUploadServerUrlResponse.fromJson(map);
+
+    var responseString = await _postImageRequest(uploadUrl.result.uploadUrl, file.readAsBytesSync());
+    print(uploadUrl.result.uploadUrl);
     print(responseString);
     final _map = jsonDecode(responseString);
-    WallUploadServerUrlResponse uploadUrl =
-        WallUploadServerUrlResponse.fromJson(_map);
-    return uploadUrl;
+    WallUploadedPhoto uploadedPhoto =
+        WallUploadedPhoto.fromJson(_map);
+    return uploadedPhoto;
   }
 
-    Future<CityList> photosSaveWallPhoto(WallUploadServerUrlObject wallUploadServerUrlResult) async {
+    Future<PhotosSaveWallPhotoResult> photosSaveWallPhoto(WallUploadedPhoto wallUploadedPhoto) async {
     /// https://vk.com/dev/photos.saveWallPhoto more info
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/photos.saveWallPhoto',
       <String, String>{
-        // 'group_id': wallUploadServerUrlResult.,
-        // 'city_ids': idString,
+        'photo': wallUploadedPhoto.photo,
+        'server': wallUploadedPhoto.server.toString(),
+        'hash': wallUploadedPhoto.hash,
         'access_token': userToken,
         'v': apiVersion,
       },
@@ -377,8 +381,8 @@ class VkApi {
     print(uri);
     print(response);
     final _map = jsonDecode(response);
-    CityList cityList = CityList.fromJson(_map);
-    return cityList;
+    PhotosSaveWallPhotoResult result = PhotosSaveWallPhotoResult.fromJson(_map);
+    return result;
   }
 
 

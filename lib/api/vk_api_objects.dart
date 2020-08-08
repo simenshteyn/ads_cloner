@@ -806,6 +806,26 @@ class WallUploadServerUrlObject {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallUploadedPhoto {
+  int server;
+  String photo, hash;
+  WallUploadedPhoto(this.server, this.photo, this.hash);
+  factory WallUploadedPhoto.fromJson(Map<String, dynamic> json) =>
+      _$WallUploadedPhotoFromJson(json);
+  Map<String, dynamic> toJson() => _$WallUploadedPhotoToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class PhotosSaveWallPhotoResult {
+  @JsonKey(name: 'response')
+  List<Photo> photos;
+  PhotosSaveWallPhotoResult(this.photos);
+  factory PhotosSaveWallPhotoResult.fromJson(Map<String, dynamic> json) =>
+      _$PhotosSaveWallPhotoResultFromJson(json);
+  Map<String, dynamic> toJson() => _$PhotosSaveWallPhotoResultToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class UploadedPhoto {
   String photo;
   UploadedPhoto(this.photo);

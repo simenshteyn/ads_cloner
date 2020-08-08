@@ -45,11 +45,17 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -71,7 +77,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                 stream: bloc.outAdsTargetingList,
                 builder: (context, snapshot) {
                   if (apiResponseHasError(snapshot))
-                    return showError(snapshot, context);
+                    return showError(context, snapshot);
                   else if ((snapshot.hasData) &&
                       (snapshot.data.adsTargeting?.length > 0)) {
                     _currentTargeting = snapshot.data.adsTargeting[0];
@@ -88,7 +94,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
               if (apiResponseHasError(snapshot))
-                return showError(snapshot, context);
+                return showError(context, snapshot);
               else if ((snapshot.hasData) &&
                   (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
@@ -139,7 +145,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return apiResponseHasError(snapshot)
-                  ? showError(snapshot, context)
+                  ? showError(context, snapshot)
                   : FloatingActionButton(
                       child: Icon(Icons.content_copy),
                       onPressed: () {

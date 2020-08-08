@@ -155,21 +155,16 @@ class CloneImageFactory implements CloneFactory {
 
       //  photos.getWallUploadServer https://vk.com/dev/photos.saveWallPhoto
 
-      // var changedWallPostAdsStealth =
-      //     await _replaceWallPostAdsStealthMessage(clonedWallPost, cloneTask);  TODO
+      var changedWallPostAdsStealth =
+          await _replaceWallPostAdsStealthPhoto(clonedWallPost, cloneTask);
       var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
-      // createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth( //TODO
-      //     changedWallPostAdsStealth);
+      createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
+          changedWallPostAdsStealth);
       return createAd;
     }
     if (originalAd.isAdaptiveFormat) {
-      //clone layout
-      //upload icon
-      // upload photo from file in clonetask
-      // add uploaded photo to cloned layout
       var clonedAdLayout = adLayout.clone();
 
-      // clonedAdLayout.description = cloneTask.value;
       await _createAndUploadIcon(clonedAdLayout);
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 11);
       clonedAdLayout.imageSrc = photoData.photo;
@@ -183,22 +178,23 @@ class CloneImageFactory implements CloneFactory {
       var createAd = CreateAd.bulder(
           originalAd, clonedAdLayout, adTargeting); //replacedbulder
       return createAd;
-    } 
-    // else if (originalAd.isImageTextFormat) {
-    //   var clonedAdLayout = adLayout.clone();
-    //   clonedAdLayout.description = cloneTask.value;
-    //   await _createAndUploadPhoto(clonedAdLayout, 1);
-    //   var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
-    //   return createAd;
-    // } else if (originalAd.isBigImageFormat) {
-    //   var clonedAdLayout = adLayout.clone();
-    //   clonedAdLayout.title = cloneTask.value;
-    //   await _createAndUploadPhoto(clonedAdLayout, 2);
-    //   var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
-    //   return createAd;
-    // } else {
-    //   return CreateAd();
-    // }
+    } else if (originalAd.isImageTextFormat) {
+      var clonedLayout = adLayout.clone();
+      photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 1);
+      clonedLayout.imageSrc = photoData.photo;
+      var createAd = CreateAd.bulder(
+          originalAd, clonedLayout, adTargeting); 
+      return createAd;
+    } else if (originalAd.isBigImageFormat) {
+      var clonedLayout = adLayout.clone();
+      photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 2);
+      clonedLayout.imageSrc = photoData.photo;
+      var createAd = CreateAd.bulder(
+          originalAd, clonedLayout, adTargeting); 
+      return createAd;
+    } else {
+      return CreateAd(); // change this later
+    }
   }
 
   Future<void> _cloneAndReplacePrettyCards(
@@ -220,9 +216,12 @@ class CloneImageFactory implements CloneFactory {
   Future<WallPostAdsStealth> _replaceWallPostAdsStealthPhoto(
       WallPost clonedWallPost, CloneTask cloneTask) async {
     var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(clonedWallPost);
-    var uploadServer = await vkApi.photosGetWallUploadServer(clonedWallPost.ownerId, cloneTask.value);
-
-    //wallPostAdsStealth. = cloneTask.value;
+    var wallUploadedPhotoInfo =
+        await vkApi.photosGetWallUploadServer(cloneTask.value);
+    var uploadResult = await vkApi.photosSaveWallPhoto(wallUploadedPhotoInfo);
+    wallPostAdsStealth.linkImage = uploadResult.photos[0].sizes
+        .firstWhere((element) => element.type == 'x')
+        .url; //TODO somechecks, may be
     return wallPostAdsStealth;
   }
 

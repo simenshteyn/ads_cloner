@@ -48,7 +48,7 @@ class LoginPage extends StatelessWidget {
   Future<void> vkLogin(BuildContext context, ApplicationBloc bloc) async {
     if (await checkLoggedIn() == false) {
       FlutterVKSdk.login(
-          scope: '${VKScope.ads}, ${VKScope.offline}',
+          scope: '${VKScope.ads}, ${VKScope.offline}, ${VKScope.photos}',
           onSuccess: (VKAccessToken token) async {
             bloc.inVkAccessToken.add(token);
             _openAccountsPage(context);

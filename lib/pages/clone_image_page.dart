@@ -55,11 +55,17 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
     createAdsList = CreateAdsList([]);
 
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -97,6 +103,10 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
                   _cropImage(context, 1080, 607);
                 } else if (appBloc.currentAd.isWallPostFormat) {
                   _cropImage(context, 537, 240);
+                } else if (appBloc.currentAd.isImageTextFormat) {
+                  _cropImage(context, 145, 85);
+                } else if (appBloc.currentAd.isBigImageFormat) {
+                  _cropImage(context, 145, 165);
                 }
               } else if (state == AppState.cropped) _clearImage();
             },
@@ -247,7 +257,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
             appBloc.currentWallPost,
             cloneTask);
         createAdsList.appendAd(createdAd);
-      } on Exception catch (e) {
+      } catch (e) {
         appBloc.inWarningMessage.add('${e}');
       }
     }

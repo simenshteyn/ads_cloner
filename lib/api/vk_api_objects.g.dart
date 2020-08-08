@@ -1437,6 +1437,53 @@ Map<String, dynamic> _$WallUploadServerUrlObjectToJson(
   return val;
 }
 
+WallUploadedPhoto _$WallUploadedPhotoFromJson(Map<String, dynamic> json) {
+  return WallUploadedPhoto(
+    json['server'] as int,
+    json['photo'] as String,
+    json['hash'] as String,
+  );
+}
+
+Map<String, dynamic> _$WallUploadedPhotoToJson(WallUploadedPhoto instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('server', instance.server);
+  writeNotNull('photo', instance.photo);
+  writeNotNull('hash', instance.hash);
+  return val;
+}
+
+PhotosSaveWallPhotoResult _$PhotosSaveWallPhotoResultFromJson(
+    Map<String, dynamic> json) {
+  return PhotosSaveWallPhotoResult(
+    (json['response'] as List)
+        ?.map(
+            (e) => e == null ? null : Photo.fromJson(e as Map<String, dynamic>))
+        ?.toList(),
+  );
+}
+
+Map<String, dynamic> _$PhotosSaveWallPhotoResultToJson(
+    PhotosSaveWallPhotoResult instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('response', instance.photos);
+  return val;
+}
+
 UploadedPhoto _$UploadedPhotoFromJson(Map<String, dynamic> json) {
   return UploadedPhoto(
     json['photo'] as String,

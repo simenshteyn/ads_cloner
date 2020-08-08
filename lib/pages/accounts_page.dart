@@ -29,11 +29,17 @@ class _AccountsPageSnackbarState extends State<AccountsPageSnackbar> {
     AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
     bloc.getAccountsList.add(appBloc.vkAccessToken);
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -51,7 +57,7 @@ class _AccountsPageSnackbarState extends State<AccountsPageSnackbar> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(snapshot, context)
+                    ? showError(context, snapshot)
                     : ListView.builder(
                         itemCount: snapshot.data.accounts.length,
                         itemBuilder: (BuildContext context, int index) {

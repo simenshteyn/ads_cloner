@@ -36,21 +36,40 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
         .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     appBloc.getCurrentCreateAdsList.add('give me');
 
-    bloc.outCreateAdsResultList
-        .forEach((e) => Scaffold.of(context).showSnackBar(SnackBar(
-              backgroundColor: Colors.green,
-              content:
-                  Text('Создано объявлений: ${e.createAdsResultList.length}'),
-              action: SnackBarAction(
-                textColor: Colors.white,
-                label: 'Открыть',
-                onPressed: () {
-                  var nav = Navigator.of(context);
-                  nav.pop();
-                  nav.pop();
-                },
-              ),
-            )));
+    // bloc.outCreateAdsResultList
+    //     .forEach((e) => Scaffold.of(context).showSnackBar(SnackBar(
+    //           backgroundColor: Colors.green,
+    //           content:
+    //               Text('Создано объявлений: ${e.createAdsResultList.length}'),
+    //           action: SnackBarAction(
+    //             textColor: Colors.white,
+    //             label: 'Открыть',
+    //             onPressed: () {
+    //               var nav = Navigator.of(context);
+    //               nav.pop();
+    //               nav.pop();
+    //             },
+    //           ),
+    //         )));
+
+    bloc.outCreateAdsResultList.forEach((event) {
+      if (event.createAdsResultList[0].errorCode == null) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
+          content:
+              Text('Создано объявлений: ${event.createAdsResultList.length}'),
+          action: SnackBarAction(
+            textColor: Colors.white,
+            label: 'Открыть',
+            onPressed: () {
+              var nav = Navigator.of(context);
+              nav.pop();
+              nav.pop();
+            },
+          ),
+        ));
+      }
+    });
 
     bloc.outWallPostList.forEach((e) {
       if ((appBloc.currentAd.isWallPostFormat) && (e.wallPosts.length == 0)) {
@@ -71,11 +90,17 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
     });
 
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -111,11 +136,17 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
               stream: bloc.outCreateAdsResultList,
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
-                  appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
-                  _isLoading = false;
-                  return apiResponseHasError(snapshot)
-                      ? showError(snapshot, context)
-                      : Container();
+                  if (createAdApiResponseHasError(snapshot)) {
+                    appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+                    _isLoading = false;
+                    return createAdShowError(context, snapshot);
+                  }
+
+                  // appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+                  // _isLoading = false;
+                  // return createAdApiResponseHasError(snapshot)
+                  //     ? createAdShowError(snapshot, context)
+                  //     : Container();
                 }
                 return Container();
               }),

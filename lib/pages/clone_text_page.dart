@@ -48,11 +48,17 @@ class _CloneTextPageSnackbarState extends State<CloneTextPageSnackbar> {
     createAdsList = CreateAdsList([]);
 
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override

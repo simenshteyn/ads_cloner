@@ -34,11 +34,17 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
     bloc.getAdsList.add(req);
     appBloc.outWarningMessage.forEach((e) {
-      Scaffold.of(context).showSnackBar(SnackBar(
-        content: Text('${e}'),
-        backgroundColor: Colors.red,
-      ));
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
     });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
   }
 
   @override
@@ -56,7 +62,7 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(snapshot, context)
+                    ? showError(context, snapshot)
                     : ListView.builder(
                         itemCount: snapshot.data.ads.length,
                         itemBuilder: (BuildContext context, int index) {
