@@ -37,8 +37,10 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
     super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
-    bloc.getCampaignsList
-        .add(CampaignsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
+
+    bloc.getCampaignsList.add(CampaignsRequest(
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentClient));
+
     appBloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);

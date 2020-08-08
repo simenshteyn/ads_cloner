@@ -169,7 +169,6 @@ class CloneImageFactory implements CloneFactory {
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 11);
       clonedAdLayout.imageSrc = photoData.photo;
 
-      // if (clonedAdLayout.isAdaptiveVideoAdFormat) {
       //   await _createAndUploadVideo(clonedAdLayout);
       // } else {
       //   await _createAndUploadPhoto(clonedAdLayout, 11);
@@ -177,20 +176,21 @@ class CloneImageFactory implements CloneFactory {
 
       var createAd = CreateAd.bulder(
           originalAd, clonedAdLayout, adTargeting); //replacedbulder
+      if (clonedAdLayout.isAdaptiveVideoAdFormat) {
+        createAd.video = null;
+      }
       return createAd;
     } else if (originalAd.isImageTextFormat) {
       var clonedLayout = adLayout.clone();
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 1);
       clonedLayout.imageSrc = photoData.photo;
-      var createAd = CreateAd.bulder(
-          originalAd, clonedLayout, adTargeting); 
+      var createAd = CreateAd.bulder(originalAd, clonedLayout, adTargeting);
       return createAd;
     } else if (originalAd.isBigImageFormat) {
       var clonedLayout = adLayout.clone();
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 2);
       clonedLayout.imageSrc = photoData.photo;
-      var createAd = CreateAd.bulder(
-          originalAd, clonedLayout, adTargeting); 
+      var createAd = CreateAd.bulder(originalAd, clonedLayout, adTargeting);
       return createAd;
     } else {
       return CreateAd(); // change this later

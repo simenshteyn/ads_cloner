@@ -33,7 +33,7 @@ class AdsBloc implements BlocBase {
     _cmdAdsController.stream.listen((AdsRequest request) {
       var vk = VkApi(userToken: request.vkAccessToken.token);
       vk
-          .adsGetAds(request.account.accountId.toString(), request.campaign.id)
+          .adsGetAds(request.account.accountId.toString(), request.campaign.id, request.client?.id)
           .then((list) {
         _ads = list;
         _adsController.sink.add(_ads);
@@ -46,7 +46,7 @@ class AdsBloc implements BlocBase {
       var vk = VkApi(userToken: request.vkAccessToken.token);
       vk
           .adsGetCampaignLayout(
-              request.account.accountId.toString(), request.campaign)
+              request.account.accountId.toString(), request.campaign, request.client?.id)
           .then((list) {
         _layout = list;
         _layoutController.sink.add(_layout);

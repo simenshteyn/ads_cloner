@@ -31,7 +31,7 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
     final req = AdsRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign, appBloc.currentClient);
     bloc.getAdsList.add(req);
     appBloc.outWarningMessage.forEach((e) {
       if (context != null) {
@@ -96,7 +96,7 @@ void _openAdPreviewPage(BuildContext context) {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
     final req = AdsRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign);
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentCampaign, appBloc.currentClient);
     bloc.getAdsList.add(req);
   });
 }

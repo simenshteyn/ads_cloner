@@ -22,7 +22,7 @@ class CampaignsBloc implements BlocBase {
     _campaignsController.stream.listen(_handleLogic);
     _cmdCampaignsController.stream.listen((CampaignsRequest request) {
       var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk.adsGetCampaigns(request.account.accountId.toString()).then((list) {
+      vk.adsGetCampaigns(request.account.accountId.toString(), request.client?.id).then((list) {
         _campaigns = list;
         _campaignsController.sink.add(_campaigns);
       });

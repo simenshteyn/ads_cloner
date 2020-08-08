@@ -5,6 +5,7 @@ import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ad_layout.dart';
 import 'package:ads_cloner/models/ad_targeting.dart';
 import 'package:ads_cloner/models/campaign.dart';
+import 'package:ads_cloner/models/clients_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/wall_post.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
@@ -16,6 +17,7 @@ class ApplicationBloc implements BlocBase {
   AccountsList accountsList;
   CampaignsList campaignsList;
   Account currentAccount;
+  Client currentClient;
   Campaign currentCampaign;
   Ad currentAd;
   AdLayout currentAdLayout;
@@ -52,6 +54,13 @@ class ApplicationBloc implements BlocBase {
   Stream<Account> get outCurrentAccount => _currentAccountController.stream;
   StreamController _cmdCurrentAccountController = StreamController();
   StreamSink get getCurrentAccount => _cmdCurrentAccountController.sink;
+
+  StreamController<Client> _currentClientController =
+      StreamController<Client>.broadcast();
+  StreamSink<Client> get inCurrentClient => _currentClientController.sink;
+  Stream<Client> get outCurrentClient => _currentClientController.stream;
+  StreamController _cmdCurrentClientController = StreamController();
+  StreamSink get getCurrentClient => _cmdCurrentClientController.sink;
 
   StreamController<Campaign> _currentCampaignController =
       StreamController<Campaign>.broadcast();
@@ -135,6 +144,11 @@ class ApplicationBloc implements BlocBase {
       _currentAccountController.sink.add(account);
     });
 
+    _currentClientController.stream.listen(_handleCurrentClientController);
+    _cmdCurrentClientController.stream.listen((client) {
+      _currentClientController.sink.add(client);
+    });
+
     _currentCampaignController.stream.listen(_handleCurrentCampaignController);
     _cmdCurrentCampaignController.stream.listen((campaign) {
       _currentCampaignController.sink.add(campaign);
@@ -187,6 +201,8 @@ class ApplicationBloc implements BlocBase {
     _cmdCampaignsController.close();
     _currentAccountController.close();
     _cmdCurrentAccountController.close();
+    _currentClientController.close();
+    _cmdCurrentClientController.close();
     _currentCampaignController.close();
     _cmdCurrentCampaignController.close();
     _currentAdController.close();
@@ -218,6 +234,10 @@ class ApplicationBloc implements BlocBase {
 
   void _handleCurrentAccountController(data) {
     currentAccount = data;
+  }
+
+  void _handleCurrentClientController(data) {
+    currentClient = data;
   }
 
   void _handleCurrentCampaignController(data) {

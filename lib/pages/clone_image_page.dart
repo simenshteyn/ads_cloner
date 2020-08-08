@@ -160,7 +160,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   }
 
   Future _pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery);
+    final pickedFile = await picker.getImage(source: ImageSource.gallery, maxHeight: 3840, maxWidth: 3840);
     if (pickedFile != null) {
       setState(() {
         state = AppState.picked;

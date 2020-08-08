@@ -36,22 +36,6 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
         .add(WallPostRequest(appBloc.vkAccessToken, appBloc.currentPostId));
     appBloc.getCurrentCreateAdsList.add('give me');
 
-    // bloc.outCreateAdsResultList
-    //     .forEach((e) => Scaffold.of(context).showSnackBar(SnackBar(
-    //           backgroundColor: Colors.green,
-    //           content:
-    //               Text('Создано объявлений: ${e.createAdsResultList.length}'),
-    //           action: SnackBarAction(
-    //             textColor: Colors.white,
-    //             label: 'Открыть',
-    //             onPressed: () {
-    //               var nav = Navigator.of(context);
-    //               nav.pop();
-    //               nav.pop();
-    //             },
-    //           ),
-    //         )));
-
     bloc.outCreateAdsResultList.forEach((event) {
       if (event.createAdsResultList[0].errorCode == null) {
         Scaffold.of(context).showSnackBar(SnackBar(
@@ -140,6 +124,10 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                     appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
                     _isLoading = false;
                     return createAdShowError(context, snapshot);
+                  } else {
+                    appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+                    _isLoading = false;
+                    return Container();
                   }
 
                   // appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
@@ -212,6 +200,6 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCreateAdsList);
     bloc.getCreateAdsResultList.add(req);
-    //appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+    // appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
   }
 }

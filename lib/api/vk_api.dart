@@ -10,6 +10,7 @@ import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/campaign.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
+import 'package:ads_cloner/models/clients_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/pretty_card_create_result.dart';
@@ -55,19 +56,38 @@ class VkApi {
     return listOfAccounts;
   }
 
-  Future<CampaignsList> adsGetCampaigns(String accountId) async {
+  Future<ClientsList> adsGetClients(String accountId) async {
     var uri = Uri.https(
       baseUrl,
-      'method/ads.getCampaigns',
+      'method/ads.getClients',
       <String, String>{
+        'account_id': accountId,
         'access_token': userToken,
         'v': apiVersion,
       },
     );
-    var map = {
-      'account_id': accountId,
-    };
-    var response = await _postRequest(uri, map);
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    ClientsList listOfClients = ClientsList.fromJson(_map);
+    return listOfClients;
+  }
+
+  Future<CampaignsList> adsGetCampaigns(String accountId,
+      [int clientId]) async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.getCampaigns',
+      <String, String>{
+        'account_id': accountId,
+        'client_id': clientId == null ? null : clientId.toString(),
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+
+    var response = await _getRequest(uri);
     print(uri);
     print(response);
     final _map = jsonDecode(response);
@@ -75,7 +95,8 @@ class VkApi {
     return listOfCampaigns;
   }
 
-  Future<AdsList> adsGetAds(String accountId, int campaignId) async {
+  Future<AdsList> adsGetAds(String accountId, int campaignId,
+      [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -83,9 +104,10 @@ class VkApi {
       <String, String>{
         'account_id': accountId,
         'campaign_ids': '[${campaignId}]',
+        'client_id': clientId == null ? null : '${clientId}',
         'access_token': userToken,
         'v': apiVersion,
-      },
+      }..removeWhere((key, value) => key == null || value == null),
     );
     var response = await _getRequest(uri);
     print(uri);
@@ -95,7 +117,7 @@ class VkApi {
     return listOfAds;
   }
 
-  Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad) async {
+  Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad, [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -104,9 +126,10 @@ class VkApi {
         'account_id': accountId,
         'campaign_ids': '[${ad.campaignId}]',
         'ad_ids': '[${ad.id}]',
+        'client_id': clientId == null ? null : '${clientId}',
         'access_token': userToken,
         'v': apiVersion,
-      },
+      }..removeWhere((key, value) => key == null || value == null),
     );
     var response = await _getRequest(uri);
     print(uri);
@@ -116,8 +139,8 @@ class VkApi {
     return listOfAdsLayout;
   }
 
-  Future<AdsLayoutList> adsGetCampaignLayout(
-      String accountId, Campaign campaign) async {
+  Future<AdsLayoutList> adsGetCampaignLayout( //TODO where this is used?!
+      String accountId, Campaign campaign, [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -125,9 +148,10 @@ class VkApi {
       <String, String>{
         'account_id': accountId,
         'campaign_ids': '[${campaign.id}]',
+        'client_id': clientId == null ? null : '${clientId}',
         'access_token': userToken,
         'v': apiVersion,
-      },
+      }..removeWhere((key, value) => key == null || value == null),
     );
     var response = await _getRequest(uri);
     print(uri);
@@ -137,7 +161,7 @@ class VkApi {
     return listOfAdsLayout;
   }
 
-  Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad) async {
+  Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad, [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -146,9 +170,10 @@ class VkApi {
         'account_id': accountId,
         'campaign_ids': '[${ad.campaignId}]',
         'ad_ids': '[${ad.id}]',
+        'client_id': clientId == null ? null : '${clientId}',
         'access_token': userToken,
         'v': apiVersion,
-      },
+      }..removeWhere((key, value) => key == null || value == null),
     );
     var response = await _getRequest(uri);
     print(uri);
@@ -351,19 +376,20 @@ class VkApi {
     );
     var response = await _getRequest(uri);
     final map = jsonDecode(response);
-     WallUploadServerUrlResponse uploadUrl =
+    WallUploadServerUrlResponse uploadUrl =
         WallUploadServerUrlResponse.fromJson(map);
 
-    var responseString = await _postImageRequest(uploadUrl.result.uploadUrl, file.readAsBytesSync());
+    var responseString = await _postImageRequest(
+        uploadUrl.result.uploadUrl, file.readAsBytesSync());
     print(uploadUrl.result.uploadUrl);
     print(responseString);
     final _map = jsonDecode(responseString);
-    WallUploadedPhoto uploadedPhoto =
-        WallUploadedPhoto.fromJson(_map);
+    WallUploadedPhoto uploadedPhoto = WallUploadedPhoto.fromJson(_map);
     return uploadedPhoto;
   }
 
-    Future<PhotosSaveWallPhotoResult> photosSaveWallPhoto(WallUploadedPhoto wallUploadedPhoto) async {
+  Future<PhotosSaveWallPhotoResult> photosSaveWallPhoto(
+      WallUploadedPhoto wallUploadedPhoto) async {
     /// https://vk.com/dev/photos.saveWallPhoto more info
     await _delayBetweenApiRequests();
     var uri = Uri.https(
@@ -384,8 +410,6 @@ class VkApi {
     PhotosSaveWallPhotoResult result = PhotosSaveWallPhotoResult.fromJson(_map);
     return result;
   }
-
-
 
   Future<Uint8List> _getBytesFromImageUrl(String url) async {
     http.Response response = await http.get(

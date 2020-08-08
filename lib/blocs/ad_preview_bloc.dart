@@ -36,7 +36,7 @@ class AdPreviewBloc implements BlocBase {
 
     _cmdAdsLayoutController.stream.listen((AdsLayoutRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.adsGetAdsLayout(req.account.accountId.toString(), req.ad).then((list) {
+      vk.adsGetAdsLayout(req.account.accountId.toString(), req.ad, req.client?.id).then((list) {
         _adsLayout = list;
         _adsLayoutController.sink.add(_adsLayout);
       });
@@ -47,7 +47,7 @@ class AdPreviewBloc implements BlocBase {
     _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
       vk
-          .adsGetAdsTargeting(req.account.accountId.toString(), req.ad)
+          .adsGetAdsTargeting(req.account.accountId.toString(), req.ad, req.client?.id)
           .then((list) {
         _adsTargetingList = list;
         _adsTargetingController.sink.add(_adsTargetingList);

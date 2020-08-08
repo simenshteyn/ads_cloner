@@ -10,6 +10,7 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
+import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/pages/clone_page.dart';
 import 'package:ads_cloner/widgets/ad_info_widget.dart';
 import 'package:ads_cloner/widgets/ad_target_widget.dart';
@@ -41,9 +42,9 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
     bloc.getAdsLayoutList.add(AdsLayoutRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd));
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
     appBloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
@@ -121,8 +122,9 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                         child: Container(
                           height: 600,
                           child: Padding(
-                            padding: const EdgeInsets.all(10.0),
+                            padding: const EdgeInsets.only(top: 20),
                             child: Container(
+                              //width: MediaQuery.of(context).size.width * 0.80,
                               child: WebView(
                                 gestureNavigationEnabled: false,
                                 javascriptMode: JavascriptMode.disabled,
@@ -168,7 +170,10 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
           child: ClonePage(),
         );
       }),
-    );
+    ).whenComplete(() {
+      ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+      appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
+    });
   }
 
   String _postUrlConvertor(String linkUrl) {
