@@ -9,7 +9,7 @@ import 'package:ads_cloner/models/wall_post.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
 import 'package:ads_cloner/api/vk_api.dart';
 
-enum CloneType { text, pure, image }
+enum CloneType { text, pure, image, age }
 
 class CloneTask {
   CloneType type;

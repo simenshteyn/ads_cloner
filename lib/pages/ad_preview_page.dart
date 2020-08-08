@@ -41,10 +41,10 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
     super.initState();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdPreviewBloc bloc = BlocProvider.of<AdPreviewBloc>(context);
-    bloc.getAdsLayoutList.add(AdsLayoutRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
-    bloc.getAdsTargetingList.add(AdsTargetingRequest(
-        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
+    bloc.getAdsLayoutList.add(AdsLayoutRequest(appBloc.vkAccessToken,
+        appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
+    bloc.getAdsTargetingList.add(AdsTargetingRequest(appBloc.vkAccessToken,
+        appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
     appBloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
@@ -125,11 +125,13 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                             padding: const EdgeInsets.only(top: 20),
                             child: Container(
                               //width: MediaQuery.of(context).size.width * 0.80,
-                              child: WebView(
-                                gestureNavigationEnabled: false,
-                                javascriptMode: JavascriptMode.disabled,
-                                initialUrl:
-                                    snapshot.data.adsLayout[0].previewLink,
+                              child: AbsorbPointer(
+                                child: WebView(
+                                  gestureNavigationEnabled: false,
+                                  javascriptMode: JavascriptMode.disabled,
+                                  initialUrl:
+                                      snapshot.data.adsLayout[0].previewLink,
+                                ),
                               ),
                             ),
                           ),

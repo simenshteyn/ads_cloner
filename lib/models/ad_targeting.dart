@@ -11,7 +11,7 @@ class AdTargeting {
   String apps, appsNot, districts, stations, streets, schools, positions;
   String religions, interestCategories, interests, userDevices, userOs;
   String userBrowsers, retargetingGroups, retargetingGroupsNot;
-  String groupsRecommended, groupsFormula; // Not documented in api
+  String groupsRecommended, groupsFormula, groupsActiveFormula, groupsActiveRecommended; // Not documented in api
   //Map<String, List<int>> eventsRetargetingGroups;
   String paying, travellers, schoolFrom;
   String schoolTo, uniFrom, uniTo;
@@ -49,6 +49,8 @@ class AdTargeting {
     this.retargetingGroupsNot,
     this.groupsRecommended, //not documented in api
     this.groupsFormula, //not documented in api
+    this.groupsActiveFormula, //not documentes
+    this.groupsActiveRecommended, //not documented
     //this.eventsRetargetingGroups,
     this.paying,
     this.travellers,

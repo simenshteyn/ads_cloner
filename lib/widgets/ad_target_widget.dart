@@ -129,6 +129,22 @@ class AdTargetWidget extends StatelessWidget {
                           Text(target.groupsActive, style: _textStyleDown),
                     )
                   : null,
+              (target.groupsActiveRecommended != null)
+                  ? ListTile(
+                      title: Text('Активность в сообществах расширенная',
+                          style: _textStyleUp),
+                      subtitle: Text(target.groupsActiveRecommended,
+                          style: _textStyleDown),
+                    )
+                  : null,
+              (target.groupsActiveFormula != null)
+                  ? ListTile(
+                      title: Text('Активность в сообществах по формуле',
+                          style: _textStyleUp),
+                      subtitle: Text(target.groupsActiveFormula,
+                          style: _textStyleDown),
+                    )
+                  : null,
               (target.groupsRecommended != null)
                   ? ListTile(
                       title:

@@ -16,7 +16,8 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
   int _index = 0;
   List<OptionCard> cards = [
     OptionCard(title: "Text", type: CloneType.text),
-    OptionCard(title: "Image", type: CloneType.pure),
+    OptionCard(title: "Image", type: CloneType.image),
+    OptionCard(title: "Age", type: CloneType.age),
   ];
 
   @override
@@ -52,7 +53,6 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                           break;
                         }
                     }
-                    //_openCloneTextPage(context);
                   },
                   child: Center(
                     child: Text(
@@ -86,6 +86,16 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider<CloneImageBloc>(
           bloc: CloneImageBloc(), child: CloneImagePage());
+    })).whenComplete(() {
+      // do some shit
+    });
+  }
+
+    void _openCloneAgePage(BuildContext context) {
+    Navigator.of(context)
+        .push(MaterialPageRoute(builder: (BuildContext context) {
+      return BlocProvider<CloneAgeBloc>(
+          bloc: CloneAgeBloc(), child: CloneAgePage());
     })).whenComplete(() {
       // do some shit
     });

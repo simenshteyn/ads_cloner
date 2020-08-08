@@ -38,6 +38,8 @@ AdTargeting _$AdTargetingFromJson(Map<String, dynamic> json) {
     json['retargeting_groups_not'] as String,
     json['groups_recommended'] as String,
     json['groups_formula'] as String,
+    json['groups_active_formula'] as String,
+    json['groups_active_recommended'] as String,
     json['paying'] as String,
     json['travellers'] as String,
     json['school_from'] as String,
@@ -89,6 +91,8 @@ Map<String, dynamic> _$AdTargetingToJson(AdTargeting instance) {
   writeNotNull('retargeting_groups_not', instance.retargetingGroupsNot);
   writeNotNull('groups_recommended', instance.groupsRecommended);
   writeNotNull('groups_formula', instance.groupsFormula);
+  writeNotNull('groups_active_formula', instance.groupsActiveFormula);
+  writeNotNull('groups_active_recommended', instance.groupsActiveRecommended);
   writeNotNull('paying', instance.paying);
   writeNotNull('travellers', instance.travellers);
   writeNotNull('school_from', instance.schoolFrom);
