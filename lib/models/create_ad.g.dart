@@ -28,7 +28,7 @@ CreateAd _$CreateAdFromJson(Map<String, dynamic> json) {
     disclaimerSpecialist: json['disclaimer_specialist'] as int,
     disclaimerSupplements: json['disclaimer_supplements'] as int,
     weeklyScheduleUseHolidays: json['weekly_schedule_use_holidays'] as int,
-    adPlatform: json['ad_platform'] as String,
+    adPlatform: json['ad_platform'],
     name: json['name'] as String,
     title: json['title'] as String,
     description: json['description'] as String,

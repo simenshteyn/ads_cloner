@@ -786,6 +786,26 @@ class UploadUrl {
 }
 
 @JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallUploadServerUrlResponse {
+  @JsonKey(name: 'response')
+  WallUploadServerUrlObject result;
+  WallUploadServerUrlResponse(this.result);
+  factory WallUploadServerUrlResponse.fromJson(Map<String, dynamic> json) =>
+      _$WallUploadServerUrlResponseFromJson(json);
+  Map<String, dynamic> toJson() => _$WallUploadServerUrlResponseToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
+class WallUploadServerUrlObject {
+  String uploadUrl;
+  int albumId, userId;
+  WallUploadServerUrlObject(this.uploadUrl, this.albumId, this.userId);
+  factory WallUploadServerUrlObject.fromJson(Map<String, dynamic> json) =>
+      _$WallUploadServerUrlObjectFromJson(json);
+  Map<String, dynamic> toJson() => _$WallUploadServerUrlObjectToJson(this);
+}
+
+@JsonSerializable(fieldRename: FieldRename.snake, includeIfNull: false)
 class UploadedPhoto {
   String photo;
   UploadedPhoto(this.photo);

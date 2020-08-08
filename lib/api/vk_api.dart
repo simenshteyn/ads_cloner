@@ -337,6 +337,52 @@ class VkApi {
     return uploadUrl;
   }
 
+  Future<WallUploadServerUrlResponse> photosGetWallUploadServer(
+      int groupId, File file) async {
+    /// https://vk.com/dev/photos.getWallUploadServer more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/photos.getWallUploadServer',
+      <String, String>{
+        'group_id': '${-groupId}', //should be positive
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var responseString = await _postImageRequest(uri.toString(), file.readAsBytesSync());
+    // var response = await _getRequest(uri);
+    print(uri);
+    print(responseString);
+    final _map = jsonDecode(responseString);
+    WallUploadServerUrlResponse uploadUrl =
+        WallUploadServerUrlResponse.fromJson(_map);
+    return uploadUrl;
+  }
+
+    Future<CityList> photosSaveWallPhoto(WallUploadServerUrlObject wallUploadServerUrlResult) async {
+    /// https://vk.com/dev/photos.saveWallPhoto more info
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/photos.saveWallPhoto',
+      <String, String>{
+        // 'group_id': wallUploadServerUrlResult.,
+        // 'city_ids': idString,
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    CityList cityList = CityList.fromJson(_map);
+    return cityList;
+  }
+
+
+
   Future<Uint8List> _getBytesFromImageUrl(String url) async {
     http.Response response = await http.get(
       url,

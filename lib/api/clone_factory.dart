@@ -147,19 +147,21 @@ class CloneImageFactory implements CloneFactory {
 
   Future<CreateAd> buildAd(Ad originalAd, AdTargeting adTargeting,
       AdLayout adLayout, WallPost adWallPost, CloneTask cloneTask) async {
-    // if (originalAd.isWallPostFormat) {
-    //   var clonedWallPost = adWallPost.clone();
-    //   if (clonedWallPost.hasPrettyCards) {
-    //     await _cloneAndReplacePrettyCards(clonedWallPost, adWallPost);
-    //   }
+    if (originalAd.isWallPostFormat) {
+      var clonedWallPost = adWallPost.clone();
+      // if (clonedWallPost.hasPrettyCards) {
+      //   await _cloneAndReplacePrettyCards(clonedWallPost, adWallPost);
+      // }
 
-    //   var changedWallPostAdsStealth =
-    //       await _replaceWallPostAdsStealthMessage(clonedWallPost, cloneTask);
-    //   var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
-    //   createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
-    //       changedWallPostAdsStealth);
-    //   return createAd;
-    // }
+      //  photos.getWallUploadServer https://vk.com/dev/photos.saveWallPhoto
+
+      // var changedWallPostAdsStealth =
+      //     await _replaceWallPostAdsStealthMessage(clonedWallPost, cloneTask);  TODO
+      var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
+      // createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth( //TODO
+      //     changedWallPostAdsStealth);
+      return createAd;
+    }
     if (originalAd.isAdaptiveFormat) {
       //clone layout
       //upload icon
@@ -170,7 +172,7 @@ class CloneImageFactory implements CloneFactory {
       // clonedAdLayout.description = cloneTask.value;
       await _createAndUploadIcon(clonedAdLayout);
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 11);
-      adLayout.imageSrc = photoData.photo;
+      clonedAdLayout.imageSrc = photoData.photo;
 
       // if (clonedAdLayout.isAdaptiveVideoAdFormat) {
       //   await _createAndUploadVideo(clonedAdLayout);
@@ -181,7 +183,7 @@ class CloneImageFactory implements CloneFactory {
       var createAd = CreateAd.bulder(
           originalAd, clonedAdLayout, adTargeting); //replacedbulder
       return createAd;
-    }
+    } 
     // else if (originalAd.isImageTextFormat) {
     //   var clonedAdLayout = adLayout.clone();
     //   clonedAdLayout.description = cloneTask.value;
@@ -215,10 +217,12 @@ class CloneImageFactory implements CloneFactory {
     }
   }
 
-  Future<WallPostAdsStealth> _replaceWallPostAdsStealthMessage(
+  Future<WallPostAdsStealth> _replaceWallPostAdsStealthPhoto(
       WallPost clonedWallPost, CloneTask cloneTask) async {
     var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(clonedWallPost);
-    wallPostAdsStealth.message = cloneTask.value;
+    var uploadServer = await vkApi.photosGetWallUploadServer(clonedWallPost.ownerId, cloneTask.value);
+
+    //wallPostAdsStealth. = cloneTask.value;
     return wallPostAdsStealth;
   }
 

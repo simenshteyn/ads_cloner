@@ -1388,6 +1388,55 @@ Map<String, dynamic> _$UploadUrlToJson(UploadUrl instance) {
   return val;
 }
 
+WallUploadServerUrlResponse _$WallUploadServerUrlResponseFromJson(
+    Map<String, dynamic> json) {
+  return WallUploadServerUrlResponse(
+    json['response'] == null
+        ? null
+        : WallUploadServerUrlObject.fromJson(
+            json['response'] as Map<String, dynamic>),
+  );
+}
+
+Map<String, dynamic> _$WallUploadServerUrlResponseToJson(
+    WallUploadServerUrlResponse instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('response', instance.result);
+  return val;
+}
+
+WallUploadServerUrlObject _$WallUploadServerUrlObjectFromJson(
+    Map<String, dynamic> json) {
+  return WallUploadServerUrlObject(
+    json['upload_url'] as String,
+    json['album_id'] as int,
+    json['user_id'] as int,
+  );
+}
+
+Map<String, dynamic> _$WallUploadServerUrlObjectToJson(
+    WallUploadServerUrlObject instance) {
+  final val = <String, dynamic>{};
+
+  void writeNotNull(String key, dynamic value) {
+    if (value != null) {
+      val[key] = value;
+    }
+  }
+
+  writeNotNull('upload_url', instance.uploadUrl);
+  writeNotNull('album_id', instance.albumId);
+  writeNotNull('user_id', instance.userId);
+  return val;
+}
+
 UploadedPhoto _$UploadedPhotoFromJson(Map<String, dynamic> json) {
   return UploadedPhoto(
     json['photo'] as String,

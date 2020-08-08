@@ -1,4 +1,5 @@
 import 'package:ads_cloner/api/clone_factory.dart';
+import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_image_bloc.dart';
@@ -49,6 +50,10 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
     super.initState();
     state = AppState.free;
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    final vk = VkApi(userToken: appBloc.vkAccessToken.token);
+    adsFactory = CloneImageFactory(vk);
+    createAdsList = CreateAdsList([]);
+
     appBloc.outWarningMessage.forEach((e) {
       Scaffold.of(context).showSnackBar(SnackBar(
         content: Text('${e}'),
@@ -60,6 +65,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   @override
   Widget build(BuildContext context) {
     CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text('Варианты картинок'),
@@ -86,9 +92,13 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
             onPressed: () {
               if (state == AppState.free)
                 _pickImage();
-              else if (state == AppState.picked)
-                _cropImage(context);
-              else if (state == AppState.cropped) _clearImage();
+              else if (state == AppState.picked) {
+                if (appBloc.currentAd.isAdaptiveFormat) {
+                  _cropImage(context, 1080, 607);
+                } else if (appBloc.currentAd.isWallPostFormat) {
+                  _cropImage(context, 537, 240);
+                }
+              } else if (state == AppState.cropped) _clearImage();
             },
             child: _buildButtonIcon(),
           ),
@@ -149,55 +159,33 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
     }
   }
 
-  Future<Null> _cropImage(BuildContext context) async {
+  Future<Null> _cropImage(
+      BuildContext context, int cropWidth, int cropHeight) async {
     CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     try {
       File croppedFile = await ImageCropper.cropImage(
           sourcePath: currentImageFile.path,
-          maxWidth: 1080,
-          maxHeight: 608,
-          // aspectRatio: CropAspectRatio(ratioX: 16, ratioY: 9),
-          aspectRatioPresets: Platform.isAndroid
-              ? [
-                  // CropAspectRatioPreset.square,
-                  // CropAspectRatioPreset.ratio3x2,
-                  //CropAspectRatioPreset.original,
-                  // CropAspectRatioPreset.ratio4x3,
-                  CropAspectRatioPreset.ratio16x9
-                ]
-              : [
-                  //CropAspectRatioPreset.original,
-                  // CropAspectRatioPreset.square,
-                  // CropAspectRatioPreset.ratio3x2,
-                  // CropAspectRatioPreset.ratio4x3,
-                  // CropAspectRatioPreset.ratio5x3,
-                  // CropAspectRatioPreset.ratio5x4,
-                  // CropAspectRatioPreset.ratio7x5,
-                  CropAspectRatioPreset.ratio16x9
-                ],
+          maxWidth: cropWidth,
+          maxHeight: cropHeight,
+          aspectRatio: CropAspectRatio(
+              ratioX: cropWidth.toDouble(), ratioY: cropHeight.toDouble()),
           androidUiSettings: AndroidUiSettings(
               toolbarTitle: 'Обрезка',
               toolbarColor: Colors.deepOrange,
               toolbarWidgetColor: Colors.white,
-              //initAspectRatio: CropAspectRatioPreset.original,
               lockAspectRatio: true), //changed
           iosUiSettings: IOSUiSettings(
             title: 'Обрезка',
           ));
       if (croppedFile != null) {
-        // ImageProperties properties =
-        //     await FlutterNativeImage.getImageProperties(croppedFile.path);
         File compressedFile = await FlutterNativeImage.compressImage(
             croppedFile.path,
             quality: 100,
-            targetWidth: 1080,
-            targetHeight: 607);
-        var decodedImage =
-            await decodeImageFromList(compressedFile.readAsBytesSync());
-        print(decodedImage.width);
-        print(decodedImage.height);
-        //Image resizedImeage = copyResize(image, width: 120);
+            targetWidth: cropWidth,
+            targetHeight: cropHeight);
+        // var decodedImage =
+        //     await decodeImageFromList(compressedFile.readAsBytesSync());
         bloc.addFileToList.add(compressedFile);
         currentImageFile = compressedFile;
         setState(() {
