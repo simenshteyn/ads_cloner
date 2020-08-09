@@ -1,8 +1,10 @@
 import 'package:ads_cloner/api/clone_factory.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:ads_cloner/blocs/clone_age_bloc.dart';
 import 'package:ads_cloner/blocs/clone_image_bloc.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
 import 'package:ads_cloner/models/option_card.dart';
+import 'package:ads_cloner/pages/clone_age_page.dart';
 import 'package:ads_cloner/pages/clone_image_page.dart';
 import 'package:ads_cloner/pages/clone_text_page.dart';
 import 'package:flutter/material.dart';
@@ -27,11 +29,11 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
         height: 200,
         child: PageView.builder(
           itemCount: cards.length,
-          controller: PageController(viewportFraction: 0.7),
+          controller: PageController(viewportFraction: 0.5),
           onPageChanged: (int index) => setState(() => _index = index),
           itemBuilder: (_, i) {
             return Transform.scale(
-              scale: i == _index ? 1 : 0.95,
+              scale: i == _index ? 1 : 0.97,
               child: Card(
                 elevation: 6,
                 shape: RoundedRectangleBorder(
@@ -41,16 +43,20 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
                   splashColor: Colors.blue.withAlpha(30),
                   onTap: () {
                     print('Card ${cards[i].title} tapped');
-                    switch (i) {
-                      case 0:
+                    switch (cards[i].type) {
+                      case CloneType.text:
                         {
                           _openCloneTextPage(context);
                           break;
                         }
-                      case 1:
+                      case CloneType.image:
                         {
                           _openCloneImagePage(context);
                           break;
+                        }
+                      case CloneType.age:
+                        {
+                          _openCloneAgePage(context);
                         }
                     }
                   },
@@ -91,7 +97,7 @@ class _CloneOptionsWidgetState extends State<CloneOptionsWidget> {
     });
   }
 
-    void _openCloneAgePage(BuildContext context) {
+  void _openCloneAgePage(BuildContext context) {
     Navigator.of(context)
         .push(MaterialPageRoute(builder: (BuildContext context) {
       return BlocProvider<CloneAgeBloc>(

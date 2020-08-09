@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:json_annotation/json_annotation.dart';
 import 'package:ads_cloner/api/target_objects_ids.dart';
@@ -11,7 +13,10 @@ class AdTargeting {
   String apps, appsNot, districts, stations, streets, schools, positions;
   String religions, interestCategories, interests, userDevices, userOs;
   String userBrowsers, retargetingGroups, retargetingGroupsNot;
-  String groupsRecommended, groupsFormula, groupsActiveFormula, groupsActiveRecommended; // Not documented in api
+  String groupsRecommended,
+      groupsFormula,
+      groupsActiveFormula,
+      groupsActiveRecommended; // Not documented in api
   //Map<String, List<int>> eventsRetargetingGroups;
   String paying, travellers, schoolFrom;
   String schoolTo, uniFrom, uniTo;
@@ -66,6 +71,12 @@ class AdTargeting {
   factory AdTargeting.fromJson(Map<String, dynamic> json) =>
       _$AdTargetingFromJson(json);
   Map<String, dynamic> toJson() => _$AdTargetingToJson(this);
+
+  AdTargeting clone() {
+    final String jsonString = json.encode(this);
+    final jsonResponse = json.decode(jsonString);
+    return AdTargeting.fromJson(jsonResponse as Map<String, dynamic>);
+  }
 
   String get getCountryString {
     return _getFieldString(this.country, getCountyById);
