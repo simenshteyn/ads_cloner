@@ -3,6 +3,8 @@ import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
+import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/update_ads_request.dart';
 import 'bloc_provider.dart';
 
 class AdsBloc implements BlocBase {
@@ -25,6 +27,14 @@ class AdsBloc implements BlocBase {
       StreamController<AdsRequest>.broadcast();
   StreamSink<AdsRequest> get getAdsLayoutList => _cmdLayoutController.sink;
 
+  StreamController<CreateAdsResultList> _adsStatusController =
+      StreamController<CreateAdsResultList>.broadcast();
+  Stream<CreateAdsResultList> get outAdsStatus => _adsStatusController.stream;
+
+  StreamController<UpdateAdsRequest> _cmdAdsStatusController =
+      StreamController<UpdateAdsRequest>.broadcast();
+  StreamSink<UpdateAdsRequest> get getUpdateAds => _cmdAdsStatusController.sink;
+
   AdsBloc() {
     print("ADS BLOC CREATED");
 
@@ -33,7 +43,8 @@ class AdsBloc implements BlocBase {
     _cmdAdsController.stream.listen((AdsRequest request) {
       var vk = VkApi(userToken: request.vkAccessToken.token);
       vk
-          .adsGetAds(request.account.accountId.toString(), request.campaign.id, request.client?.id)
+          .adsGetAds(request.account.accountId.toString(), request.campaign.id,
+              request.client?.id)
           .then((list) {
         _ads = list;
         _adsController.sink.add(_ads);
@@ -45,11 +56,23 @@ class AdsBloc implements BlocBase {
     _cmdLayoutController.stream.listen((AdsRequest request) {
       var vk = VkApi(userToken: request.vkAccessToken.token);
       vk
-          .adsGetCampaignLayout(
-              request.account.accountId.toString(), request.campaign, request.client?.id)
+          .adsGetCampaignLayout(request.account.accountId.toString(),
+              request.campaign, request.client?.id)
           .then((list) {
         _layout = list;
         _layoutController.sink.add(_layout);
+      });
+    });
+
+    _adsStatusController.stream.listen(_handleUpdateAdsLogic);
+
+    _cmdAdsStatusController.stream.listen((UpdateAdsRequest request) {
+      var vk = VkApi(userToken: request.vkAccessToken.token);
+      vk
+          .adsUpdateAds(
+              request.account.accountId.toString(), request.ad, request.status)
+          .then((list) {
+        _adsStatusController.sink.add(list);
       });
     });
   }
@@ -60,6 +83,8 @@ class AdsBloc implements BlocBase {
     _cmdAdsController.close();
     _layoutController.close();
     _cmdLayoutController.close();
+    _adsStatusController.close();
+    _cmdAdsStatusController.close();
   }
 
   void _handleLogic(data) {
@@ -69,4 +94,8 @@ class AdsBloc implements BlocBase {
   void _handleLayoutLogic(data) {
     _layout = data;
   }
+
+  void _handleUpdateAdsLogic(data) {}
+
+  
 }

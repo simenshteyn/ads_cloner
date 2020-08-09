@@ -117,7 +117,29 @@ class VkApi {
     return listOfAds;
   }
 
-  Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad, [int clientId]) async {
+  Future<CreateAdsResultList> adsUpdateAds(String accountId, Ad ad, int status) async {
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.updateAds',
+      <String, String>{
+        'account_id': accountId,
+        'data': '[{"ad_id": ${ad.id}, "status": ${status}}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    CreateAdsResultList listOfAds = CreateAdsResultList.fromJson(_map);
+    return listOfAds;
+  }
+
+  Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad,
+      [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -139,8 +161,11 @@ class VkApi {
     return listOfAdsLayout;
   }
 
-  Future<AdsLayoutList> adsGetCampaignLayout( //TODO where this is used?!
-      String accountId, Campaign campaign, [int clientId]) async {
+  Future<AdsLayoutList> adsGetCampaignLayout(
+      //TODO where this is used?!
+      String accountId,
+      Campaign campaign,
+      [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
@@ -161,7 +186,8 @@ class VkApi {
     return listOfAdsLayout;
   }
 
-  Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad, [int clientId]) async {
+  Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad,
+      [int clientId]) async {
     await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
