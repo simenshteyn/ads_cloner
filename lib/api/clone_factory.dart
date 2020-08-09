@@ -19,11 +19,68 @@ class CloneTask {
 }
 
 abstract class CloneFactory {
+  VkApi vkApi;
+  UploadedPhoto photoData;
+  UploadedPhoto iconData;
+  UploadedVideo videoData;
   Future<CreateAd> buildAd(Ad originalAd, AdTargeting adTargeting,
       AdLayout adLayout, WallPost adWallPost, CloneTask cloneTask);
+
+  Future<void> _cloneAndReplacePrettyCards(
+      WallPost clonedWallPost, WallPost originalWallPost) async {
+    for (var attachment in clonedWallPost.attachments) {
+      if (attachment.type == 'pretty_cards') {
+        for (int i = 0; i < attachment.prettyCards.cards.length; i++) {
+          var newCardResult = await vkApi.prettyCardsCreate(
+              originalWallPost.ownerId.toString(),
+              attachment.prettyCards.cards[i]);
+          var newPrettyCard = await vkApi.prettyCardsGetById(newCardResult);
+          attachment.prettyCards.cards[i]
+              .updateFromPrettyCard(newPrettyCard.result[0]);
+        }
+      }
+    }
+  }
+
+  Future<String> _createAndGetLinkForWallPostAdsStealth(
+      WallPostAdsStealth wallPostAdsStealth) async {
+    var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
+    if (newStealth.errorResponse != null) {
+      print(newStealth.errorResponse.errorMsg);
+      throw Exception(newStealth.errorResponse.errorMsg);
+    }
+    var link = newStealth.wallLink(wallPostAdsStealth);
+    return link;
+  }
+
+  Future<void> _createAndUploadIcon(AdLayout adLayout) async {
+    if (iconData == null) {
+      iconData = await vkApi.uploadPhotoFromUrl(adLayout.iconSrc2x, 11, 1);
+    }
+    adLayout.iconSrc = iconData.photo;
+  }
+
+  Future<void> _createAndUploadVideo(AdLayout adLayout) async {
+    if (videoData == null) {
+      videoData = await vkApi.uploadVideoFromUrl(adLayout.videoSrc720);
+    }
+    adLayout.videoSrc720 = videoData.videoData; //use720 this time TODO
+  }
+
+  Future<void> _createAndUploadPhoto(AdLayout adLayout, int adFormat) async {
+    if (photoData == null) {
+      if (adFormat == 2) {
+        photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc, adFormat);
+      } else {
+        photoData =
+            await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, adFormat);
+      }
+    }
+    adLayout.imageSrc = photoData.photo;
+  }
 }
 
-class CloneTextFactory implements CloneFactory {
+class CloneTextFactory with CloneFactory {
   VkApi vkApi;
   UploadedPhoto photoData;
   UploadedPhoto iconData;
@@ -76,68 +133,15 @@ class CloneTextFactory implements CloneFactory {
     }
   }
 
-  Future<void> _cloneAndReplacePrettyCards(
-      WallPost clonedWallPost, WallPost originalWallPost) async {
-    for (var attachment in clonedWallPost.attachments) {
-      if (attachment.type == 'pretty_cards') {
-        for (int i = 0; i < attachment.prettyCards.cards.length; i++) {
-          var newCardResult = await vkApi.prettyCardsCreate(
-              originalWallPost.ownerId.toString(),
-              attachment.prettyCards.cards[i]);
-          var newPrettyCard = await vkApi.prettyCardsGetById(newCardResult);
-          attachment.prettyCards.cards[i]
-              .updateFromPrettyCard(newPrettyCard.result[0]);
-        }
-      }
-    }
-  }
-
   Future<WallPostAdsStealth> _replaceWallPostAdsStealthMessage(
       WallPost clonedWallPost, CloneTask cloneTask) async {
     var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(clonedWallPost);
     wallPostAdsStealth.message = cloneTask.value;
     return wallPostAdsStealth;
   }
-
-  Future<String> _createAndGetLinkForWallPostAdsStealth(
-      WallPostAdsStealth wallPostAdsStealth) async {
-    var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
-    if (newStealth.errorResponse != null) {
-      print(newStealth.errorResponse.errorMsg);
-      throw Exception(newStealth.errorResponse.errorMsg);
-    }
-    var link = newStealth.wallLink(wallPostAdsStealth);
-    return link;
-  }
-
-  Future<void> _createAndUploadIcon(AdLayout adLayout) async {
-    if (iconData == null) {
-      iconData = await vkApi.uploadPhotoFromUrl(adLayout.iconSrc2x, 11, 1);
-    }
-    adLayout.iconSrc = iconData.photo;
-  }
-
-  Future<void> _createAndUploadVideo(AdLayout adLayout) async {
-    if (videoData == null) {
-      videoData = await vkApi.uploadVideoFromUrl(adLayout.videoSrc720);
-    }
-    adLayout.videoSrc720 = videoData.videoData; //use720 this time TODO
-  }
-
-  Future<void> _createAndUploadPhoto(AdLayout adLayout, int adFormat) async {
-    if (photoData == null) {
-      if (adFormat == 2) {
-        photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc, adFormat);
-      } else {
-        photoData =
-            await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, adFormat);
-      }
-    }
-    adLayout.imageSrc = photoData.photo;
-  }
 }
 
-class CloneImageFactory implements CloneFactory {
+class CloneImageFactory with CloneFactory {
   VkApi vkApi;
   UploadedPhoto photoData;
   UploadedPhoto iconData;
@@ -197,22 +201,6 @@ class CloneImageFactory implements CloneFactory {
     }
   }
 
-  Future<void> _cloneAndReplacePrettyCards(
-      WallPost clonedWallPost, WallPost originalWallPost) async {
-    for (var attachment in clonedWallPost.attachments) {
-      if (attachment.type == 'pretty_cards') {
-        for (int i = 0; i < attachment.prettyCards.cards.length; i++) {
-          var newCardResult = await vkApi.prettyCardsCreate(
-              originalWallPost.ownerId.toString(),
-              attachment.prettyCards.cards[i]);
-          var newPrettyCard = await vkApi.prettyCardsGetById(newCardResult);
-          attachment.prettyCards.cards[i]
-              .updateFromPrettyCard(newPrettyCard.result[0]);
-        }
-      }
-    }
-  }
-
   Future<WallPostAdsStealth> _replaceWallPostAdsStealthPhoto(
       WallPost clonedWallPost, CloneTask cloneTask) async {
     var wallPostAdsStealth = WallPostAdsStealth.fromWallPost(clonedWallPost);
@@ -224,46 +212,9 @@ class CloneImageFactory implements CloneFactory {
         .url; //TODO somechecks, may be
     return wallPostAdsStealth;
   }
-
-  Future<String> _createAndGetLinkForWallPostAdsStealth(
-      WallPostAdsStealth wallPostAdsStealth) async {
-    var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
-    if (newStealth.errorResponse != null) {
-      print(newStealth.errorResponse.errorMsg);
-      throw Exception(newStealth.errorResponse.errorMsg);
-    }
-    var link = newStealth.wallLink(wallPostAdsStealth);
-    return link;
-  }
-
-  Future<void> _createAndUploadIcon(AdLayout adLayout) async {
-    if (iconData == null) {
-      iconData = await vkApi.uploadPhotoFromUrl(adLayout.iconSrc2x, 11, 1);
-    }
-    adLayout.iconSrc = iconData.photo;
-  }
-
-  Future<void> _createAndUploadVideo(AdLayout adLayout) async {
-    if (videoData == null) {
-      videoData = await vkApi.uploadVideoFromUrl(adLayout.videoSrc720);
-    }
-    adLayout.videoSrc720 = videoData.videoData; //use720 this time TODO
-  }
-
-  Future<void> _createAndUploadPhoto(AdLayout adLayout, int adFormat) async {
-    if (photoData == null) {
-      if (adFormat == 2) {
-        photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc, adFormat);
-      } else {
-        photoData =
-            await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, adFormat);
-      }
-    }
-    adLayout.imageSrc = photoData.photo;
-  }
 }
 
-class CloneAgeFactory implements CloneFactory {
+class CloneAgeFactory with CloneFactory {
   VkApi vkApi;
   UploadedPhoto photoData;
   UploadedPhoto iconData;
@@ -327,59 +278,6 @@ class CloneAgeFactory implements CloneFactory {
     } else {
       return CreateAd();
     }
-  }
-
-  Future<void> _cloneAndReplacePrettyCards(
-      WallPost clonedWallPost, WallPost originalWallPost) async {
-    for (var attachment in clonedWallPost.attachments) {
-      if (attachment.type == 'pretty_cards') {
-        for (int i = 0; i < attachment.prettyCards.cards.length; i++) {
-          var newCardResult = await vkApi.prettyCardsCreate(
-              originalWallPost.ownerId.toString(),
-              attachment.prettyCards.cards[i]);
-          var newPrettyCard = await vkApi.prettyCardsGetById(newCardResult);
-          attachment.prettyCards.cards[i]
-              .updateFromPrettyCard(newPrettyCard.result[0]);
-        }
-      }
-    }
-  }
-
-  Future<String> _createAndGetLinkForWallPostAdsStealth(
-      WallPostAdsStealth wallPostAdsStealth) async {
-    var newStealth = await vkApi.wallPostAdsStealth(wallPostAdsStealth);
-    if (newStealth.errorResponse != null) {
-      print(newStealth.errorResponse.errorMsg);
-      throw Exception(newStealth.errorResponse.errorMsg);
-    }
-    var link = newStealth.wallLink(wallPostAdsStealth);
-    return link;
-  }
-
-  Future<void> _createAndUploadIcon(AdLayout adLayout) async {
-    if (iconData == null) {
-      iconData = await vkApi.uploadPhotoFromUrl(adLayout.iconSrc2x, 11, 1);
-    }
-    adLayout.iconSrc = iconData.photo;
-  }
-
-  Future<void> _createAndUploadVideo(AdLayout adLayout) async {
-    if (videoData == null) {
-      videoData = await vkApi.uploadVideoFromUrl(adLayout.videoSrc720);
-    }
-    adLayout.videoSrc720 = videoData.videoData; //use720 this time TODO
-  }
-
-  Future<void> _createAndUploadPhoto(AdLayout adLayout, int adFormat) async {
-    if (photoData == null) {
-      if (adFormat == 2) {
-        photoData = await vkApi.uploadPhotoFromUrl(adLayout.imageSrc, adFormat);
-      } else {
-        photoData =
-            await vkApi.uploadPhotoFromUrl(adLayout.imageSrc2x, adFormat);
-      }
-    }
-    adLayout.imageSrc = photoData.photo;
   }
 
   void _addPostfixToAdName(CreateAd createAd, CloneTask cloneTask) {
