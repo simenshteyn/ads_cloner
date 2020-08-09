@@ -224,6 +224,8 @@ class CloneAgeFactory with CloneFactory {
 
   Future<CreateAd> buildAd(Ad originalAd, AdTargeting adTargeting,
       AdLayout adLayout, WallPost adWallPost, CloneTask cloneTask) async {
+
+
     if (originalAd.isWallPostFormat) {
       var clonedWallPost = adWallPost.clone();
       if (clonedWallPost.hasPrettyCards) {
@@ -238,8 +240,8 @@ class CloneAgeFactory with CloneFactory {
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
       _addPostfixToAdName(createAd, cloneTask);
-
       return createAd;
+
     } else if (originalAd.isAdaptiveFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadIcon(clonedAdLayout);
@@ -256,6 +258,7 @@ class CloneAgeFactory with CloneFactory {
       _addPostfixToAdName(createAd, cloneTask);
 
       return createAd;
+
     } else if (originalAd.isImageTextFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadPhoto(clonedAdLayout, 1);
@@ -266,6 +269,7 @@ class CloneAgeFactory with CloneFactory {
       _addPostfixToAdName(createAd, cloneTask);
 
       return createAd;
+      
     } else if (originalAd.isBigImageFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadPhoto(clonedAdLayout, 2);
