@@ -1,7 +1,9 @@
 import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/blocs/campaigns_bloc.dart';
+import 'package:ads_cloner/models/campaign.dart';
 import 'package:ads_cloner/models/campaigns_request.dart';
+import 'package:ads_cloner/models/update_campaigns_request.dart';
 import 'package:ads_cloner/pages/ads_page.dart';
 import 'package:flutter/material.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
@@ -46,6 +48,18 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
         _showSnackBar('${e}', context);
       }
     });
+
+    bloc.outCampaignsStatus.forEach((event) {
+      if (event.createCampaignsResultList[0].errorCode == null) {
+        Scaffold.of(context).showSnackBar(SnackBar(
+          backgroundColor: Colors.green,
+          content: Text('Статус кампании изменен'),
+        ));
+      } else {
+        appBloc.inWarningMessage.add(
+            'Ошибка ${event.createCampaignsResultList[0].errorCode}: ${event.createCampaignsResultList[0].errorDesc}');
+      }
+    });
   }
 
   _showSnackBar(String text, BuildContext context) {
@@ -71,26 +85,96 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
                     'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
                 return Container();
               }
-              return ListView.builder(
-                itemCount: snapshot.data.campaigns.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    leading: Icon(Icons.photo_library),
-                    title: Text(snapshot.data.campaigns[index].name),
-                    trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () {
-                      appBloc.inCurrentCampaign
-                          .add(snapshot.data.campaigns[index]);
-                      _openAdsPage(context);
-                    },
-                  );
-                },
+              return RefreshIndicator(
+                onRefresh: () => _refresh(context),
+                child: ListView.builder(
+                  itemCount: snapshot.data.campaigns.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return ListTile(
+                      leading: _buildStatusIcon(
+                          context, snapshot.data.campaigns[index]),
+                      title: Text(snapshot.data.campaigns[index].name),
+                      trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: () {
+                        appBloc.inCurrentCampaign
+                            .add(snapshot.data.campaigns[index]);
+                        _openAdsPage(context);
+                      },
+                    );
+                  },
+                ),
               );
             }
             return Center(child: CircularProgressIndicator());
           }),
     );
-    //);
+  }
+
+  Future<Null> _refresh(context) async {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
+    bloc.getCampaignsList.add(CampaignsRequest(
+        appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentClient));
+  }
+
+  Widget _buildStatusIcon(BuildContext context, Campaign campaign) {
+    switch (campaign.status) {
+      case 0:
+        return _buildPopupMenuButton(
+            context, campaign, Icon(Icons.pause_circle_filled));
+        break;
+      case 1:
+        return _buildPopupMenuButton(context, campaign,
+            Icon(Icons.play_circle_filled, color: Colors.green[200]));
+        break;
+      case 2:
+        return _buildPopupMenuButton(context, campaign, Icon(Icons.cancel));
+        break;
+      default:
+        return _buildPopupMenuButton(
+            context, campaign, Icon(Icons.report_problem));
+    }
+  }
+
+  Widget _buildPopupMenuButton(
+      BuildContext context, Campaign campaign, Icon icon) {
+    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
+    return Container(
+      width: 35,
+      height: 35,
+      child: PopupMenuButton(
+          child: icon,
+          itemBuilder: (_) => <PopupMenuItem<int>>[
+                PopupMenuItem<int>(
+                    child: Row(
+                      children: [
+                        Icon(Icons.play_circle_filled,
+                            color: Colors.green[200]),
+                        const Text('  Запустить'),
+                      ],
+                    ),
+                    value: 1),
+                PopupMenuItem<int>(
+                    child: Row(
+                      children: [
+                        Icon(Icons.pause_circle_filled, color: Colors.red[200]),
+                        const Text('  Остановить'),
+                      ],
+                    ),
+                    value: 0),
+              ],
+          onSelected: (status) {
+            bloc.getUpdateCampaigns.add(UpdateCampaignsRequest(
+                appBloc.vkAccessToken,
+                appBloc.currentAccount,
+                campaign,
+                status));
+            final req = CampaignsRequest(appBloc.vkAccessToken,
+                appBloc.currentAccount, appBloc.currentClient);
+            bloc.getCampaignsList.add(req);
+          }),
+    );
   }
 
   void _openAdsPage(BuildContext context) {

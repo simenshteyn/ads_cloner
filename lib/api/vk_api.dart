@@ -13,6 +13,7 @@ import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/clients_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/create_campaigns_result_list.dart';
 import 'package:ads_cloner/models/pretty_card_create_result.dart';
 import 'package:ads_cloner/models/pretty_card_list.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
@@ -92,6 +93,27 @@ class VkApi {
     print(response);
     final _map = jsonDecode(response);
     CampaignsList listOfCampaigns = CampaignsList.fromJson(_map);
+    return listOfCampaigns;
+  }
+
+    Future<CreateCampaignsResultList> adsUpdateCampaigns(String accountId, Campaign campaign, int status) async {
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.updateCampaigns',
+      <String, String>{
+        'account_id': accountId,
+        'data': '[{"campaign_id": ${campaign.id}, "status": ${status}}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    CreateCampaignsResultList listOfCampaigns = CreateCampaignsResultList.fromJson(_map);
     return listOfCampaigns;
   }
 
