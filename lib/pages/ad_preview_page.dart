@@ -103,8 +103,8 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                     _postUrlConvertor(snapshot.data.adsLayout[0].linkUrl);
 
                 return DraggableScrollableSheet(
-                  initialChildSize: 0.3,
-                  maxChildSize: 0.8,
+                  initialChildSize: 0.2,
+                  maxChildSize: 0.4,
                   minChildSize: 0.1,
                   builder: (context, controller) {
                     return SingleChildScrollView(
@@ -119,22 +119,27 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                               bottomLeft: Radius.circular(30),
                               bottomRight: Radius.circular(30)),
                         ),
-                        child: Container(
-                          height: 600,
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 20),
-                            child: Container(
-                              //width: MediaQuery.of(context).size.width * 0.80,
-                              child: AbsorbPointer(
-                                child: WebView(
-                                  gestureNavigationEnabled: false,
-                                  javascriptMode: JavascriptMode.disabled,
-                                  initialUrl:
-                                      snapshot.data.adsLayout[0].previewLink,
+                        child: Column(
+                          children: [
+                            Icon(Icons.drag_handle),
+                            Container(
+                              height: 600,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 10),
+                                child: Container(
+                                  //width: MediaQuery.of(context).size.width * 0.80,
+                                  child: AbsorbPointer(
+                                    child: WebView(
+                                      gestureNavigationEnabled: false,
+                                      javascriptMode: JavascriptMode.disabled,
+                                      initialUrl:
+                                          snapshot.data.adsLayout[0].previewLink,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
                       ),
                     );
