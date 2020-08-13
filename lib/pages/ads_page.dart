@@ -4,6 +4,7 @@ import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
+import 'package:ads_cloner/models/delete_ads_request.dart';
 import 'package:ads_cloner/models/update_ads_request.dart';
 import 'package:ads_cloner/pages/ad_preview_page.dart';
 import 'package:flutter/material.dart';
@@ -83,17 +84,51 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
                         child: ListView.builder(
                             itemCount: snapshot.data.ads.length,
                             itemBuilder: (BuildContext context, int index) {
-                              return ListTile(
-                                leading: _buildStatusIcon(
-                                    context, snapshot.data.ads[index]),
-                                title: Text(snapshot.data.ads[index].name),
-                                trailing: Icon(Icons.keyboard_arrow_right),
-                                onTap: () {
-                                  appBloc.inCurrentAd
-                                      .add(snapshot.data.ads[index]);
-                                  _openAdPreviewPage(context);
+                              return Dismissible(
+                                direction: DismissDirection.endToStart,
+                                key: UniqueKey(),
+                                onDismissed: (DismissDirection direction) {
+                                  print(
+                                      'dismissed ${snapshot.data.ads[index]}');
+                                  bloc.getDeleteAds.add(DeleteAdsRequest(
+                                      appBloc.vkAccessToken,
+                                      appBloc.currentAccount,
+                                      snapshot.data.ads[index]));
                                 },
-                                onLongPress: () {},
+                                background: Container(
+                                  color: Colors.red[400],
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(15),
+                                    child: Row(
+                                      mainAxisAlignment: MainAxisAlignment.end,
+                                      children: [
+                                        Text('Архивировать',
+                                            style:
+                                                TextStyle(color: Colors.white)),
+                                        Icon(Icons.archive,
+                                            color: Colors.white),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                                child: ListTile(
+                                  leading: _buildStatusIcon(
+                                      context, snapshot.data.ads[index]),
+                                  title: Text(snapshot.data.ads[index].name),
+                                  trailing: Icon(Icons.keyboard_arrow_right),
+                                  onTap: () {
+                                    appBloc.inCurrentAd
+                                        .add(snapshot.data.ads[index]);
+                                    final req = AdsRequest(
+                                        appBloc.vkAccessToken,
+                                        appBloc.currentAccount,
+                                        appBloc.currentCampaign,
+                                        appBloc.currentClient);
+                                    bloc.getAdsList.add(req);
+                                    _openAdPreviewPage(context);
+                                  },
+                                  onLongPress: () {},
+                                ),
                               );
                             }),
                       );

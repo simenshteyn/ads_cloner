@@ -14,6 +14,7 @@ import 'package:ads_cloner/models/clients_list.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
 import 'package:ads_cloner/models/create_campaigns_result_list.dart';
+import 'package:ads_cloner/models/delete_ads_result.dart';
 import 'package:ads_cloner/models/pretty_card_create_result.dart';
 import 'package:ads_cloner/models/pretty_card_list.dart';
 import 'package:ads_cloner/models/wall_post_adsstealth.dart';
@@ -158,6 +159,27 @@ class VkApi {
     final _map = jsonDecode(response);
     CreateAdsResultList listOfAds = CreateAdsResultList.fromJson(_map);
     return listOfAds;
+  }
+
+    Future<DeleteAdsResult> adsDeleteAds(String accountId, Ad ad) async {
+    await _delayBetweenApiRequests();
+    var uri = Uri.https(
+      baseUrl,
+      'method/ads.deleteAds',
+      <String, String>{
+        'account_id': accountId,
+        'ids': '[${ad.id}]',
+        'access_token': userToken,
+        'v': apiVersion,
+      }..removeWhere((key, value) => key == null || value == null),
+    );
+
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    DeleteAdsResult listOfDeletedAds = DeleteAdsResult.fromJson(_map);
+    return listOfDeletedAds;
   }
 
   Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad,

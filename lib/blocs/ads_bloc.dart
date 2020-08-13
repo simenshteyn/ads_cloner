@@ -4,6 +4,8 @@ import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
 import 'package:ads_cloner/models/create_ads_result_list.dart';
+import 'package:ads_cloner/models/delete_ads_request.dart';
+import 'package:ads_cloner/models/delete_ads_result.dart';
 import 'package:ads_cloner/models/update_ads_request.dart';
 import 'bloc_provider.dart';
 
@@ -34,6 +36,14 @@ class AdsBloc implements BlocBase {
   StreamController<UpdateAdsRequest> _cmdAdsStatusController =
       StreamController<UpdateAdsRequest>.broadcast();
   StreamSink<UpdateAdsRequest> get getUpdateAds => _cmdAdsStatusController.sink;
+
+  StreamController<DeleteAdsResult> _adsDeleteController =
+      StreamController<DeleteAdsResult>.broadcast();
+  Stream<DeleteAdsResult> get outDeleteAds => _adsDeleteController.stream;
+
+  StreamController<DeleteAdsRequest> _cmdAdsDeleteController =
+      StreamController<DeleteAdsRequest>.broadcast();
+  StreamSink<DeleteAdsRequest> get getDeleteAds => _cmdAdsDeleteController.sink;
 
   AdsBloc() {
     print("ADS BLOC CREATED");
@@ -75,6 +85,17 @@ class AdsBloc implements BlocBase {
         _adsStatusController.sink.add(list);
       });
     });
+
+    _adsDeleteController.stream.listen(_handleDeleteAdsLogic);
+
+    _cmdAdsDeleteController.stream.listen((DeleteAdsRequest request) {
+      var vk = VkApi(userToken: request.vkAccessToken.token);
+      vk
+          .adsDeleteAds(request.account.accountId.toString(), request.ad)
+          .then((list) {
+        _adsDeleteController.sink.add(list);
+      });
+    });
   }
 
   void dispose() {
@@ -85,6 +106,8 @@ class AdsBloc implements BlocBase {
     _cmdLayoutController.close();
     _adsStatusController.close();
     _cmdAdsStatusController.close();
+    _adsDeleteController.close();
+    _cmdAdsDeleteController.close();
   }
 
   void _handleLogic(data) {
@@ -97,5 +120,5 @@ class AdsBloc implements BlocBase {
 
   void _handleUpdateAdsLogic(data) {}
 
-  
+  void _handleDeleteAdsLogic(data) {}
 }
