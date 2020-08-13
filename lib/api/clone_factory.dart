@@ -78,6 +78,14 @@ abstract class CloneFactory {
     }
     adLayout.imageSrc = photoData.photo;
   }
+
+  void _autobiddingFix(CreateAd createAd) {
+    if (createAd.autobidding == 1) {
+      createAd.cpc = null;
+      createAd.cpm = null;
+      createAd.ocpm = null;
+    }
+  }
 }
 
 class CloneTextFactory with CloneFactory {
@@ -101,6 +109,7 @@ class CloneTextFactory with CloneFactory {
       var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
+      _autobiddingFix(createAd);
       return createAd;
     } else if (originalAd.isAdaptiveFormat) {
       var clonedAdLayout = adLayout.clone();
@@ -115,18 +124,21 @@ class CloneTextFactory with CloneFactory {
 
       var createAd = CreateAd.bulder(
           originalAd, clonedAdLayout, adTargeting); //replacedbulder
+      _autobiddingFix(createAd);
       return createAd;
     } else if (originalAd.isImageTextFormat) {
       var clonedAdLayout = adLayout.clone();
       clonedAdLayout.description = cloneTask.value;
       await _createAndUploadPhoto(clonedAdLayout, 1);
       var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
+      _autobiddingFix(createAd);
       return createAd;
     } else if (originalAd.isBigImageFormat) {
       var clonedAdLayout = adLayout.clone();
       clonedAdLayout.title = cloneTask.value;
       await _createAndUploadPhoto(clonedAdLayout, 2);
       var createAd = CreateAd.bulder(originalAd, clonedAdLayout, adTargeting);
+      _autobiddingFix(createAd);
       return createAd;
     } else {
       return CreateAd();
@@ -164,6 +176,7 @@ class CloneImageFactory with CloneFactory {
       var createAd = CreateAd.bulder(originalAd, adLayout, adTargeting);
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
+      _autobiddingFix(createAd);
       return createAd;
     }
     if (originalAd.isAdaptiveFormat) {
@@ -183,18 +196,21 @@ class CloneImageFactory with CloneFactory {
       if (clonedAdLayout.isAdaptiveVideoAdFormat) {
         createAd.video = null;
       }
+      _autobiddingFix(createAd);
       return createAd;
     } else if (originalAd.isImageTextFormat) {
       var clonedLayout = adLayout.clone();
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 1);
       clonedLayout.imageSrc = photoData.photo;
       var createAd = CreateAd.bulder(originalAd, clonedLayout, adTargeting);
+      _autobiddingFix(createAd);
       return createAd;
     } else if (originalAd.isBigImageFormat) {
       var clonedLayout = adLayout.clone();
       photoData = await vkApi.uploadPhotoFromFile(cloneTask.value, 2);
       clonedLayout.imageSrc = photoData.photo;
       var createAd = CreateAd.bulder(originalAd, clonedLayout, adTargeting);
+      _autobiddingFix(createAd);
       return createAd;
     } else {
       return CreateAd(); // change this later
@@ -224,8 +240,6 @@ class CloneAgeFactory with CloneFactory {
 
   Future<CreateAd> buildAd(Ad originalAd, AdTargeting adTargeting,
       AdLayout adLayout, WallPost adWallPost, CloneTask cloneTask) async {
-
-
     if (originalAd.isWallPostFormat) {
       var clonedWallPost = adWallPost.clone();
       if (clonedWallPost.hasPrettyCards) {
@@ -240,8 +254,8 @@ class CloneAgeFactory with CloneFactory {
       createAd.linkUrl = await _createAndGetLinkForWallPostAdsStealth(
           changedWallPostAdsStealth);
       _addPostfixToAdName(createAd, cloneTask);
+      _autobiddingFix(createAd);
       return createAd;
-
     } else if (originalAd.isAdaptiveFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadIcon(clonedAdLayout);
@@ -256,9 +270,8 @@ class CloneAgeFactory with CloneFactory {
       var createAd =
           CreateAd.bulder(originalAd, clonedAdLayout, newAdTargeting);
       _addPostfixToAdName(createAd, cloneTask);
-
+      _autobiddingFix(createAd);
       return createAd;
-
     } else if (originalAd.isImageTextFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadPhoto(clonedAdLayout, 1);
@@ -267,9 +280,8 @@ class CloneAgeFactory with CloneFactory {
       var createAd =
           CreateAd.bulder(originalAd, clonedAdLayout, newAdTargeting);
       _addPostfixToAdName(createAd, cloneTask);
-
+      _autobiddingFix(createAd);
       return createAd;
-      
     } else if (originalAd.isBigImageFormat) {
       var clonedAdLayout = adLayout.clone();
       await _createAndUploadPhoto(clonedAdLayout, 2);
@@ -278,6 +290,7 @@ class CloneAgeFactory with CloneFactory {
       var createAd =
           CreateAd.bulder(originalAd, clonedAdLayout, newAdTargeting);
       _addPostfixToAdName(createAd, cloneTask);
+      _autobiddingFix(createAd);
       return createAd;
     } else {
       return CreateAd();

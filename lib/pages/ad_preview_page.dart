@@ -104,7 +104,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
 
                 return DraggableScrollableSheet(
                   initialChildSize: 0.2,
-                  maxChildSize: 0.4,
+                  maxChildSize: 0.8,
                   minChildSize: 0.1,
                   builder: (context, controller) {
                     return SingleChildScrollView(
@@ -123,7 +123,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                           children: [
                             Icon(Icons.drag_handle),
                             Container(
-                              height: 600,
+                              height: 500,
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Container(

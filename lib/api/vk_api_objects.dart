@@ -663,13 +663,21 @@ class Card {
   String get clearPrice {
     //Should remove any letters to create via API
     RegExp digitsOnly = RegExp(r"([+-]?[0-9]+(?:\.[0-9]*)?)");
-    return digitsOnly.firstMatch(price).group(0);
+    if (price != null) {
+      return digitsOnly.firstMatch(price).group(0);
+    } else {
+      return null;
+    }
   }
 
   String get clearPriceOld {
     //Should remove any letters to create via API
     RegExp digitsOnly = RegExp(r"([+-]?[0-9]+(?:\.[0-9]*)?)");
-    return digitsOnly.firstMatch(priceOld).group(0);
+    if (priceOld != null) {
+      return digitsOnly.firstMatch(priceOld).group(0);
+    } else {
+      return null;
+    }
   }
 
   void updateFromPrettyCard(PrettyCard prettyCard) {
