@@ -226,6 +226,7 @@ class CloneImageFactory with CloneFactory {
     wallPostAdsStealth.linkImage = uploadResult.photos[0].sizes
         .firstWhere((element) => element.type == 'x')
         .url; //TODO somechecks, may be
+    wallPostAdsStealth.linkVideo = null;
     return wallPostAdsStealth;
   }
 }
