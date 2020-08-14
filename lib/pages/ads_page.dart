@@ -2,7 +2,6 @@ import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
 import 'package:ads_cloner/blocs/ads_bloc.dart';
 import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_request.dart';
 import 'package:ads_cloner/models/delete_ads_request.dart';
 import 'package:ads_cloner/models/update_ads_request.dart';
@@ -11,7 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/models/ads_list.dart';
-import 'package:provider/provider.dart';
 
 class AdsPage extends StatelessWidget {
   @override
