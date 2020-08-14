@@ -12,13 +12,43 @@ import 'package:ads_cloner/blocs/application_bloc.dart';
 class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: LoginPageSnackbar(),
+    );
+  }
+}
+
+class LoginPageSnackbar extends StatefulWidget {
+  @override
+  _LoginPageSnackbarState createState() => _LoginPageSnackbarState();
+}
+
+class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
+  @override
+  void initState() {
+    super.initState();
+    LoginBloc bloc = BlocProvider.of<LoginBloc>(context);
+
+    bloc.outWarningMessage.forEach((e) {
+      if (context != null) {
+        _showSnackBar('${e}', context);
+      }
+    });
+  }
+
+  _showSnackBar(String text, BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('${text}'),
+      backgroundColor: Colors.red,
+    ));
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final ApplicationBloc applicationBloc =
         BlocProvider.of<ApplicationBloc>(context);
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Ads Cloner'),
-      ),
+      appBar: AppBar(title: Text('Ads Cloner')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -27,7 +57,7 @@ class LoginPage extends StatelessWidget {
               color: Colors.blue,
               textColor: Colors.white,
               onPressed: () {
-                vkLogin(context, applicationBloc);
+                _vkLogin(context, applicationBloc);
               },
               child: Text(
                 'Login VK',
@@ -40,28 +70,9 @@ class LoginPage extends StatelessWidget {
     );
   }
 
-  Future<bool> checkLoggedIn() async {
+  Future<bool> _checkLoggedIn() async {
     var isLoggedIn = await FlutterVKSdk.isLoggedIn();
     return isLoggedIn;
-  }
-
-  Future<void> vkLogin(BuildContext context, ApplicationBloc bloc) async {
-    if (await checkLoggedIn() == false) {
-      FlutterVKSdk.login(
-          scope: '${VKScope.ads}, ${VKScope.offline}, ${VKScope.photos}',
-          onSuccess: (VKAccessToken token) async {
-            bloc.inVkAccessToken.add(token);
-            _openAccountsPage(context);
-          },
-          onError: (error) {
-            print('LOGIN ERROR: $error}');
-          });
-    } else {
-      print('Already logged in');
-      VKAccessToken token = await FlutterVKSdk.getAccessToken();
-      bloc.inVkAccessToken.add(token);
-      _openAccountsPage(context);
-    }
   }
 
   void _openAccountsPage(BuildContext context) {
@@ -73,5 +84,26 @@ class LoginPage extends StatelessWidget {
         );
       }),
     );
+  }
+
+  Future<void> _vkLogin(BuildContext context, ApplicationBloc appBloc) async {
+    LoginBloc bloc = BlocProvider.of<LoginBloc>(context);
+    if (await _checkLoggedIn() == false) {
+      FlutterVKSdk.login(
+          scope: '${VKScope.ads}, ${VKScope.offline}, ${VKScope.photos}',
+          onSuccess: (VKAccessToken token) async {
+            appBloc.inVkAccessToken.add(token);
+            _openAccountsPage(context);
+          },
+          onError: (error) {
+            bloc.inWarningMessage.add('LOGIN ERROR: ${error}');
+            // print('LOGIN ERROR: $error}');
+          });
+    } else {
+      print('Already logged in');
+      VKAccessToken token = await FlutterVKSdk.getAccessToken();
+      appBloc.inVkAccessToken.add(token);
+      _openAccountsPage(context);
+    }
   }
 }
