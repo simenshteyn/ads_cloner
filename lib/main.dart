@@ -25,6 +25,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Ads Cloner Demo',
+      theme: ThemeData(
+        // Define the default brightness and colors.
+        brightness: Brightness.light,
+        primaryColor: Colors.red[700],
+        accentColor: Colors.red[500],
+      ),
       home: BlocProvider<LoginBloc>(
         bloc: LoginBloc(),
         child: LoginPage(),
