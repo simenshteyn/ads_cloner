@@ -92,50 +92,7 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
                     ? showErrorOnCurrentPage(context, snapshot, bloc)
                     : RefreshIndicator(
                         onRefresh: () => _refresh(context),
-                        child: ListView.builder(
-                            itemCount: snapshot.data.ads.length,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Dismissible(
-                                direction: DismissDirection.endToStart,
-                                key: UniqueKey(),
-                                onDismissed: (DismissDirection direction) {
-                                  print(
-                                      'dismissed ${snapshot.data.ads[index]}');
-                                  bloc.getDeleteAds.add(DeleteAdsRequest(
-                                      appBloc.vkAccessToken,
-                                      appBloc.currentAccount,
-                                      snapshot.data.ads[index]));
-                                },
-                                background: Container(
-                                  color: Colors.red[400],
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(15),
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.end,
-                                      children: [
-                                        Text('Архивировать',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        Icon(Icons.archive,
-                                            color: Colors.white),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                                child: ListTile(
-                                  leading: _buildStatusIcon(
-                                      context, snapshot.data.ads[index]),
-                                  title: Text(snapshot.data.ads[index].name),
-                                  trailing: Icon(Icons.keyboard_arrow_right),
-                                  onTap: () {
-                                    appBloc.inCurrentAd
-                                        .add(snapshot.data.ads[index]);
-                                    _openAdPreviewPage(context);
-                                  },
-                                  onLongPress: () {},
-                                ),
-                              );
-                            }),
+                        child: _buildVerticalAdsList(context, snapshot),
                       );
               }
               return Center(child: CircularProgressIndicator());
@@ -151,6 +108,47 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
         appBloc.currentCampaign, appBloc.currentClient);
     bloc.getAdsList.add(req);
   }
+}
+
+Widget _buildVerticalAdsList(BuildContext context, AsyncSnapshot snapshot) {
+  ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+  AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+  return ListView.builder(
+      itemCount: snapshot.data.ads.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Dismissible(
+          direction: DismissDirection.endToStart,
+          key: UniqueKey(),
+          onDismissed: (DismissDirection direction) {
+            print('dismissed ${snapshot.data.ads[index]}');
+            bloc.getDeleteAds.add(DeleteAdsRequest(appBloc.vkAccessToken,
+                appBloc.currentAccount, snapshot.data.ads[index]));
+          },
+          background: Container(
+            color: Colors.red[400],
+            child: Padding(
+              padding: const EdgeInsets.all(15),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Text('Архивировать', style: TextStyle(color: Colors.white)),
+                  Icon(Icons.archive, color: Colors.white),
+                ],
+              ),
+            ),
+          ),
+          child: ListTile(
+            leading: _buildStatusIcon(context, snapshot.data.ads[index]),
+            title: Text(snapshot.data.ads[index].name),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            onTap: () {
+              appBloc.inCurrentAd.add(snapshot.data.ads[index]);
+              _openAdPreviewPage(context);
+            },
+            onLongPress: () {},
+          ),
+        );
+      });
 }
 
 Widget _buildStatusIcon(BuildContext context, Ad ad) {
