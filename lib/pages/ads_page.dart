@@ -10,6 +10,7 @@ import 'package:flutter/material.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/models/ads_list.dart';
+import 'package:flutter/services.dart';
 
 class AdsPage extends StatelessWidget {
   @override
@@ -29,6 +30,13 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
   @override
   void initState() {
     super.initState();
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
     final req = AdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
@@ -59,6 +67,15 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
       content: Text('${text}'),
       backgroundColor: Colors.red,
     ));
+  }
+
+  @override
+  void dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    super.dispose();
   }
 
   @override
@@ -222,16 +239,27 @@ Widget _buildPopupMenuButton(BuildContext context, Ad ad, Icon icon) {
 }
 
 void _openAdPreviewPage(BuildContext context) {
+  ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+  AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+
   Navigator.of(context).push(
     MaterialPageRoute(builder: (BuildContext context) {
+      SystemChrome.setPreferredOrientations([
+        DeviceOrientation.portraitUp,
+        DeviceOrientation.portraitDown,
+      ]);
       return BlocProvider<AdPreviewBloc>(
         bloc: AdPreviewBloc(),
         child: AdPreviewPage(),
       );
     }),
   ).whenComplete(() {
-    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     final req = AdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCampaign, appBloc.currentClient);
     bloc.getAdsList.add(req);
