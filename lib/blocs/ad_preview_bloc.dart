@@ -11,6 +11,7 @@ import 'package:ads_cloner/models/ads_targeting_request.dart';
 class AdPreviewBloc implements BlocBase, BlocWithPageNotifier {
   AdsLayoutList _adsLayout;
   AdsTargetingList _adsTargetingList;
+  VkApi _currentVkApi;
 
   StreamController<AdsLayoutList> _adsLayoutController =
       StreamController<AdsLayoutList>.broadcast();
@@ -41,8 +42,10 @@ class AdPreviewBloc implements BlocBase, BlocWithPageNotifier {
     _adsLayoutController.stream.listen(_handleLayoutLogic);
 
     _cmdAdsLayoutController.stream.listen((AdsLayoutRequest req) {
-      var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: req.vkAccessToken.token);
+      }
+      _currentVkApi
           .adsGetAdsLayout(
               req.account.accountId.toString(), req.ad, req.client?.id)
           .then((list) {
@@ -54,9 +57,11 @@ class AdPreviewBloc implements BlocBase, BlocWithPageNotifier {
     _adsTargetingController.stream.listen(_handleTargetingLogic);
 
     _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) async {
-      var vk = VkApi(userToken: req.vkAccessToken.token);
-      await vk.delayBetweenApiRequests(750);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: req.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsGetAdsTargeting(
               req.account.accountId.toString(), req.ad, req.client?.id)
           .then((list) {

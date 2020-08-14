@@ -108,7 +108,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                   if (snapshot.data.isNotEmpty) {
                     var _currentWallPost = snapshot.data.wallPosts[0];
                     appBloc.inCurrentWallPost.add(_currentWallPost);
-                    return Container(); //Text('${_currentWallPost.id}');
+                    return Container(); 
                   }
                 }
                 if (snapshot.hasError) {
@@ -129,12 +129,6 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                     _isLoading = false;
                     return Container();
                   }
-
-                  // appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
-                  // _isLoading = false;
-                  // return createAdApiResponseHasError(snapshot)
-                  //     ? createAdShowError(snapshot, context)
-                  //     : Container();
                 }
                 return Container();
               }),
@@ -200,6 +194,5 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
     var req = CreateAdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
         appBloc.currentCreateAdsList);
     bloc.getCreateAdsResultList.add(req);
-    // appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
   }
 }

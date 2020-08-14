@@ -130,12 +130,6 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
                                   onTap: () {
                                     appBloc.inCurrentAd
                                         .add(snapshot.data.ads[index]);
-                                    final req = AdsRequest(
-                                        appBloc.vkAccessToken,
-                                        appBloc.currentAccount,
-                                        appBloc.currentCampaign,
-                                        appBloc.currentClient);
-                                    bloc.getAdsList.add(req);
                                     _openAdPreviewPage(context);
                                   },
                                   onLongPress: () {},

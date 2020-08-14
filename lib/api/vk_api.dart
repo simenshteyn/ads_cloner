@@ -30,12 +30,9 @@ class VkApi {
   final apiVersion = '5.103';
   final userToken;
   final _httpClient = HttpClient();
+  final _filter = RequestFloodFilter<Uri>(Duration(milliseconds: 500));
 
   VkApi({this.userToken});
-
-  Future _delayBetweenApiRequests([int time = 250]) {
-    return Future.delayed(Duration(milliseconds: time));
-  }
 
   Future delayBetweenApiRequests([int time = 250]) {
     return Future.delayed(Duration(milliseconds: time));
@@ -97,8 +94,8 @@ class VkApi {
     return listOfCampaigns;
   }
 
-    Future<CreateCampaignsResultList> adsUpdateCampaigns(String accountId, Campaign campaign, int status) async {
-    await _delayBetweenApiRequests();
+  Future<CreateCampaignsResultList> adsUpdateCampaigns(
+      String accountId, Campaign campaign, int status) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.updateCampaigns',
@@ -114,13 +111,13 @@ class VkApi {
     print(uri);
     print(response);
     final _map = jsonDecode(response);
-    CreateCampaignsResultList listOfCampaigns = CreateCampaignsResultList.fromJson(_map);
+    CreateCampaignsResultList listOfCampaigns =
+        CreateCampaignsResultList.fromJson(_map);
     return listOfCampaigns;
   }
 
   Future<AdsList> adsGetAds(String accountId, int campaignId,
       [int clientId]) async {
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAds',
@@ -140,8 +137,8 @@ class VkApi {
     return listOfAds;
   }
 
-  Future<CreateAdsResultList> adsUpdateAds(String accountId, Ad ad, int status) async {
-    await _delayBetweenApiRequests();
+  Future<CreateAdsResultList> adsUpdateAds(
+      String accountId, Ad ad, int status) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.updateAds',
@@ -161,8 +158,7 @@ class VkApi {
     return listOfAds;
   }
 
-    Future<DeleteAdsResult> adsDeleteAds(String accountId, Ad ad) async {
-    await _delayBetweenApiRequests();
+  Future<DeleteAdsResult> adsDeleteAds(String accountId, Ad ad) async {
     var uri = Uri.https(
       baseUrl,
       'method/ads.deleteAds',
@@ -184,7 +180,6 @@ class VkApi {
 
   Future<AdsLayoutList> adsGetAdsLayout(String accountId, Ad ad,
       [int clientId]) async {
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -210,7 +205,6 @@ class VkApi {
       String accountId,
       Campaign campaign,
       [int clientId]) async {
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsLayout',
@@ -232,7 +226,6 @@ class VkApi {
 
   Future<AdsTargetingList> adsGetAdsTargeting(String accountId, Ad ad,
       [int clientId]) async {
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getAdsTargeting',
@@ -254,7 +247,6 @@ class VkApi {
   }
 
   Future<WallPostList> wallGetById(String postId) async {
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/wall.getById',
@@ -275,8 +267,6 @@ class VkApi {
 
   Future<CreateAdsResultList> adsCreateAds(
       String accountId, CreateAdsList createAdsList) async {
-    await _delayBetweenApiRequests();
-
     var uri = Uri.https(
       baseUrl,
       'method/ads.createAds',
@@ -301,7 +291,6 @@ class VkApi {
 
   Future<WallPostAdsStealthResult> wallPostAdsStealth(
       WallPostAdsStealth wallPostAdsStealth) async {
-    await _delayBetweenApiRequests();
     var baseMap = <String, String>{
       'access_token': userToken,
       'v': apiVersion,
@@ -324,7 +313,6 @@ class VkApi {
   Future<PrettyCardCreateResult> prettyCardsCreate(
       String ownerId, Card card) async {
     /// https://vk.com/dev/prettyCards.create more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/prettyCards.create',
@@ -353,7 +341,6 @@ class VkApi {
   Future<PrettyCardList> prettyCardsGetById(
       PrettyCardCreateResult cardCreateResult) async {
     /// https://vk.com/dev/prettyCards.getById more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/prettyCards.getById',
@@ -374,7 +361,6 @@ class VkApi {
 
   Future<CityList> databaseGetCitiesById(String idString) async {
     /// https://vk.com/dev/database.getCitiesById more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/database.getCitiesById',
@@ -394,7 +380,6 @@ class VkApi {
 
   Future<UploadUrl> adsGetUploadUrl(int adFormat, [int icon]) async {
     /// https://vk.com/dev/ads.getUploadURL more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getUploadURL',
@@ -415,7 +400,6 @@ class VkApi {
 
   Future<UploadUrl> adsGetVideoUploadUrl() async {
     /// https://vk.com/dev/ads.getVideoUploadURL more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/ads.getVideoUploadURL',
@@ -435,7 +419,6 @@ class VkApi {
   Future<WallUploadedPhoto> photosGetWallUploadServer(File file) async {
     /// https://vk.com/dev/photos.getWallUploadServer more info
     /// Maybe i should split this in two functions
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/photos.getWallUploadServer',
@@ -461,7 +444,6 @@ class VkApi {
   Future<PhotosSaveWallPhotoResult> photosSaveWallPhoto(
       WallUploadedPhoto wallUploadedPhoto) async {
     /// https://vk.com/dev/photos.saveWallPhoto more info
-    await _delayBetweenApiRequests();
     var uri = Uri.https(
       baseUrl,
       'method/photos.saveWallPhoto',
@@ -491,7 +473,6 @@ class VkApi {
   Future<UploadedPhoto> uploadPhotoFromUrl(String url, int adFormat,
       [int icon]) async {
     /// https://vk.com/dev/upload_photo_ads more info
-    await _delayBetweenApiRequests();
     var imageBytes = await _getBytesFromImageUrl(url);
     var uploadUrl = await adsGetUploadUrl(adFormat, icon);
     var response = await _postImageRequest(uploadUrl.uploadUrl, imageBytes);
@@ -505,9 +486,7 @@ class VkApi {
   Future<UploadedPhoto> uploadPhotoFromFile(File file, int adFormat,
       [int icon]) async {
     /// https://vk.com/dev/upload_photo_ads more info
-    await _delayBetweenApiRequests();
-    //var imageBytes = await _getBytesFromImageUrl(url);
-    var imageBytes = await file.readAsBytesSync();
+    var imageBytes = file.readAsBytesSync();
     var uploadUrl = await adsGetUploadUrl(adFormat, icon);
     var response = await _postImageRequest(uploadUrl.uploadUrl, imageBytes);
     print(response);
@@ -519,7 +498,6 @@ class VkApi {
 
   Future<UploadedVideo> uploadVideoFromUrl(String url) async {
     /// https://vk.com/dev/upload_photo_ads more info
-    await _delayBetweenApiRequests();
     var videoBytes = await _getBytesFromImageUrl(url);
     var uploadUrl = await adsGetVideoUploadUrl();
     var response = await _postVideoRequest(uploadUrl.uploadUrl, videoBytes);
@@ -531,6 +509,10 @@ class VkApi {
   }
 
   Future<String> _getRequest(Uri uri) async {
+    while (_filter.isFloodRequest(uri)) {
+      await delayBetweenApiRequests(50);
+    }
+    print('GET REQUEST ${DateTime.now()}');
     var request =
         await _httpClient.getUrl(uri); //i use POST for 44 error prevention
     var response = await request.close();
@@ -541,6 +523,10 @@ class VkApi {
 
   Future<String> _postRequest(Uri uri, Map<String, dynamic> jsonMap) async {
     /// For big requests to avoid 414 error
+    while (_filter.isFloodRequest(uri)) {
+      await delayBetweenApiRequests(50);
+    }
+    print('POST REQUEST ${DateTime.now()}');
     var postURL = uri;
     var request = http.MultipartRequest('POST', postURL);
     request.fields.addAll(jsonMap);
@@ -575,5 +561,22 @@ class VkApi {
     return (response.statusCode == 200)
         ? response.body
         : '{"error": {"error_code": ${response.statusCode}, "error_msg": "POST request problem: ${response.reasonPhrase}"}}';
+  }
+}
+
+class RequestFloodFilter<T> {
+  DateTime lastRequestDateTime = null;
+  final Duration duration;
+
+  RequestFloodFilter(this.duration);
+
+  bool isFloodRequest(T e) {
+    final now = DateTime.now();
+    if (lastRequestDateTime == null ||
+        now.difference(lastRequestDateTime) > duration) {
+      lastRequestDateTime = now;
+      return false;
+    }
+    return true;
   }
 }

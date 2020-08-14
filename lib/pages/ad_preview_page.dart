@@ -127,7 +127,6 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                               child: Padding(
                                 padding: const EdgeInsets.only(top: 10),
                                 child: Container(
-                                  //width: MediaQuery.of(context).size.width * 0.80,
                                   child: AbsorbPointer(
                                     child: WebView(
                                       gestureNavigationEnabled: false,

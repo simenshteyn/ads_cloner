@@ -25,7 +25,6 @@ class ApplicationBloc implements BlocBase {
   String currentPostId;
   CreateAdsList currentCreateAdsList;
   WallPost currentWallPost;
-  // String warningMessage;
 
   StreamController<VKAccessToken> _tokenController =
       StreamController<VKAccessToken>.broadcast();

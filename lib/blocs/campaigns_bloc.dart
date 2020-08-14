@@ -9,6 +9,7 @@ import 'bloc_provider.dart';
 
 class CampaignsBloc implements BlocBase, BlocWithPageNotifier {
   CampaignsList _campaigns;
+  VkApi _currentVkApi;
 
   StreamController<CampaignsList> _campaignsController =
       StreamController<CampaignsList>.broadcast();
@@ -39,8 +40,11 @@ class CampaignsBloc implements BlocBase, BlocWithPageNotifier {
 
     _campaignsController.stream.listen(_handleLogic);
     _cmdCampaignsController.stream.listen((CampaignsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsGetCampaigns(
               request.account.accountId.toString(), request.client?.id)
           .then((list) {
@@ -48,11 +52,15 @@ class CampaignsBloc implements BlocBase, BlocWithPageNotifier {
         _campaignsController.sink.add(_campaigns);
       });
     });
+
     _campaignsStatusController.stream.listen(_handleStatusLogic);
     _cmdCampaignsStatusController.stream
         .listen((UpdateCampaignsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsUpdateCampaigns(request.account.accountId.toString(),
               request.campaign, request.status)
           .then((list) {

@@ -3,7 +3,6 @@ import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/blocs/clone_text_bloc.dart';
-import 'package:ads_cloner/models/ad.dart';
 import 'package:ads_cloner/models/create_ads_list.dart';
 import 'package:flutter/material.dart';
 import 'package:badges/badges.dart';

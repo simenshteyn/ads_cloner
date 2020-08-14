@@ -174,7 +174,6 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   Future<Null> _cropImage(
       BuildContext context, int cropWidth, int cropHeight) async {
     CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
-    // ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     try {
       File croppedFile = await ImageCropper.cropImage(
           sourcePath: currentImageFile.path,
@@ -196,8 +195,6 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
             quality: 100,
             targetWidth: cropWidth,
             targetHeight: cropHeight);
-        // var decodedImage =
-        //     await decodeImageFromList(compressedFile.readAsBytesSync());
         bloc.addFileToList.add(compressedFile);
         currentImageFile = compressedFile;
         setState(() {

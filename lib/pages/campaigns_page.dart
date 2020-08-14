@@ -187,16 +187,4 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
       }),
     );
   }
-
-  // bool _apiResponseHasError(snapshot) {
-  //   return (snapshot.data?.errorResponse != null) ? true : false;
-  // }
-
-  // Widget _showError(BuildContext context, AsyncSnapshot snapshot) {
-  //   CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
-
-  //   bloc.inWarningMessage.add(
-  //       'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
-  //   return Text('error');
-  // }
 }

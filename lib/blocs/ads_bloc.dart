@@ -13,6 +13,7 @@ import 'bloc_provider.dart';
 class AdsBloc implements BlocBase, BlocWithPageNotifier {
   AdsList _ads;
   AdsLayoutList _layout;
+  VkApi _currentVkApi;
 
   StreamController<AdsList> _adsController =
       StreamController<AdsList>.broadcast();
@@ -57,8 +58,11 @@ class AdsBloc implements BlocBase, BlocWithPageNotifier {
     _adsController.stream.listen(_handleLogic);
 
     _cmdAdsController.stream.listen((AdsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsGetAds(request.account.accountId.toString(), request.campaign.id,
               request.client?.id)
           .then((list) {
@@ -70,8 +74,11 @@ class AdsBloc implements BlocBase, BlocWithPageNotifier {
     _layoutController.stream.listen(_handleLayoutLogic);
 
     _cmdLayoutController.stream.listen((AdsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsGetCampaignLayout(request.account.accountId.toString(),
               request.campaign, request.client?.id)
           .then((list) {
@@ -83,8 +90,11 @@ class AdsBloc implements BlocBase, BlocWithPageNotifier {
     _adsStatusController.stream.listen(_handleUpdateAdsLogic);
 
     _cmdAdsStatusController.stream.listen((UpdateAdsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsUpdateAds(
               request.account.accountId.toString(), request.ad, request.status)
           .then((list) {
@@ -95,8 +105,11 @@ class AdsBloc implements BlocBase, BlocWithPageNotifier {
     _adsDeleteController.stream.listen(_handleDeleteAdsLogic);
 
     _cmdAdsDeleteController.stream.listen((DeleteAdsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
           .adsDeleteAds(request.account.accountId.toString(), request.ad)
           .then((list) {
         _adsDeleteController.sink.add(list);

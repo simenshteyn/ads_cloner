@@ -97,7 +97,6 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
           },
           onError: (error) {
             bloc.inWarningMessage.add('LOGIN ERROR: ${error}');
-            // print('LOGIN ERROR: $error}');
           });
     } else {
       print('Already logged in');

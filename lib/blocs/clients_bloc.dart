@@ -7,6 +7,7 @@ import 'bloc_provider.dart';
 
 class ClientsBloc implements BlocBase, BlocWithPageNotifier {
   ClientsList _clients;
+  VkApi _currentVkApi;
 
   StreamController<ClientsList> _clientsController =
       StreamController<ClientsList>.broadcast();
@@ -26,8 +27,13 @@ class ClientsBloc implements BlocBase, BlocWithPageNotifier {
 
     _clientsController.stream.listen(_handleLogic);
     _cmdClientsController.stream.listen((ClientsRequest request) {
-      var vk = VkApi(userToken: request.vkAccessToken.token);
-      vk.adsGetClients(request.account.accountId.toString()).then((list) {
+      if (_currentVkApi == null) {
+        _currentVkApi = VkApi(userToken: request.vkAccessToken.token);
+      }
+
+      _currentVkApi
+          .adsGetClients(request.account.accountId.toString())
+          .then((list) {
         _clients = list;
         _clientsController.sink.add(_clients);
       });
