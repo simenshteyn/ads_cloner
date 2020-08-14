@@ -30,20 +30,16 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
   @override
   void initState() {
     super.initState();
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeRight,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-    ]);
-
+    _enableLandscapeOrientation();
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AdsBloc bloc = BlocProvider.of<AdsBloc>(context);
-    final req = AdsRequest(appBloc.vkAccessToken, appBloc.currentAccount,
-        appBloc.currentCampaign, appBloc.currentClient);
-    bloc.getAdsList.add(req);
+    bloc.getAdsList.add(AdsRequest(
+        appBloc.vkAccessToken,
+        appBloc.currentAccount,
+        appBloc.currentCampaign,
+        appBloc.currentClient));
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -56,7 +52,7 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
           content: Text('Статус объявления изменен'),
         ));
       } else {
-        appBloc.inWarningMessage.add(
+        bloc.inWarningMessage.add(
             'Ошибка ${event.createAdsResultList[0].errorCode}: ${event.createAdsResultList[0].errorDesc}');
       }
     });
@@ -93,7 +89,7 @@ class _AdsPageSnackbarState extends State<AdsPageSnackbar> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(context, snapshot)
+                    ? showErrorOnCurrentPage(context, snapshot, bloc)
                     : RefreshIndicator(
                         onRefresh: () => _refresh(context),
                         child: ListView.builder(
@@ -236,6 +232,15 @@ Widget _buildPopupMenuButton(BuildContext context, Ad ad, Icon icon) {
           bloc.getAdsList.add(req);
         }),
   );
+}
+
+void _enableLandscapeOrientation() {
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeRight,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
 }
 
 void _openAdPreviewPage(BuildContext context) {

@@ -42,7 +42,7 @@ class _CloneAgePageSnackbarState extends State<CloneAgePageSnackbar> {
     bloc.getAgeRangeList
         .add(AgeRangeRequest(_currentRangeValues, _currentSliderValue));
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -83,7 +83,6 @@ class _CloneAgePageSnackbarState extends State<CloneAgePageSnackbar> {
                   _currentRangeValues = values;
                   bloc.getAgeRangeList
                       .add(AgeRangeRequest(values, _currentSliderValue));
-                  print('IN AGE BLOC!');
                 });
               },
             ),
@@ -158,6 +157,8 @@ class _CloneAgePageSnackbarState extends State<CloneAgePageSnackbar> {
   Future<void> _sendAgeListToAdsFactory(
       List<AgeRange> ageList, BuildContext context) async {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneAgeBloc bloc = BlocProvider.of<CloneAgeBloc>(context);
+
     for (var age in ageList) {
       var cloneTask = CloneTask(type: CloneType.age, value: age);
       try {
@@ -169,7 +170,7 @@ class _CloneAgePageSnackbarState extends State<CloneAgePageSnackbar> {
             cloneTask);
         createAdsList.appendAd(createdAd);
       } on Exception catch (e) {
-        appBloc.inWarningMessage.add('${e}');
+        bloc.inWarningMessage.add('${e}');
       }
     }
   }

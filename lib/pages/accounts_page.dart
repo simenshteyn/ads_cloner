@@ -30,7 +30,7 @@ class _AccountsPageSnackbarState extends State<AccountsPageSnackbar> {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     AccountsBloc bloc = BlocProvider.of<AccountsBloc>(context);
     bloc.getAccountsList.add(appBloc.vkAccessToken);
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -59,7 +59,7 @@ class _AccountsPageSnackbarState extends State<AccountsPageSnackbar> {
             builder: (context, snapshot) {
               if (snapshot.hasData) {
                 return apiResponseHasError(snapshot)
-                    ? showError(context, snapshot)
+                    ? showErrorOnCurrentPage(context, snapshot, bloc)
                     : ListView.builder(
                         itemCount: snapshot.data.accounts.length,
                         itemBuilder: (BuildContext context, int index) {

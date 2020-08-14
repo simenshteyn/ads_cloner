@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
@@ -7,7 +8,7 @@ import 'package:ads_cloner/models/ads_layout_request.dart';
 import 'package:ads_cloner/models/ads_targeting_list.dart';
 import 'package:ads_cloner/models/ads_targeting_request.dart';
 
-class AdPreviewBloc implements BlocBase {
+class AdPreviewBloc implements BlocBase, BlocWithPageNotifier {
   AdsLayoutList _adsLayout;
   AdsTargetingList _adsTargetingList;
 
@@ -29,6 +30,11 @@ class AdPreviewBloc implements BlocBase {
   StreamSink<AdsTargetingRequest> get getAdsTargetingList =>
       _cmdAdsTargetingController.sink;
 
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
+
   AdPreviewBloc() {
     print("AD PREVIEW BLOC CREATED");
 
@@ -36,7 +42,10 @@ class AdPreviewBloc implements BlocBase {
 
     _cmdAdsLayoutController.stream.listen((AdsLayoutRequest req) {
       var vk = VkApi(userToken: req.vkAccessToken.token);
-      vk.adsGetAdsLayout(req.account.accountId.toString(), req.ad, req.client?.id).then((list) {
+      vk
+          .adsGetAdsLayout(
+              req.account.accountId.toString(), req.ad, req.client?.id)
+          .then((list) {
         _adsLayout = list;
         _adsLayoutController.sink.add(_adsLayout);
       });
@@ -44,15 +53,19 @@ class AdPreviewBloc implements BlocBase {
 
     _adsTargetingController.stream.listen(_handleTargetingLogic);
 
-    _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) {
+    _cmdAdsTargetingController.stream.listen((AdsTargetingRequest req) async {
       var vk = VkApi(userToken: req.vkAccessToken.token);
+      await vk.delayBetweenApiRequests(750);
       vk
-          .adsGetAdsTargeting(req.account.accountId.toString(), req.ad, req.client?.id)
+          .adsGetAdsTargeting(
+              req.account.accountId.toString(), req.ad, req.client?.id)
           .then((list) {
         _adsTargetingList = list;
         _adsTargetingController.sink.add(_adsTargetingList);
       });
     });
+
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
@@ -62,6 +75,7 @@ class AdPreviewBloc implements BlocBase {
     _cmdAdsLayoutController.close();
     _adsTargetingController.close();
     _cmdAdsTargetingController.close();
+    _warningMessageController.close();
   }
 
   void _handleLayoutLogic(data) {
@@ -71,4 +85,6 @@ class AdPreviewBloc implements BlocBase {
   void _handleTargetingLogic(data) {
     _adsTargetingList = data;
   }
+
+  void _handleWarningMessage(data) {}
 }

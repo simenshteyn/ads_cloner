@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:ads_cloner/blocs/application_bloc.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:flutter/material.dart';
@@ -6,9 +8,9 @@ bool apiResponseHasError(snapshot) {
   return (snapshot.data?.errorResponse != null) ? true : false;
 }
 
-Widget showError(BuildContext context, snapshot) {
-  ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-  appBloc.inWarningMessage.add(
+Widget showErrorOnCurrentPage(
+    BuildContext context, AsyncSnapshot snapshot, BlocWithPageNotifier bloc) {
+  bloc.inWarningMessage.add(
       'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
   return Container();
 }
@@ -19,9 +21,14 @@ bool createAdApiResponseHasError(snapshot) {
       : false;
 }
 
-Widget createAdShowError(BuildContext context, snapshot) {
-  ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-  appBloc.inWarningMessage.add(
+Widget createAdShowError(
+    BuildContext context, AsyncSnapshot snapshot, BlocWithPageNotifier bloc) {
+  bloc.inWarningMessage.add(
       'Ошибка ${snapshot.data.createAdsResultList[0].errorCode}: ${snapshot.data.createAdsResultList[0].errorDesc}');
   return Container();
+}
+
+abstract class BlocWithPageNotifier {
+  StreamSink<String> get inWarningMessage;
+  Stream<String> get outWarningMessage;
 }

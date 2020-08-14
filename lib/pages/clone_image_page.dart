@@ -50,11 +50,12 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
     super.initState();
     state = AppState.free;
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneImageFactory(vk);
     createAdsList = CreateAdsList([]);
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -160,7 +161,8 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   }
 
   Future _pickImage() async {
-    final pickedFile = await picker.getImage(source: ImageSource.gallery, maxHeight: 3840, maxWidth: 3840);
+    final pickedFile = await picker.getImage(
+        source: ImageSource.gallery, maxHeight: 3840, maxWidth: 3840);
     if (pickedFile != null) {
       setState(() {
         state = AppState.picked;
@@ -172,7 +174,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   Future<Null> _cropImage(
       BuildContext context, int cropWidth, int cropHeight) async {
     CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
-    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    // ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
     try {
       File croppedFile = await ImageCropper.cropImage(
           sourcePath: currentImageFile.path,
@@ -203,7 +205,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
         });
       }
     } catch (e) {
-      appBloc.inWarningMessage.add(e.toString());
+      bloc.inWarningMessage.add(e.toString());
     }
   }
 
@@ -247,6 +249,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
   Future<void> _sendFileListToAdsFactory(
       List<File> fileList, BuildContext context) async {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneImageBloc bloc = BlocProvider.of<CloneImageBloc>(context);
     for (var file in fileList) {
       var cloneTask = CloneTask(type: CloneType.image, value: file);
       try {
@@ -258,7 +261,7 @@ class _CloneImagePageSnackbarState extends State<CloneImagePageSnackbar> {
             cloneTask);
         createAdsList.appendAd(createdAd);
       } catch (e) {
-        appBloc.inWarningMessage.add('${e}');
+        bloc.inWarningMessage.add('${e}');
       }
     }
   }

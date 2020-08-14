@@ -34,7 +34,7 @@ class _ClientsPageSnackbarState extends State<ClientsPageSnackbar> {
     ClientsBloc bloc = BlocProvider.of<ClientsBloc>(context);
     bloc.getClientsList
         .add(ClientsRequest(appBloc.vkAccessToken, appBloc.currentAccount));
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -60,7 +60,7 @@ class _ClientsPageSnackbarState extends State<ClientsPageSnackbar> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (apiResponseHasError(snapshot)) {
-                appBloc.inWarningMessage.add(
+                bloc.inWarningMessage.add(
                     'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
                 return Container();
               }

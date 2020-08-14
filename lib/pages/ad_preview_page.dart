@@ -45,7 +45,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
         appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
     bloc.getAdsTargetingList.add(AdsTargetingRequest(appBloc.vkAccessToken,
         appBloc.currentAccount, appBloc.currentAd, appBloc.currentClient));
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -78,7 +78,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
                 stream: bloc.outAdsTargetingList,
                 builder: (context, snapshot) {
                   if (apiResponseHasError(snapshot))
-                    return showError(context, snapshot);
+                    return showErrorOnCurrentPage(context, snapshot, bloc);
                   else if ((snapshot.hasData) &&
                       (snapshot.data.adsTargeting?.length > 0)) {
                     _currentTargeting = snapshot.data.adsTargeting[0];
@@ -95,7 +95,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
             stream: bloc.outAdsLayoutList,
             builder: (context, snapshot) {
               if (apiResponseHasError(snapshot))
-                return showError(context, snapshot);
+                return showErrorOnCurrentPage(context, snapshot, bloc);
               else if ((snapshot.hasData) &&
                   (snapshot.data.adsLayout?.length > 0)) {
                 _currentLayout = snapshot.data.adsLayout[0];
@@ -154,7 +154,7 @@ class _AdPreviewPageSnackbarState extends State<AdPreviewPageSnackbar> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               return apiResponseHasError(snapshot)
-                  ? showError(context, snapshot)
+                  ? showErrorOnCurrentPage(context, snapshot, bloc)
                   : FloatingActionButton(
                       child: Icon(Icons.content_copy),
                       onPressed: () {

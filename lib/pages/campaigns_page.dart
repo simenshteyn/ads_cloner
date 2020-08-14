@@ -43,7 +43,7 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
     bloc.getCampaignsList.add(CampaignsRequest(
         appBloc.vkAccessToken, appBloc.currentAccount, appBloc.currentClient));
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -56,7 +56,7 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
           content: Text('Статус кампании изменен'),
         ));
       } else {
-        appBloc.inWarningMessage.add(
+        bloc.inWarningMessage.add(
             'Ошибка ${event.createCampaignsResultList[0].errorCode}: ${event.createCampaignsResultList[0].errorDesc}');
       }
     });
@@ -81,7 +81,7 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               if (apiResponseHasError(snapshot)) {
-                appBloc.inWarningMessage.add(
+                bloc.inWarningMessage.add(
                     'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
                 return Container();
               }
@@ -188,14 +188,15 @@ class _CampaignsPageSnackbarState extends State<CampaignsPageSnackbar> {
     );
   }
 
-  bool apiResponseHasError(snapshot) {
-    return (snapshot.data?.errorResponse != null) ? true : false;
-  }
+  // bool _apiResponseHasError(snapshot) {
+  //   return (snapshot.data?.errorResponse != null) ? true : false;
+  // }
 
-  Widget showError(BuildContext context, AsyncSnapshot snapshot) {
-    ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
-    appBloc.inWarningMessage.add(
-        'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
-    return Text('error');
-  }
+  // Widget _showError(BuildContext context, AsyncSnapshot snapshot) {
+  //   CampaignsBloc bloc = BlocProvider.of<CampaignsBloc>(context);
+
+  //   bloc.inWarningMessage.add(
+  //       'Ошибка ${snapshot.data.errorResponse.errorCode}: ${snapshot.data.errorResponse.errorMsg}');
+  //   return Text('error');
+  // }
 }

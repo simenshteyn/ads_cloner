@@ -43,11 +43,13 @@ class _CloneTextPageSnackbarState extends State<CloneTextPageSnackbar> {
     super.initState();
     _textController.addListener(_saveLastValue);
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
+
     final vk = VkApi(userToken: appBloc.vkAccessToken.token);
     adsFactory = CloneTextFactory(vk);
     createAdsList = CreateAdsList([]);
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -241,6 +243,7 @@ class _CloneTextPageSnackbarState extends State<CloneTextPageSnackbar> {
   Future<void> _sendTextListToAdsFactory(
       List<String> textList, BuildContext context) async {
     ApplicationBloc appBloc = BlocProvider.of<ApplicationBloc>(context);
+    CloneTextBloc bloc = BlocProvider.of<CloneTextBloc>(context);
     for (var text in textList) {
       var cloneTask = CloneTask(type: CloneType.text, value: text);
       try {
@@ -252,7 +255,7 @@ class _CloneTextPageSnackbarState extends State<CloneTextPageSnackbar> {
             cloneTask);
         createAdsList.appendAd(createdAd);
       } on Exception catch (e) {
-        appBloc.inWarningMessage.add('${e}');
+        bloc.inWarningMessage.add('${e}');
       }
     }
   }

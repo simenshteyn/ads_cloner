@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/models/ads_layout_list.dart';
 import 'package:ads_cloner/models/ads_list.dart';
@@ -9,7 +10,7 @@ import 'package:ads_cloner/models/delete_ads_result.dart';
 import 'package:ads_cloner/models/update_ads_request.dart';
 import 'bloc_provider.dart';
 
-class AdsBloc implements BlocBase {
+class AdsBloc implements BlocBase, BlocWithPageNotifier {
   AdsList _ads;
   AdsLayoutList _layout;
 
@@ -44,6 +45,11 @@ class AdsBloc implements BlocBase {
   StreamController<DeleteAdsRequest> _cmdAdsDeleteController =
       StreamController<DeleteAdsRequest>.broadcast();
   StreamSink<DeleteAdsRequest> get getDeleteAds => _cmdAdsDeleteController.sink;
+
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
 
   AdsBloc() {
     print("ADS BLOC CREATED");
@@ -96,6 +102,8 @@ class AdsBloc implements BlocBase {
         _adsDeleteController.sink.add(list);
       });
     });
+
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
@@ -108,6 +116,7 @@ class AdsBloc implements BlocBase {
     _cmdAdsStatusController.close();
     _adsDeleteController.close();
     _cmdAdsDeleteController.close();
+    _warningMessageController.close();
   }
 
   void _handleLogic(data) {
@@ -121,4 +130,6 @@ class AdsBloc implements BlocBase {
   void _handleUpdateAdsLogic(data) {}
 
   void _handleDeleteAdsLogic(data) {}
+
+  void _handleWarningMessage(data) {}
 }

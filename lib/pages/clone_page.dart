@@ -73,7 +73,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
       }
     });
 
-    appBloc.outWarningMessage.forEach((e) {
+    bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
       }
@@ -112,7 +112,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                   }
                 }
                 if (snapshot.hasError) {
-                  appBloc.inWarningMessage.add(snapshot.error.toString());
+                  bloc.inWarningMessage.add(snapshot.error.toString());
                 }
                 return Container();
               }),
@@ -123,7 +123,7 @@ class _ClonePageSnackbarState extends State<ClonePageSnackbar> {
                   if (createAdApiResponseHasError(snapshot)) {
                     appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
                     _isLoading = false;
-                    return createAdShowError(context, snapshot);
+                    return createAdShowError(context, snapshot, bloc);
                   } else {
                     appBloc.inCurrentCreateAdsList.add(CreateAdsList([]));
                     _isLoading = false;

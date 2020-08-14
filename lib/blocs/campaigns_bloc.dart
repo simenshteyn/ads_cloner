@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/models/campaigns_list.dart';
 import 'package:ads_cloner/models/campaigns_request.dart';
@@ -6,7 +7,7 @@ import 'package:ads_cloner/models/create_campaigns_result_list.dart';
 import 'package:ads_cloner/models/update_campaigns_request.dart';
 import 'bloc_provider.dart';
 
-class CampaignsBloc implements BlocBase {
+class CampaignsBloc implements BlocBase, BlocWithPageNotifier {
   CampaignsList _campaigns;
 
   StreamController<CampaignsList> _campaignsController =
@@ -27,6 +28,11 @@ class CampaignsBloc implements BlocBase {
       StreamController<UpdateCampaignsRequest>.broadcast();
   StreamSink<UpdateCampaignsRequest> get getUpdateCampaigns =>
       _cmdCampaignsStatusController.sink;
+
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
 
   CampaignsBloc() {
     print("CAMPAIGNS BLOC CREATED");
@@ -53,6 +59,7 @@ class CampaignsBloc implements BlocBase {
         _campaignsStatusController.sink.add(list);
       });
     });
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void _handleLogic(data) {
@@ -63,6 +70,8 @@ class CampaignsBloc implements BlocBase {
     //
   }
 
+  void _handleWarningMessage(data) {}
+
   void dispose() {
     print("CAMPAIGNS BLOC DISPOSED");
 
@@ -70,5 +79,6 @@ class CampaignsBloc implements BlocBase {
     _cmdCampaignsController.close();
     _campaignsStatusController.close();
     _cmdCampaignsStatusController.close();
+    _warningMessageController.close();
   }
 }

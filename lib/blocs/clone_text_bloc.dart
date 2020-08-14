@@ -1,7 +1,8 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'dart:async';
 
-class CloneTextBloc implements BlocBase {
+class CloneTextBloc implements BlocBase, BlocWithPageNotifier {
   List<String> _textList = [];
 
   StreamController<List<String>> _textListController =
@@ -12,16 +13,23 @@ class CloneTextBloc implements BlocBase {
   StreamController<String> _cmdAddText = StreamController<String>.broadcast();
   StreamSink get addTextToList => _cmdAddText.sink;
 
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
+
   CloneTextBloc() {
     print('CLONE TEXT BLOC CREATED');
     _textListController.stream.listen(_handleLogic);
     _cmdAddText.stream.listen(_handleLogicAddText);
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
     print("CLONE TEXT BLOC DISPOSED");
     _textListController.close();
     _cmdAddText.close();
+    _warningMessageController.close();
   }
 
   void _handleLogic(List<String> list) {
@@ -32,4 +40,6 @@ class CloneTextBloc implements BlocBase {
     _textList.add(text);
     _textListController.sink.add(_textList);
   }
+
+  void _handleWarningMessage(data) {}
 }

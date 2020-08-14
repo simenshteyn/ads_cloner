@@ -1,10 +1,11 @@
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'dart:async';
 
 import 'package:ads_cloner/models/age_range.dart';
 import 'package:flutter/material.dart';
 
-class CloneAgeBloc implements BlocBase {
+class CloneAgeBloc implements BlocBase, BlocWithPageNotifier {
   List<AgeRange> _ageRangeList = [];
 
   StreamController<List<AgeRange>> _ageRangeListController =
@@ -17,16 +18,23 @@ class CloneAgeBloc implements BlocBase {
   StreamSink<AgeRangeRequest> get getAgeRangeList =>
       _cmdAgeRangeListController.sink;
 
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
+
   CloneAgeBloc() {
     print('CLONE AGE BLOC CREATED');
     _ageRangeListController.stream.listen(_handleLogic);
     _cmdAgeRangeListController.stream.listen(_handleCmdLogic);
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
     print("CLONE AGE BLOC DISPOSED");
     _ageRangeListController.close();
     _cmdAgeRangeListController.close();
+    _warningMessageController.close();
   }
 
   void _handleLogic(List<AgeRange> list) {
@@ -54,4 +62,6 @@ class CloneAgeBloc implements BlocBase {
     _divide(range.start.round(), range.end.round(), size.round());
     return result;
   }
+
+  void _handleWarningMessage(data) {}
 }

@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:ads_cloner/api/error_check.dart';
 import 'package:ads_cloner/api/vk_api.dart';
 import 'package:ads_cloner/blocs/bloc_provider.dart';
 import 'package:ads_cloner/models/create_ads_request.dart';
@@ -8,7 +9,7 @@ import 'package:ads_cloner/models/wall_post_adsstealth_result.dart';
 import 'package:ads_cloner/models/wall_post_list.dart';
 import 'package:ads_cloner/models/wall_post_request.dart';
 
-class CloneBloc implements BlocBase {
+class CloneBloc implements BlocBase, BlocWithPageNotifier {
   CreateAdsResultList _createAdsResultList;
   WallPostAdsStealthResult _wallPostAdsStealthResult;
   WallPostList _wallPostList;
@@ -39,6 +40,11 @@ class CloneBloc implements BlocBase {
       StreamController<WallPostRequest>.broadcast();
   StreamSink<WallPostRequest> get getWallPostList =>
       _cmdWallPostController.sink;
+
+  StreamController<String> _warningMessageController =
+      StreamController<String>.broadcast();
+  StreamSink<String> get inWarningMessage => _warningMessageController.sink;
+  Stream<String> get outWarningMessage => _warningMessageController.stream;
 
   CloneBloc() {
     print("CLONE BLOC CREATED");
@@ -99,6 +105,8 @@ class CloneBloc implements BlocBase {
         _wallPostController.sink.add(_wallPostList);
       });
     });
+
+    _warningMessageController.stream.listen(_handleWarningMessage);
   }
 
   void dispose() {
@@ -108,6 +116,7 @@ class CloneBloc implements BlocBase {
     _cmdWallPostAdsStealthController.close();
     _wallPostController.close();
     _cmdWallPostController.close();
+    _warningMessageController.close();
     print("CLONE BLOC DISPOSED");
   }
 
@@ -130,4 +139,6 @@ class CloneBloc implements BlocBase {
       i++;
     }
   }
+
+  void _handleWarningMessage(data) {}
 }
