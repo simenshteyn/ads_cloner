@@ -1,12 +1,12 @@
 import 'dart:async';
 
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/models/ads_layout_list.dart';
-import 'package:ads_cloner/models/ads_layout_request.dart';
-import 'package:ads_cloner/models/ads_targeting_list.dart';
-import 'package:ads_cloner/models/ads_targeting_request.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/models/ads_layout_list.dart';
+import 'package:SmmHub/models/ads_layout_request.dart';
+import 'package:SmmHub/models/ads_targeting_list.dart';
+import 'package:SmmHub/models/ads_targeting_request.dart';
 
 class AdPreviewBloc implements BlocBase, BlocWithPageNotifier {
   AdsLayoutList _adsLayout;

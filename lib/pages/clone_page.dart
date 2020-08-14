@@ -1,14 +1,14 @@
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/blocs/clone_bloc.dart';
-import 'package:ads_cloner/models/create_ads_list.dart';
-import 'package:ads_cloner/models/create_ads_request.dart';
-import 'package:ads_cloner/models/create_ads_result_list.dart';
-import 'package:ads_cloner/models/wall_post_list.dart';
-import 'package:ads_cloner/models/wall_post_request.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/clone_bloc.dart';
+import 'package:SmmHub/models/create_ads_list.dart';
+import 'package:SmmHub/models/create_ads_request.dart';
+import 'package:SmmHub/models/create_ads_result_list.dart';
+import 'package:SmmHub/models/wall_post_list.dart';
+import 'package:SmmHub/models/wall_post_request.dart';
 import 'package:flutter/material.dart';
-import 'package:ads_cloner/widgets/clone_options_widget.dart';
-import 'package:ads_cloner/api/error_check.dart';
+import 'package:SmmHub/widgets/clone_options_widget.dart';
+import 'package:SmmHub/api/error_check.dart';
 
 class ClonePage extends StatelessWidget {
   @override

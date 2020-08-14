@@ -1,12 +1,12 @@
-import 'package:ads_cloner/api/clone_factory.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/blocs/clone_age_bloc.dart';
-import 'package:ads_cloner/blocs/clone_image_bloc.dart';
-import 'package:ads_cloner/blocs/clone_text_bloc.dart';
-import 'package:ads_cloner/models/option_card.dart';
-import 'package:ads_cloner/pages/clone_age_page.dart';
-import 'package:ads_cloner/pages/clone_image_page.dart';
-import 'package:ads_cloner/pages/clone_text_page.dart';
+import 'package:SmmHub/api/clone_factory.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/clone_age_bloc.dart';
+import 'package:SmmHub/blocs/clone_image_bloc.dart';
+import 'package:SmmHub/blocs/clone_text_bloc.dart';
+import 'package:SmmHub/models/option_card.dart';
+import 'package:SmmHub/pages/clone_age_page.dart';
+import 'package:SmmHub/pages/clone_image_page.dart';
+import 'package:SmmHub/pages/clone_text_page.dart';
 import 'package:flutter/material.dart';
 
 class CloneOptionsWidget extends StatefulWidget {

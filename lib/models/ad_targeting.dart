@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:ads_cloner/api/vk_api.dart';
+import 'package:SmmHub/api/vk_api.dart';
 import 'package:json_annotation/json_annotation.dart';
-import 'package:ads_cloner/api/target_objects_ids.dart';
+import 'package:SmmHub/api/target_objects_ids.dart';
 
 part 'ad_targeting.g.dart';
 

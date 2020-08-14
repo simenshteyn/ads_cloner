@@ -1,6 +1,6 @@
-import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ad_layout.dart';
-import 'package:ads_cloner/models/ad_targeting.dart';
+import 'package:SmmHub/models/ad.dart';
+import 'package:SmmHub/models/ad_layout.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'create_ad.g.dart';

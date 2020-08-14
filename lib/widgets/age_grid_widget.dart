@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:ads_cloner/models/age_range.dart';
+import 'package:SmmHub/models/age_range.dart';
 import 'package:flutter/material.dart';
 
 class AgeGridWidget extends StatelessWidget {

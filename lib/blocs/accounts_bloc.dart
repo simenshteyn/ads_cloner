@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/models/accounts_list.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/models/accounts_list.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
-import 'package:ads_cloner/api/vk_api.dart';
+import 'package:SmmHub/api/vk_api.dart';
 
 class AccountsBloc implements BlocBase, BlocWithPageNotifier {
   AccountsList _accounts;

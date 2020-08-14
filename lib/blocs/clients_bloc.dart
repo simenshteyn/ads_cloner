@@ -1,8 +1,8 @@
 import 'dart:async';
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/models/clients_list.dart';
-import 'package:ads_cloner/models/clients_request.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/models/clients_list.dart';
+import 'package:SmmHub/models/clients_request.dart';
 import 'bloc_provider.dart';
 
 class ClientsBloc implements BlocBase, BlocWithPageNotifier {

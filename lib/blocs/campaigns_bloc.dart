@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/models/campaigns_list.dart';
-import 'package:ads_cloner/models/campaigns_request.dart';
-import 'package:ads_cloner/models/create_campaigns_result_list.dart';
-import 'package:ads_cloner/models/update_campaigns_request.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/models/campaigns_list.dart';
+import 'package:SmmHub/models/campaigns_request.dart';
+import 'package:SmmHub/models/create_campaigns_result_list.dart';
+import 'package:SmmHub/models/update_campaigns_request.dart';
 import 'bloc_provider.dart';
 
 class CampaignsBloc implements BlocBase, BlocWithPageNotifier {

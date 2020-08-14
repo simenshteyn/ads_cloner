@@ -1,4 +1,4 @@
-import 'package:ads_cloner/models/wall_post.dart';
+import 'package:SmmHub/models/wall_post.dart';
 import 'dart:math';
 import 'dart:convert';
 

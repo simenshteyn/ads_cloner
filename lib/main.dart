@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_vk_sdk/flutter_vk_sdk.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/blocs/login_bloc.dart';
-import 'package:ads_cloner/pages/login_page.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/blocs/login_bloc.dart';
+import 'package:SmmHub/pages/login_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

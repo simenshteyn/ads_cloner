@@ -1,15 +1,15 @@
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/blocs/ad_preview_bloc.dart';
-import 'package:ads_cloner/blocs/ads_bloc.dart';
-import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ads_request.dart';
-import 'package:ads_cloner/models/delete_ads_request.dart';
-import 'package:ads_cloner/models/update_ads_request.dart';
-import 'package:ads_cloner/pages/ad_preview_page.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/blocs/ad_preview_bloc.dart';
+import 'package:SmmHub/blocs/ads_bloc.dart';
+import 'package:SmmHub/models/ad.dart';
+import 'package:SmmHub/models/ads_request.dart';
+import 'package:SmmHub/models/delete_ads_request.dart';
+import 'package:SmmHub/models/update_ads_request.dart';
+import 'package:SmmHub/pages/ad_preview_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/models/ads_list.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/models/ads_list.dart';
 import 'package:flutter/services.dart';
 
 class AdsPage extends StatelessWidget {

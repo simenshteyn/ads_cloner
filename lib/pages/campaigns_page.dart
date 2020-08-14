@@ -1,14 +1,14 @@
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/blocs/ads_bloc.dart';
-import 'package:ads_cloner/blocs/campaigns_bloc.dart';
-import 'package:ads_cloner/models/campaign.dart';
-import 'package:ads_cloner/models/campaigns_request.dart';
-import 'package:ads_cloner/models/update_campaigns_request.dart';
-import 'package:ads_cloner/pages/ads_page.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/blocs/ads_bloc.dart';
+import 'package:SmmHub/blocs/campaigns_bloc.dart';
+import 'package:SmmHub/models/campaign.dart';
+import 'package:SmmHub/models/campaigns_request.dart';
+import 'package:SmmHub/models/update_campaigns_request.dart';
+import 'package:SmmHub/pages/ads_page.dart';
 import 'package:flutter/material.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/models/campaigns_list.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/models/campaigns_list.dart';
 
 class CampaignsPage extends StatefulWidget {
   @override

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
 import 'package:flutter/material.dart';
 
 bool apiResponseHasError(snapshot) {

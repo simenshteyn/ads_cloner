@@ -1,4 +1,4 @@
-import 'package:ads_cloner/api/vk_api_objects.dart';
+import 'package:SmmHub/api/vk_api_objects.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 part 'pretty_card_create_result.g.dart';

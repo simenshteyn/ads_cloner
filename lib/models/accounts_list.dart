@@ -1,5 +1,5 @@
-import 'package:ads_cloner/api/vk_api_objects.dart';
-import 'package:ads_cloner/models/account.dart';
+import 'package:SmmHub/api/vk_api_objects.dart';
+import 'package:SmmHub/models/account.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'accounts_list.g.dart';
 

@@ -1,8 +1,8 @@
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
 import 'dart:async';
 
-import 'package:ads_cloner/models/age_range.dart';
+import 'package:SmmHub/models/age_range.dart';
 import 'package:flutter/material.dart';
 
 class CloneAgeBloc implements BlocBase, BlocWithPageNotifier {

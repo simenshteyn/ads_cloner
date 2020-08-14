@@ -1,4 +1,4 @@
-import 'package:ads_cloner/models/create_ad.dart';
+import 'package:SmmHub/models/create_ad.dart';
 
 class CreateAdsList {
   List<CreateAd> createAdsList = [];

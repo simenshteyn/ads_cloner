@@ -1,13 +1,13 @@
 import 'dart:async';
 
-import 'package:ads_cloner/api/vk_api_objects.dart';
-import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ad_layout.dart';
-import 'package:ads_cloner/models/ad_targeting.dart';
-import 'package:ads_cloner/models/create_ad.dart';
-import 'package:ads_cloner/models/wall_post.dart';
-import 'package:ads_cloner/models/wall_post_adsstealth.dart';
-import 'package:ads_cloner/api/vk_api.dart';
+import 'package:SmmHub/api/vk_api_objects.dart';
+import 'package:SmmHub/models/ad.dart';
+import 'package:SmmHub/models/ad_layout.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
+import 'package:SmmHub/models/create_ad.dart';
+import 'package:SmmHub/models/wall_post.dart';
+import 'package:SmmHub/models/wall_post_adsstealth.dart';
+import 'package:SmmHub/api/vk_api.dart';
 
 enum CloneType { text, pure, image, age }
 

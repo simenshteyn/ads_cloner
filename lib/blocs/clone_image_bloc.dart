@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:ads_cloner/api/error_check.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
+import 'package:SmmHub/api/error_check.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
 import 'dart:async';
 
 class CloneImageBloc implements BlocBase, BlocWithPageNotifier {

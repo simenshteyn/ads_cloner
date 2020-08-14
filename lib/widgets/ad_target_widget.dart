@@ -1,7 +1,7 @@
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/blocs/application_bloc.dart';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/models/ad_targeting.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/blocs/application_bloc.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
 import 'package:flutter/material.dart';
 
 class AdTargetWidget extends StatelessWidget {

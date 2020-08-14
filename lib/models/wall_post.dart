@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:ads_cloner/api/vk_api_objects.dart';
+import 'package:SmmHub/api/vk_api_objects.dart';
 import 'package:json_annotation/json_annotation.dart';
 part 'wall_post.g.dart';
 

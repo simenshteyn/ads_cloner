@@ -1,16 +1,16 @@
 import 'dart:async';
-import 'package:ads_cloner/blocs/bloc_provider.dart';
-import 'package:ads_cloner/models/account.dart';
-import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ad_layout.dart';
-import 'package:ads_cloner/models/ad_targeting.dart';
-import 'package:ads_cloner/models/campaign.dart';
-import 'package:ads_cloner/models/clients_list.dart';
-import 'package:ads_cloner/models/create_ads_list.dart';
-import 'package:ads_cloner/models/wall_post.dart';
+import 'package:SmmHub/blocs/bloc_provider.dart';
+import 'package:SmmHub/models/account.dart';
+import 'package:SmmHub/models/ad.dart';
+import 'package:SmmHub/models/ad_layout.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
+import 'package:SmmHub/models/campaign.dart';
+import 'package:SmmHub/models/clients_list.dart';
+import 'package:SmmHub/models/create_ads_list.dart';
+import 'package:SmmHub/models/wall_post.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
-import 'package:ads_cloner/models/accounts_list.dart';
-import 'package:ads_cloner/models/campaigns_list.dart';
+import 'package:SmmHub/models/accounts_list.dart';
+import 'package:SmmHub/models/campaigns_list.dart';
 
 class ApplicationBloc implements BlocBase {
   VKAccessToken vkAccessToken;
