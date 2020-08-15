@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:SmmHub/api/error_check.dart';
 import 'package:SmmHub/blocs/bloc_provider.dart';
 import 'package:SmmHub/models/accounts_list.dart';
+import 'package:SmmHub/models/users.dart';
 import 'package:flutter_vk_sdk/models/vk_access_token.dart';
 import 'package:SmmHub/api/vk_api.dart';
 
@@ -20,6 +21,14 @@ class LoginBloc implements BlocBase, BlocWithPageNotifier {
       StreamController<String>.broadcast();
   StreamSink<String> get inWarningMessage => _warningMessageController.sink;
   Stream<String> get outWarningMessage => _warningMessageController.stream;
+
+  StreamController<Users> _userController = StreamController<Users>.broadcast();
+  Stream<Users> get outUsers => _userController.stream;
+  StreamSink<Users> get inUsers => _userController.sink;
+
+  StreamController<VKAccessToken> _cmdUserController =
+      StreamController<VKAccessToken>.broadcast();
+      StreamSink<VKAccessToken> get getUser => _cmdUserController.sink;
 
   LoginBloc() {
     print("LOGIN BLOC CREATED");

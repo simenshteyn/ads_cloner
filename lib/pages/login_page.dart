@@ -56,15 +56,15 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
             FlatButton(
               color: Colors.red,
               textColor: Colors.white,
-              padding: EdgeInsets.all(0.0),
-              child: Image.asset('assets/icon/vk.png'),
+              padding: EdgeInsets.all(8.0),
+              // child: Image.asset('lib/icon/vk.png'),
               onPressed: () {
                 _vkLogin(context, applicationBloc);
               },
-              // child: Text(
-              //   'Login VK',
-              //   style: TextStyle(fontSize: 20.0),
-              // ),
+               child: Text(
+                 'Продолжить',
+                 style: TextStyle(fontSize: 16.0),
+               ),
             ),
           ],
         ),

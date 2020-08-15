@@ -17,6 +17,7 @@ import 'package:SmmHub/models/create_campaigns_result_list.dart';
 import 'package:SmmHub/models/delete_ads_result.dart';
 import 'package:SmmHub/models/pretty_card_create_result.dart';
 import 'package:SmmHub/models/pretty_card_list.dart';
+import 'package:SmmHub/models/users.dart';
 import 'package:SmmHub/models/wall_post_adsstealth.dart';
 import 'package:SmmHub/models/wall_post_adsstealth_result.dart';
 import 'package:SmmHub/models/wall_post_list.dart';
@@ -36,6 +37,24 @@ class VkApi {
 
   Future delayBetweenApiRequests([int time = 250]) {
     return Future.delayed(Duration(milliseconds: time));
+  }
+
+  Future<Users> usersGet() async {
+    var uri = Uri.https(
+      baseUrl,
+      'method/users.get',
+      <String, String>{
+        'fields': 'photo_50',
+        'access_token': userToken,
+        'v': apiVersion,
+      },
+    );
+    var response = await _getRequest(uri);
+    print(uri);
+    print(response);
+    final _map = jsonDecode(response);
+    Users users = Users.fromJson(_map);
+    return users;
   }
 
   Future<AccountsList> adsGetAccounts() async {
