@@ -1,3 +1,4 @@
+import 'package:SmmHub/models/users.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_vk_sdk/flutter_vk_sdk.dart';
@@ -29,6 +30,14 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
     super.initState();
     LoginBloc bloc = BlocProvider.of<LoginBloc>(context);
 
+    _checkLoggedIn().then((result) {
+      if (result) {
+        _getToken().then((token) {
+          bloc.getUser.add(token);
+        });
+      }
+    });
+
     bloc.outWarningMessage.forEach((e) {
       if (context != null) {
         _showSnackBar('${e}', context);
@@ -47,12 +56,36 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
   Widget build(BuildContext context) {
     final ApplicationBloc applicationBloc =
         BlocProvider.of<ApplicationBloc>(context);
+    LoginBloc bloc = BlocProvider.of<LoginBloc>(context);
+
     return Scaffold(
       appBar: AppBar(title: Text('Ads Cloner')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            StreamBuilder<Users>(
+                stream: bloc.outUsers,
+                builder: (BuildContext context, AsyncSnapshot<Users> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          radius: 50,
+                          backgroundImage:
+                              NetworkImage(snapshot.data.result[0].photo100),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10, bottom: 20),
+                          child: Text(
+                              '${snapshot.data.result[0].firstName} ${snapshot.data.result[0].lastName}'),
+                        ),
+                      ],
+                    );
+                  }
+                  return Container();
+                }),
             FlatButton(
               color: Colors.red,
               textColor: Colors.white,
@@ -61,10 +94,10 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
               onPressed: () {
                 _vkLogin(context, applicationBloc);
               },
-               child: Text(
-                 'Продолжить',
-                 style: TextStyle(fontSize: 16.0),
-               ),
+              child: Text(
+                'Продолжить',
+                style: TextStyle(fontSize: 16.0),
+              ),
             ),
           ],
         ),
@@ -75,6 +108,10 @@ class _LoginPageSnackbarState extends State<LoginPageSnackbar> {
   Future<bool> _checkLoggedIn() async {
     var isLoggedIn = await FlutterVKSdk.isLoggedIn();
     return isLoggedIn;
+  }
+
+  Future<VKAccessToken> _getToken() async {
+    return await FlutterVKSdk.getAccessToken();
   }
 
   void _openAccountsPage(BuildContext context) {

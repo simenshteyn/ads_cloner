@@ -8,6 +8,7 @@ import 'package:SmmHub/api/vk_api.dart';
 
 class LoginBloc implements BlocBase, BlocWithPageNotifier {
   AccountsList accounts;
+  Users users;
 
   StreamController<AccountsList> _accountsController =
       StreamController<AccountsList>.broadcast();
@@ -28,7 +29,7 @@ class LoginBloc implements BlocBase, BlocWithPageNotifier {
 
   StreamController<VKAccessToken> _cmdUserController =
       StreamController<VKAccessToken>.broadcast();
-      StreamSink<VKAccessToken> get getUser => _cmdUserController.sink;
+  StreamSink<VKAccessToken> get getUser => _cmdUserController.sink;
 
   LoginBloc() {
     print("LOGIN BLOC CREATED");
@@ -39,15 +40,31 @@ class LoginBloc implements BlocBase, BlocWithPageNotifier {
       });
       _accountsController.sink.add(accounts);
     });
+
     _warningMessageController.stream.listen(_handleWarningMessage);
+
+    _userController.stream.listen(_handleUsers);
+
+    _cmdUserController.stream.listen((VKAccessToken token) async {
+      final vk = VkApi(userToken: token.token);
+      await vk.usersGet().then((obj) {
+        _userController.sink.add(obj);
+      });
+    });
   }
 
   void dispose() {
     _accountsController.close();
     _cmdController.close();
     _warningMessageController.close();
+    _userController.close();
+    _cmdUserController.close();
     print("LOGIN BLOC DISPOSED");
   }
 
   void _handleWarningMessage(data) {}
+
+  void _handleUsers(data) {
+    users = data;
+  }
 }

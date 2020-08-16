@@ -44,7 +44,7 @@ class VkApi {
       baseUrl,
       'method/users.get',
       <String, String>{
-        'fields': 'photo_50',
+        'fields': 'photo_100',
         'access_token': userToken,
         'v': apiVersion,
       },

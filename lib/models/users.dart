@@ -15,10 +15,10 @@ class User {
   int id;
   String firstName, lastName;
   bool isClosed, canAccessClosed;
-  @JsonKey(name: 'photo_50')
-  String photo50;
+  @JsonKey(name: 'photo_100')
+  String photo100;
   User(this.id, this.firstName, this.lastName, this.isClosed,
-      this.canAccessClosed, this.photo50);
+      this.canAccessClosed, this.photo100);
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
   Map<String, dynamic> toJson() => _$UserToJson(this);
 }

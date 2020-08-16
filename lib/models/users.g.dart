@@ -35,7 +35,7 @@ User _$UserFromJson(Map<String, dynamic> json) {
     json['last_name'] as String,
     json['is_closed'] as bool,
     json['can_access_closed'] as bool,
-    json['photo_50'] as String,
+    json['photo_100'] as String,
   );
 }
 
@@ -53,6 +53,6 @@ Map<String, dynamic> _$UserToJson(User instance) {
   writeNotNull('last_name', instance.lastName);
   writeNotNull('is_closed', instance.isClosed);
   writeNotNull('can_access_closed', instance.canAccessClosed);
-  writeNotNull('photo_50', instance.photo50);
+  writeNotNull('photo_100', instance.photo100);
   return val;
 }
