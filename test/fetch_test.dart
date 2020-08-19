@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/models/ads_layout_list.dart';
-import 'package:ads_cloner/models/ads_targeting_list.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/models/ads_layout_list.dart';
+import 'package:SmmHub/models/ads_targeting_list.dart';
 import 'package:test/test.dart';
 
 import 'package:http/http.dart' as http;
@@ -19,8 +19,7 @@ void main() {
     var vk = VkApi(
         userToken:
             'a889969ff058900b4df0b25aed1eb56d27cf2d4776a27f238b0030603c145ddf4cd59968085ae83c105b4');
-    var result = await vk.uploadFileFromUrl(
-        url: lst.adsLayout[0].imageSrc2x, adFormat: 11);
+    var result = await vk.uploadPhotoFromUrl(lst.adsLayout[0].imageSrc2x, 11);
     print(result.toJson().toString());
   });
 }

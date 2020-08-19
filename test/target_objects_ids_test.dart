@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:ads_cloner/api/target_objects_ids.dart';
+import 'package:SmmHub/api/target_objects_ids.dart';
 
 void main() {
   test('Countries map test', () async {

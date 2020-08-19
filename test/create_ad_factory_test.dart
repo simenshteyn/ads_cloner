@@ -1,11 +1,11 @@
-import 'package:ads_cloner/api/vk_api.dart';
-import 'package:ads_cloner/models/ad.dart';
-import 'package:ads_cloner/models/ad_layout.dart';
-import 'package:ads_cloner/models/ad_targeting.dart';
-import 'package:ads_cloner/models/create_ads_list.dart';
-import 'package:ads_cloner/models/wall_post.dart';
+import 'package:SmmHub/api/vk_api.dart';
+import 'package:SmmHub/models/ad.dart';
+import 'package:SmmHub/models/ad_layout.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
+import 'package:SmmHub/models/create_ads_list.dart';
+import 'package:SmmHub/models/wall_post.dart';
 import 'package:test/test.dart';
-import 'package:ads_cloner/api/clone_factory.dart';
+import 'package:SmmHub/api/clone_factory.dart';
 import 'dart:async';
 
 void main() {
@@ -465,7 +465,7 @@ void main() {
         userToken:
             'a889969ff058900b4df0b25aed1eb56d27cf2d4776a27f238b0030603c145ddf4cd59968085ae83c105b4');
 
-    final cloneFactory = CloneFactory(vk);
+    final cloneFactory = CloneTextFactory(vk);
     var clone = await cloneFactory.buildAd(
         ad, adTargting, adLayout, wallPost, cloneTask);
     print(clone.linkUrl);

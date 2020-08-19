@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:ads_cloner/models/wall_post_adsstealth.dart';
-import 'package:ads_cloner/models/wall_post_list.dart';
+import 'package:SmmHub/models/wall_post_adsstealth.dart';
+import 'package:SmmHub/models/wall_post_list.dart';
 import 'package:test/test.dart';
 
 void main() {

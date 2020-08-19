@@ -1,5 +1,5 @@
-import 'package:ads_cloner/models/create_ad.dart';
-import 'package:ads_cloner/models/create_ads_list.dart';
+import 'package:SmmHub/models/create_ad.dart';
+import 'package:SmmHub/models/create_ads_list.dart';
 import 'package:test/test.dart';
 
 void main() {
@@ -17,6 +17,6 @@ void main() {
     list.appendAd(createAd4);
     list.appendAd(createAd5);
     list.appendAd(createAd6);
-    expect(list.getCreateAdsListInChunks.length, 2);
+    expect(list.getCreateAdsListInChunks, 2);
   });
 }

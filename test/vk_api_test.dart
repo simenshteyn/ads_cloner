@@ -1,5 +1,5 @@
 import 'package:test/test.dart';
-import 'package:ads_cloner/api/vk_api.dart';
+import 'package:SmmHub/api/vk_api.dart';
 import 'dart:async';
 
 

@@ -1,4 +1,4 @@
-import 'package:ads_cloner/models/ad_targeting.dart';
+import 'package:SmmHub/models/ad_targeting.dart';
 import 'package:test/test.dart';
 
 void main() {

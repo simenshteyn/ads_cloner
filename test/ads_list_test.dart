@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:test/test.dart';
-import 'package:ads_cloner/models/ads_list.dart';
+import 'package:SmmHub/models/ads_list.dart';
 import 'dart:async';
 
 void main() {

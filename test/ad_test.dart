@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:ads_cloner/models/ad.dart';
+import 'package:SmmHub/models/ad.dart';
 import 'package:test/test.dart';
 import 'dart:convert';
 
