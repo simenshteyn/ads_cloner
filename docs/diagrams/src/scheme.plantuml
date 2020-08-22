@@ -1,11 +1,176 @@
 ### https://github.com/plantuml/plantuml-server
-@startuml Hello world
+@startuml AppScheme
 
-class App {
-    int someInt
-    Double someDouble
-    void someFunc()
-} 
+package "vk_api.dart" {
+    class VkApi {
+        baseUrl: String
+        apiVersion: String
+        userToken:
+        _httpClient: HttpClient
+        _filter: RequestFloodFilter
+        +delayBetweenApiRequest()
+        +usersGet(): Users
+        +adsGetAccounts(): AccountsList
+        +adsGetClients(accountId): ClientsList
+        +adsGetCampaigns(accountId, clientId): CampaignsList
+        +adsUpdateCampaigns(accountId, campaignId, status): CreateCampaignsResultList
+        +adsGetAds(accountId, campaignId, clientId): AdsList
+        +adsUpdateAds(accountId, ad, status): CreateAdsResultList
+        +adsDeleteAds(accountId, ad): DeleteAdsResult
+        +adsGetAdsLayout(accountId, ad, clientId): AdsLayoutList
+        +adsGetCampaignLayout(accountId, campaign, clientId): AdsLayoutList
+        +adsGetAdsTargeting(accountId, ad, clientId): AdsTargetingList
+        +wallGetById(postId): WallPostList
+        +adsCreateAds(accountId, createAdsList): CreateAdsResultList
+        +wallPostAdsStealth(wallPostAdsStealth): WallPostAdsStealthResult
+        +prettyCardsCreate(ownerId, card): PrettyCardCreateResult
+        +prettyCardsGetById(cardCreateResult): PrettyCardList
+        +databaseGetCitiesById(idString): CityList
+        +adsGetUploadUrl(adFormat, icon): UploadUrl
+        +adsGetVideoUploadUrl(): UploadUrl
+        +photosGetWallUploadServer(file): WallUploadedPhoto
+        +photosSaveWallPhoto(): PhotosSaveWallPhotoResult
+        -_getBytesFromImageUrl(url): Uint8List
+        +uploadPhotoFromUrl(url, adFormat, icon): UploadedPhoto
+        +uploadPhotoFromFile(file, adFormat, icon): UploadedPhoto
+        +uploadVideoFromUrl(url): UploadedVideo
+        -_getRequest(uri): String
+        -_postRequest(uri, jsonMap): String
+        -_postImageRequest(uri, bytes): String
+        -_postVideoRequest(uri, bytes): String
+    }
 
+    class RequestFloodFilter {
+        lastRequestDateTime: DateTime
+        duration: Duration
+        isFloodRequest(): bool
+    }
+}
 
+VkApi -> RequestFloodFilter
+
+abstract class BlocWithPageNotifier {
+    inWarningMessage(): String
+    outWarningMessage(): String
+}
+
+package "Login" {
+
+    class LoginPage {
+        _checkLoggedIn()
+        _showSnackBar()
+        _vkLogin()
+        _getToken()
+        _openAccountsPage()
+    }
+
+    class LoginBloc {
+        +accounts: AccountsList
+        +users: Users
+        -_accountController: AccountsList
+        -_cmdController: VKAccessToken
+        -_warningMessageController: String
+        -_userController: Users
+        -_cmdUserController: VkAccessToken
+        +outAccontsList(): AccountsList
+        +inVkAccessToken(): VKAccessToken
+        +inWarningMessage(): String
+        +outWarningMessage(): String
+        +outUsers(): Users
+        +inUsers(): Users
+        +getUser(): VkAccessToken
+
+    }
+    LoginBloc ..[#blue]|>BlocWithPageNotifier
+    LoginBloc <-> LoginPage
+    LoginBloc -> VkApi: usersGet()
+    LoginBloc -> VkApi: adsGetAccounts()
+}
+
+package "Accounts" {
+    class AccountsBloc {
+        -_accounts: AccountsList
+        -_accountsController: AccountsList
+        -_cmdController: VKAccessToken
+        -_warningMessageController: String
+
+        +outAccountsList(): AccountsList
+        +getAccountsList(): VKAccessToken
+        +inWarningMessage(): String
+        +outWarningMessage(): String
+    }
+    AccountsBloc --> VkApi: adsGetAccounts()
+    AccountsBloc ..[#blue]|> BlocWithPageNotifier
+
+    class AccountsPage {
+        -_showSnackBar()
+        -_openCampaignsPage()
+        -_openClientsPage()
+    }
+    AccountsPage <-> AccountsBloc
+    AccountsBloc ..[#blue]|> BlocWithPageNotifier
+}
+
+package "Clients" {
+    class ClientsPage {
+        -_showSnackBar()
+        -_openCampaignsPage()
+    }
+    ClientsPage <-> ClientsBloc
+
+    class ClientsBloc {
+        -_clients: ClientsList
+        -_currentVkApi: VkApi
+        -_clientsController: ClientsList
+        -_cmdClientsController: ClientsRequest
+        -_warningMessageController: String
+        +outClientsList(): ClientsList
+        +getClientsList(): ClientsRequest
+        +inWarningMessage(): String
+        +outWarningMessage(): String
+    }
+    ClientsBloc ..[#blue]|> BlocWithPageNotifier
+    ClientsBloc -> VkApi : adsGetClients()
+}
+
+package "Ads" {
+    class AdsPage {
+        -_showSnackBar()
+        -_refresh()
+        -_buildVerticalAdsList()
+        -_buildStatusIcon()
+        -_openAdPreviewPage()
+        -_buildPopupMenuButton()
+        -_enableLandscapeOrientation()
+    }
+    AdsPage <-> AdsBloc
+
+    class AdsBloc {
+        -_ads: AdsList
+        -_layout: AdsLayoutList
+        -_currentVkApi: VkApi
+        -_adsController: AdsList
+        -_cmdAdsController: AdsRequest
+        -_layoutController: AdsLayoutList
+        -_cmdLayoutController: AdsRequest
+        -_adsStatusController: CreateAdsResultList
+        -_cmdAdsStatusController: UpdateAdsRequest
+        -_adsDeleteController: DeleteAdsResult
+        -_cmdAdsDeleteController: DeleteAdsRequest
+        -_warningMessageController: String
+        +outAdsList(): AdsList
+        +getAdsList(): AdsRequest
+        +outLayoutList(): AdsLayoutList
+        +getAdsLayoutList(): AdsRequest
+        +outAdsStatus(): CreateAdsResultList
+        +getUpdateAds(): UpdateAdsRequest
+        +outDeleteAds(): DeleteAdsResult
+        +getDeleteAds(): DeleteAdsRequest
+        +inWarningMessage(): String
+        +outWarningMessage(): String
+    }
+    AdsBloc ..[#blue]|> BlocWithPageNotifier
+    AdsBloc -> VkApi: adsGetAds(),\n adsGetCampaignLayout()
+    AdsBloc -> VkApi: adsUpdateAds(),\n adsDeleteAds()
+}
 @enduml
