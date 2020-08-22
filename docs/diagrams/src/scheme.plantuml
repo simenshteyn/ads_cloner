@@ -1,0 +1,11 @@
+### https://github.com/plantuml/plantuml-server
+@startuml Hello world
+
+class App {
+    int someInt
+    Double someDouble
+    void someFunc()
+} 
+
+
+@enduml
